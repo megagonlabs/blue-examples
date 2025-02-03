@@ -1,0 +1,42 @@
+---
+version: '3.8'
+x-blue-common:
+  &blue-common
+  # build: .
+  image: python:3.9.0
+  environment:
+    &blue-common-env
+    BLUE__PROPERTIES: '{"platform.name":"default", "platform.deploy.target":"localhost", "api.server":"staging.blue.megagon.ai:5050", "db.host":"blue_db_redis",  "agent_registry.name":"default", "data_registry.name":"default", "embeddings_model":"/blue_data/models/paraphrase-MiniLM-L6-v2"}'
+  depends_on:
+    &blue-common-depends-on
+    redis:
+      condition: service_healthy
+
+services:
+  openai:
+    image: blue-service-openai
+    hostname: blue_service_OPENAI
+    ports:
+      - 8001:8001
+    deploy:
+      placement:
+        constraints:
+          - node.labels.target == service
+    networks:
+      - blue_platform_default_network_bridge
+    volumes:
+      - blue_default_data:/blue_data
+    environment:
+      <<: *blue-common-env
+    env_file:
+      - openai.env
+    restart: always
+
+networks:
+  blue_platform_default_network_bridge:
+      external: true
+
+volumes:
+  blue_default_data:
+      external: true
+
