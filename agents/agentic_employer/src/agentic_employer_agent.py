@@ -81,20 +81,6 @@ class AgenticEmployerAgent(Agent):
         worker.set_session_data("LIST_ID", self.selected_list_id)
 
 
-    def build_plan(self, plan_dag, stream, id=None):
-        
-        # create a plan id
-        if id is None:
-            id = uuid_utils.create_uuid()
-        
-        # plan context, initial streams, scope
-        plan_context = {"scope": stream[:-7], "streams": {plan_dag[0][0]: stream}}
-        
-        # construct plan
-        plan = {"id": id, "steps": plan_dag, "context": plan_context}
-
-        return plan
-
     def write_to_new_stream(self, worker, content, output, id=None, tags=None, scope="worker"):
         
         # create a unique id
