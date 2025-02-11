@@ -10,6 +10,7 @@ from blue.agent import Agent, AgentFactory
 from blue.agents.coordinator import CoordinatorAgent
 from blue.session import Session
 from blue.stream import ControlCode
+from blue.plan import Plan
 from blue.utils import json_utils, string_utils, uuid_utils
 
 ##### Agent Specific
@@ -108,62 +109,44 @@ class AgenticEmployerAgent(Agent):
 
         return output_stream
 
-    def issue_nl_query(self, question, worker, name=None, id=None):
+    def issue_nl_query(self, question, name=None, worker=None, to_param_prefix="QUESTION_RESULTS_"):
 
-        # create a unique id
-        if id is None:
-            id = uuid_utils.create_uuid()
-
-        if name is None:
-            name = "unspecified"
+        if worker == None:
+            worker = self.create_worker(None)
 
         # progress
         worker.write_progress(progress_id=worker.sid, label='Issuing question:' + question, value=self.current_step/self.num_steps)
 
-        # query plan
-        query_plan = [
-            [self.name + ".Q", "NL2SQL-E2E___INPLAN.DEFAULT"],
-            ["NL2SQL-E2E___INPLAN.DEFAULT", self.name+".QUESTION_RESULTS_" + name],
-        ]
-       
-        # write query to stream
-        query_stream = self.write_to_new_stream(worker, question, "Q", tags=["HIDDEN"], id=id)
+        # plan
+        p = Plan(prefix=worker.prefix)
+        # set input
+        p.set_input_value(name, question)
+        # set plan
+        p.add_input_to_agent_step(name, "NL2Q")
+        p.add_agent_to_agent_step("NL2Q", self.name, to_param=to_param_prefix + name)
+        
+        # submit plan
+        p.submit(worker)
 
-        # build query plan
-        plan = self.build_plan(query_plan, query_stream, id=id)
+    def issue_sql_query(self, query, name=None, worker=None, to_param_prefix="QUERY_RESULTS_"):
 
-        # write plan
-        # TODO: this shouldn't necessarily be into a new stream
-        self.write_to_new_stream(worker, plan, "PLAN", tags=["PLAN","HIDDEN"], id=id)
+        if worker == None:
+            worker = self.create_worker(None)
 
-        return
+        # progress
+        worker.write_progress(progress_id=worker.sid, label='Issuing query:' + query, value=self.current_step/self.num_steps)
 
-    def issue_sql_query(self, query, worker, name=None, id=None):
+        # plan
+        p = Plan(prefix=worker.prefix)
+        # set input
+        p.set_input_value(name, query)
+        # set plan
+        p.add_input_to_agent_step(name, "QUERYEXECUTOR")
+        p.add_agent_to_agent_step("QUERYEXECUTOR", self.name, to_param=to_param_prefix + name)
+        
+        # submit plan
+        p.submit(worker)
 
-        # create a unique id
-        if id is None:
-            id = uuid_utils.create_uuid()
-
-        if name is None:
-            name = "unspecified"
-
-        # query plan
-        query_plan = [
-            [self.name + ".Q", "QUERYEXECUTOR.DEFAULT"],
-            ["QUERYEXECUTOR.DEFAULT", self.name+".QUERY_RESULTS_" + name],
-        ]
-       
-        # write query to stream
-        query_stream = self.write_to_new_stream(worker, query, "Q", tags=["HIDDEN"], id=id)
-
-        # build query plan
-        plan = self.build_plan(query_plan, query_stream, id=id)
-
-        # write plan
-        # TODO: this shouldn't necessarily be into a new stream
-        self.write_to_new_stream(worker, plan, "PLAN", tags=["PLAN","HIDDEN"], id=id)
-
-        return
     
     def issue_queries(self, properties=None, worker=None):
         if worker == None:
@@ -186,7 +169,7 @@ class AgenticEmployerAgent(Agent):
                     q = str(q)
                 query = string_utils.safe_substitute(q, **properties, **session_data)
                 self.todos.add(query_name)
-                self.issue_sql_query(query, worker, name=query_name)
+                self.issue_sql_query(query, name=query_name, worker=worker)
 
     def move_job_seeker_to_list(self, job_seeker_id, from_list, to_list, properties=None, worker=None):
         if worker == None:
@@ -210,7 +193,7 @@ class AgenticEmployerAgent(Agent):
             query = string_utils.safe_substitute(query_template, **properties, **session_data, JOB_SEEKER_ID=job_seeker_id, FROM_LIST=from_list, TO_LIST=to_list)
             q = copy.deepcopy(move_job_seeker_to_list_query_template)
             q["query"] = query
-            self.issue_sql_query(q, worker, name="move_job_seeker_to_list")
+            self.issue_sql_query(q, name="move_job_seeker_to_list", worker=worker)
         else:
             logging.error("No `move_job_seeker_to_list` query template found in agent properties!")
 
@@ -227,7 +210,7 @@ class AgenticEmployerAgent(Agent):
             else:
                 # query lists
                 query = lists_property
-                self.issue_sql_query(query, worker, name="lists")
+                self.issue_sql_query(query, name="lists", worker=worker)
 
     def get_job_postings(self, properties=None, worker=None):
 
@@ -242,7 +225,7 @@ class AgenticEmployerAgent(Agent):
             else:
                 # query job_postings
                 query = job_postings_property
-                self.issue_sql_query(query, worker, name="job_postings")
+                self.issue_sql_query(query, name="job_postings", worker=worker)
 
     def show_ats_form(self, properties=None, worker=None, update=False):
 
@@ -281,49 +264,32 @@ class AgenticEmployerAgent(Agent):
 
         if worker == None:
             worker = self.create_worker(None)
-    
-        # create a unique id
-        id = uuid_utils.create_uuid()
 
-        # view plan
-        view_plan = [
-            [self.name + ".DEFAULT", "DOCUMENTER___JD.DEFAULT"]
-        ]
-    
-        # write job_seeker_id to stream
-        a_stream = self.write_to_new_stream(worker, "jd", "DEFAULT", tags=["HIDDEN"], id=id)
-
-        # build plan
-        plan = self.build_plan(view_plan, a_stream, id=id)
-
-        # write plan
-        self.write_to_new_stream(worker, plan, "PLAN", tags=["PLAN"], id=id)
-
-        return
+        # plan
+        p = Plan(prefix=worker.prefix)
+        # set input
+        p.set_input_value("jd", "JD")
+        # set plan
+        p.add_input_to_agent_step("jd", "DOCUMENTER___JD")
+        
+        # submit plan
+        p.submit(worker)
     
     def view_job_seeker(self, job_seeker_id, properties=None, worker=None):
 
         if worker == None:
             worker = self.create_worker(None)
 
-        # create a unique id
-        id = uuid_utils.create_uuid()
+        # plan
+        p = Plan(prefix=worker.prefix)
+        # set input
+        p.set_input_value("js", str(job_seeker_id))
+        # set plan
+        p.add_input_to_agent_step("js", "DOCUMENTER___JOBSEEKER")
+        
+        # submit plan
+        p.submit(worker)
 
-        # view plan
-        view_plan = [
-            [self.name + ".DEFAULT", "DOCUMENTER___JOBSEEKER.DEFAULT"]
-        ]
-    
-        # write job_seeker_id to stream
-        a_stream = self.write_to_new_stream(worker, str(job_seeker_id), "DEFAULT", tags=["HIDDEN"], id=id)
-
-        # build plan
-        plan = self.build_plan(view_plan, a_stream, id=id)
-
-        # write plan
-        self.write_to_new_stream(worker, plan, "PLAN", tags=["PLAN"], id=id)
-
-        return
     
     def summarize_list(self, list_code, properties=None, worker=None):
 
@@ -334,9 +300,6 @@ class AgenticEmployerAgent(Agent):
             properties = self.properties
 
         session_data = worker.get_all_session_data()
-
-        # create a unique id
-        id = uuid_utils.create_uuid()
 
         # get code from id
         list_id = self.list_id_by_code[list_code]
@@ -359,28 +322,29 @@ class AgenticEmployerAgent(Agent):
         elif list_code == "new":
             summarizer = "SUMMARIZER___RECENT"
 
-        # summary plans
-        summary_plan = [
-            [self.name + ".SQ", summarizer + ".DEFAULT"]
-        ]
+        
+        p = None
         # DEMO
         if list_code == "new":
-            summary_plan = [
-                [self.name + ".SQ", "SUMMARIZER___RECENTP1" + ".DEFAULT"],
-                [self.name + ".SQ", "SUMMARIZER___RECENTP2" + ".DEFAULT"],
-                [self.name + ".SQ", "SUMMARIZER___RECENTP3" + ".DEFAULT"]
-            ]
+            p = Plan(prefix=worker.prefix)
+            # set input
+            p.set_input_value("sq", query)
+            # set plan
+            p.add_input_to_agent_step("sq", "SUMMARIZER___RECENTP1")
+            p.add_input_to_agent_step("sq", "SUMMARIZER___RECENTP2")
+            p.add_input_to_agent_step("sq", "SUMMARIZER___RECENTP3")
+        else:
+            # plan
+            p = Plan(prefix=worker.prefix)
+            # set input
+            p.set_input_value("sq", query)
+            # set plan
+            p.add_input_to_agent_step("sq", summarizer)
 
-        # write query to stream
-        query_stream = self.write_to_new_stream(worker, query, "SQ", tags=["HIDDEN"], id=id)
+        # submit plan
+        if p: 
+            p.submit(worker)
 
-        # build query plan
-        plan = self.build_plan(summary_plan, query_stream, id=id)
-
-        # write plan
-        self.write_to_new_stream(worker, plan, "PLAN", tags=["PLAN","HIDDEN"], id=id)
-
-        return
 
     def cluster_label_to_id(self, cluster_label):
         if cluster_label in self.cluster_id_by_label:
@@ -415,29 +379,17 @@ class AgenticEmployerAgent(Agent):
         if "job_seekers_in_list" in properties:
             job_seekers_in_list_query_template = properties['job_seekers_in_list']
             query_template = job_seekers_in_list_query_template['query']
-            query = string_utils.safe_substitute(query_template, **properties, **context)
-            
+            query = string_utils.safe_substitute(query_template, **properties, **context)s
 
-        # cluster plans
-        # cluster_plan = [
-        #     [self.name + ".CQ", "CLUSTERER___JOBSEEKER.DEFAULT"],
-        #     ["CLUSTERER___JOBSEEKER.CLUSTER_INFO", self.name + ".CLUSTER_INFO_RESULTS"]
-        # ]
+        # plan
+        p = Plan(prefix=worker.prefix)
+        # set input
+        p.set_input_value("cq", query)
+        # set plan
+        p.add_input_to_agent_step("cq", "CLUSTERER___JOBSEEKER")
 
-        cluster_plan = [
-            [self.name + ".CQ", "CLUSTERER___JOBSEEKER.DEFAULT"]
-        ]
-
-        # write query to stream
-        query_stream = self.write_to_new_stream(worker, query, "CQ", tags=["HIDDEN"], id=id)
-
-        # build query plan
-        plan = self.build_plan(cluster_plan, query_stream, id=id)
-
-        # write plan
-        self.write_to_new_stream(worker, plan, "PLAN", tags=["PLAN","HIDDEN"], id=id)
-
-        return
+        # submit plan
+        p.submit(worker)
     
     def extract_job_posting_id(self, s):
         results = re.findall(r"\[\s*\+?#(-?\d+)\s*\]", s)
@@ -525,33 +477,43 @@ class AgenticEmployerAgent(Agent):
                                 data = string_utils.safe_substitute(input, **properties, **action_context)
 
 
-                        ## fix plan
-                        action_plan = []
+                        # plan
+                        p = Plan(prefix=worker.prefix)
+                        # set input
+                        p.set_input_value(action + "_" + scope + "_" + "INPUT", data)
+                        
                         # substitue self
                         for step in p:
                             f = step[0]
                             t = step[1]
 
-                            if f == "self":
-                                f = self.name + "." + action + "_" + scope + "_INPUT"
+                            from_agent = None
+                            from_param = None
+                            to_agent = None
+                            to_param = None
+
                             if t == "self":
-                                t = self.name + "." + action + "_" + scope + "_OUTPUT"
+                                to_agent = self.name
+                                to_param = action + "_" + scope + "_OUTPUT"
+                            else:
+                                ta = t.split(".")
+                                to_agent = ta[0]
+                                to_param = "DEFAULT"
+                                if len(ta) == 2:
+                                    to_param = ta[1]
 
-                            action_plan.append([f,t])
+                            if f == "self":
+                                p.add_input_to_agent_step(action + "_" + scope + "_INPUT", to_agent, to_param=to_param)
+                            else:
+                                fa = f.split(".")
+                                from_agent = fa[0]
+                                from_param = "DEFAULT"
+                                if len(fa) == 2:
+                                    from_param = fa[1]
+                                p.add_agent_to_agent_step(from_agent, to_agent, from_param=from_param, to_param=to_param)
 
-                        # create a unique id
-                        id = uuid_utils.create_uuid()
-
-                       
-
-                        # feed data as input, to output variable SCOPE + ACTION + "DATA"
-                        a_stream = self.write_to_new_stream(worker, data, action + "_" + scope + "_" + "INPUT", tags=["HIDDEN"], id=id)
-
-                        # build plan
-                        plan = self.build_plan(action_plan, a_stream, id=id)
-
-                        # write plan
-                        self.write_to_new_stream(worker, plan, "PLAN", tags=["PLAN"], id=id)
+                        # submit plan
+                        p.submit(worker)
 
 
     #### INTENT
@@ -563,22 +525,15 @@ class AgenticEmployerAgent(Agent):
         if properties is None:
             properties = self.properties
 
-        # create a unique id
-        id = uuid_utils.create_uuid()
-
-        # intent plan
-        intent_plan = [
-            ["USER.TEXT", "OPENAI___CLASSIFIER.DEFAULT"],
-            ["OPENAI___CLASSIFIER.DEFAULT", self.name + ".INTENT"]
-        ]
+        # plan
+        p = Plan(prefix=worker.prefix)
     
-        # build query plan
-        plan = self.build_plan(intent_plan, input_stream, id=id)
+        # set plan
+        p.add_agent_to_agent_step("USER", "OPENAI___CLASSIFIER", from_param="TEXT")
+        p.add_agent_to_agent_step("OPENAI___CLASSIFIER", self.name, to_param="INTENT")
+        # submit plan
+        p.submit(worker)
 
-        # write plan
-        self.write_to_new_stream(worker, plan, "PLAN", tags=["PLAN", "HIDDEN"], id=id)
-
-        return
 
     ## INIT ACTION BASED ON INTENT
     def init_action(self, intent, entities, input, properties=None, worker=None):
@@ -636,6 +591,7 @@ class AgenticEmployerAgent(Agent):
         return context_text
 
     def issue_smart_query(self, context, entities, input, properties=None, worker=None):
+
         if worker == None:
             worker = self.create_worker(None)
 
@@ -657,27 +613,17 @@ class AgenticEmployerAgent(Agent):
         
         logging.info("ISSUE NL QUERY:" + expanded_question)
 
-        # create a unique id
-        id = uuid_utils.create_uuid()
-
-        # question plan
-        question_plan = [
-            [self.name + ".QUESTION", "NL2SQL-E2E___INPLAN.DEFAULT"],
-            ["NL2SQL-E2E___INPLAN.DEFAULT", "OPENAI___EXPLAINER.DEFAULT"],
-        ]
-
-        # write query to strea
-        question_stream = self.write_to_new_stream(worker, expanded_question, "QUESTION",  tags=["HIDDEN"], id=id)
-
-        # build query plan
-        plan = self.build_plan(question_plan, question_stream, id=id)
-
-        # write plan
-        self.write_to_new_stream(worker, plan, "PLAN", tags=["PLAN", "HIDDEN"], id=id)
-
-        return
-
-
+        # plan
+        p = Plan(prefix=worker.prefix)
+        # set input
+        p.set_input_value("question", expanded_question)
+        # set plan
+        p.add_input_to_agent_step("question", "NL2Q")
+        p.add_agent_to_agent_step("NL2Q", "OPENAI___EXPLAINER")
+        
+        # submit plan
+        p.submit(worker)
+       
 
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
 
