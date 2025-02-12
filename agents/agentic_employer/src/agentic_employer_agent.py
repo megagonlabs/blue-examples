@@ -365,7 +365,7 @@ class AgenticEmployerAgent(Agent):
         if "job_seekers_in_list" in properties:
             job_seekers_in_list_query_template = properties['job_seekers_in_list']
             query_template = job_seekers_in_list_query_template['query']
-            query = string_utils.safe_substitute(query_template, **properties, **context)s
+            query = string_utils.safe_substitute(query_template, **properties, **context)
 
         # plan
         p = Plan(prefix=worker.prefix)
