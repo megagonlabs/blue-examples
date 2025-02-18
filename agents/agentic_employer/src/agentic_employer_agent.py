@@ -7,7 +7,6 @@ import re
 
 ###### Blue
 from blue.agent import Agent, AgentFactory
-from blue.agents.coordinator import CoordinatorAgent
 from blue.session import Session
 from blue.stream import ControlCode
 from blue.plan import Plan
