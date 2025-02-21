@@ -28,8 +28,8 @@ class BasicPlannerAgent(Agent):
 
             if message.isEOS():
                 ### create a basic plan
-                # plan
-                p = Plan(prefix=worker.prefix)
+                # plan with a scope of session
+                p = Plan(scope=worker.session)
                 # set input
                 a_value = 10
                 p.set_input_value("a", a_value)
