@@ -32,42 +32,6 @@ class DialogueManagerAgent(OpenAIAgent):
         if "name" not in kwargs:
             kwargs["name"] = "DIALOGUE_MANAGER"
         super().__init__(**kwargs)
-        # self.policy = {
-        #     "investigate": [
-        #         ["USER.TEXT", "NL2SQL.DEFAULT"],
-        #         ["NL2SQL.DEFAULT", "QUERYEXECUTOR.DEFAULT"],
-        #         ["QUERYEXECUTOR.DEFAULT", self.name + "RESULT"],
-        #     ],
-        #     "job_search": [
-        #         ["USER.TEXT", "OPENAI_EXTRACTOR.DEFAULT"],
-        #         ["OPENAI_EXTRACTOR.DEFAULT", "NL2SQL.DEFAULT"],
-        #         ["NL2SQL.DEFAULT", "QUERYEXECUTOR.DEFAULT"],
-        #         ["QUERYEXECUTOR.DEFAULT", self.name + "RESULT"],
-        #     ],
-        #     "summarize": [
-        #         ["USER.TEXT", "OPENAI_EXTRACTOR.DEFAULT"],
-        #         ["OPENAI_EXTRACTOR.DEFAULT", "NL2SQL.DEFAULT"],
-        #         ["NL2SQL.DEFAULT", "QUERYEXECUTOR.DEFAULT"],
-        #         ["QUERYEXECUTOR.DEDAULT", "SUMMARIZER.DEFAULT"],
-        #         ["SUMMARIZER.DEFAULT", self.name + "RESULT"],
-        #     ],
-        #     "OOD": "Intent not supported",
-        # }
-
-    # def process_output(self, output_data, properties=None):
-    #     logging.info("Entered process_output")
-    #     # get properties, overriding with properties provided
-    #     properties = self.get_properties(properties=properties)
-
-    #     logging.info(output_data)
-    #     # get gpt plan as json
-    #     plan = json.loads(output_data)
-    #     logging.info("Plan:")
-    #     logging.info(json.dumps(plan, indent=4))
-    #     logging.info(
-    #         "========================================================================================================"
-    #     )
-    #     return plan
 
     #### INTENT
     def identify_intent(self, worker, data, id=None):
@@ -93,7 +57,8 @@ class DialogueManagerAgent(OpenAIAgent):
         logging.info("Sent off intent classification request")
         return
 
-    def build_intent_plan(self, worker, intent):
+    def build_action_plan(self, worker, intent):
+        """Given an intent class, determine next action and build the corresponding plan"""
         logging.info("Building intent plan")
         logging.info(intent)
         p = Plan(scope=worker.prefix)
@@ -158,9 +123,6 @@ class DialogueManagerAgent(OpenAIAgent):
         logging.info("Submitted intent plan")
         return
 
-    # def next_action(self, intent):
-    #     return self.policy[intent]
-
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
         logging.info("Entered default_processor")
         logging.info(message)
@@ -181,7 +143,7 @@ class DialogueManagerAgent(OpenAIAgent):
                 logging.info(str(data))
 
                 intent = json.loads(data)["intent"]
-                self.build_intent_plan(worker, intent)
+                self.build_action_plan(worker, intent)
 
         elif input == "RESULT":
             if message.isData():
