@@ -5,6 +5,7 @@ import json
 
 ###### Blue
 from blue.agent import Agent, AgentFactory
+from blue.stream import Message
 from blue.session import Session
 
 # set log level
@@ -30,13 +31,12 @@ class CounterAgent(Agent):
             
             # output to stream
             output_data = len(stream_data)
-            return output_data
+            return [output_data, Message.EOS]
         
         elif message.isBOS():
             # init stream to empty array
             if worker:
                 worker.set_data('stream',[])
-            pass
         elif message.isData():
             # store data value
             data = message.getData()

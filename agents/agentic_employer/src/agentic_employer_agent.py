@@ -105,10 +105,10 @@ class AgenticEmployerAgent(Agent):
         # plan
         p = Plan(prefix=worker.prefix)
         # set input
-        p.set_input_value(name, question)
+        p.define_input(name, value=question)
         # set plan
-        p.add_input_to_agent_step(name, "NL2Q")
-        p.add_agent_to_agent_step("NL2Q", self.name, to_param=to_param_prefix + name)
+        p.connect_input_to_agent(from_input=name, to_agent="NL2Q")
+        p.connect_agent_to_agent(from_agent="NL2Q", to_agent=self.name, to_agent_input=to_param_prefix + name)
         
         # submit plan
         p.submit(worker)
@@ -124,10 +124,10 @@ class AgenticEmployerAgent(Agent):
         # plan
         p = Plan(prefix=worker.prefix)
         # set input
-        p.set_input_value(name, query)
+        p.define_input(name, value=query)
         # set plan
-        p.add_input_to_agent_step(name, "QUERYEXECUTOR")
-        p.add_agent_to_agent_step("QUERYEXECUTOR", self.name, to_param=to_param_prefix + name)
+        p.connect_input_to_agent(from_input=name, to_agent="QUERYEXECUTOR")
+        p.connect_agent_to_agent(from_agent="QUERYEXECUTOR", to_agent=self.name, to_agent_input=to_param_prefix + name)
         
         # submit plan
         p.submit(worker)
@@ -253,9 +253,9 @@ class AgenticEmployerAgent(Agent):
         # plan
         p = Plan(prefix=worker.prefix)
         # set input
-        p.set_input_value("jd", "JD")
+        p.define_input("jd", value="JD")
         # set plan
-        p.add_input_to_agent_step("jd", "DOCUMENTER___JD")
+        p.connect_input_to_agent(from_input="jd", to_agent="DOCUMENTER___JD")
         
         # submit plan
         p.submit(worker)
@@ -268,9 +268,9 @@ class AgenticEmployerAgent(Agent):
         # plan
         p = Plan(prefix=worker.prefix)
         # set input
-        p.set_input_value("js", str(job_seeker_id))
+        p.define_input("js", value=str(job_seeker_id))
         # set plan
-        p.add_input_to_agent_step("js", "DOCUMENTER___JOBSEEKER")
+        p.connect_input_to_agent(from_input="js", to_agent="DOCUMENTER___JOBSEEKER")
         
         # submit plan
         p.submit(worker)
@@ -313,18 +313,18 @@ class AgenticEmployerAgent(Agent):
         if list_code == "new":
             p = Plan(prefix=worker.prefix)
             # set input
-            p.set_input_value("sq", query)
+            p.define_input("sq", value=query)
             # set plan
-            p.add_input_to_agent_step("sq", "SUMMARIZER___RECENTP1")
-            p.add_input_to_agent_step("sq", "SUMMARIZER___RECENTP2")
-            p.add_input_to_agent_step("sq", "SUMMARIZER___RECENTP3")
+            p.connect_input_to_agent(from_input="sq", to_agent="SUMMARIZER___RECENTP1")
+            p.connect_input_to_agent(from_input="sq", to_agent="SUMMARIZER___RECENTP2")
+            p.connect_input_to_agent(from_input="sq", to_agent="SUMMARIZER___RECENTP3")
         else:
             # plan
             p = Plan(prefix=worker.prefix)
             # set input
-            p.set_input_value("sq", query)
+            p.define_input("sq", value=query)
             # set plan
-            p.add_input_to_agent_step("sq", summarizer)
+            p.connect_input_to_agent(from_input="sq", to_agent=summarizer)
 
         # submit plan
         if p: 
@@ -369,9 +369,9 @@ class AgenticEmployerAgent(Agent):
         # plan
         p = Plan(prefix=worker.prefix)
         # set input
-        p.set_input_value("cq", query)
+        p.define_input("cq", value=query)
         # set plan
-        p.add_input_to_agent_step("cq", "CLUSTERER___JOBSEEKER")
+        p.connect_input_to_agent(from_input="cq", to_agent="CLUSTERER___JOBSEEKER")
 
         # submit plan
         p.submit(worker)
@@ -465,7 +465,7 @@ class AgenticEmployerAgent(Agent):
                         # plan
                         p = Plan(prefix=worker.prefix)
                         # set input
-                        p.set_input_value(action + "_" + scope + "_" + "INPUT", data)
+                        p.define_input(action + "_" + scope + "_" + "INPUT", value=data)
                         
                         # substitue self
                         for step in p:
@@ -488,14 +488,14 @@ class AgenticEmployerAgent(Agent):
                                     to_param = ta[1]
 
                             if f == "self":
-                                p.add_input_to_agent_step(action + "_" + scope + "_INPUT", to_agent, to_param=to_param)
+                                p.connect_input_to_agent(from_input=action + "_" + scope + "_INPUT", to_agent=to_agent, to_agent_input=to_param)
                             else:
                                 fa = f.split(".")
                                 from_agent = fa[0]
                                 from_param = "DEFAULT"
                                 if len(fa) == 2:
                                     from_param = fa[1]
-                                p.add_agent_to_agent_step(from_agent, to_agent, from_param=from_param, to_param=to_param)
+                                p.connect_agent_to_agent(from_agent==from_agent, to_agent=to_agent, from_agent_output=from_param, to_agent_input=to_param)
 
                         # submit plan
                         p.submit(worker)
@@ -514,8 +514,8 @@ class AgenticEmployerAgent(Agent):
         p = Plan(prefix=worker.prefix)
     
         # set plan
-        p.add_agent_to_agent_step("USER", "OPENAI___CLASSIFIER", from_param="TEXT")
-        p.add_agent_to_agent_step("OPENAI___CLASSIFIER", self.name, to_param="INTENT")
+        p.connect_agent_to_agent(from_agent="USER", to_agent="OPENAI___CLASSIFIER", from_agent_output="TEXT")
+        p.connect_agent_to_agent(from_agent="OPENAI___CLASSIFIER", to_agent=self.name, to_agent_input="INTENT")
         # submit plan
         p.submit(worker)
 
@@ -601,10 +601,10 @@ class AgenticEmployerAgent(Agent):
         # plan
         p = Plan(prefix=worker.prefix)
         # set input
-        p.set_input_value("question", expanded_question)
+        p.define_input("question", value=expanded_question)
         # set plan
-        p.add_input_to_agent_step("question", "NL2Q")
-        p.add_agent_to_agent_step("NL2Q", "OPENAI___EXPLAINER")
+        p.connect_input_to_agent(from_input="question", to_agent="NL2Q")
+        p.connect_agent_to_agent(from_agent="NL2Q", to_agent="OPENAI___EXPLAINER")
         
         # submit plan
         p.submit(worker)

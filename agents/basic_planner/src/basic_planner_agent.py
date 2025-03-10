@@ -29,13 +29,43 @@ class BasicPlannerAgent(Agent):
             if message.isEOS():
                 ### create a basic plan
                 # plan with a scope of session
+                ## W1
+                # p = Plan(scope=worker.session)
+                # p.define_input("I", value=10)
+                # p.define_agent("COUNTER", label="C", properties={"f": 3})
+                # p.define_agent_input("DEFAULT", "COUNTER")
+                # p.define_agent_output("DEFAULT", "C")
+                # p.define_agent("BASIC_PLANNER", label="BP")
+                # p.define_agent_input("RESULT", "BASIC_PLANNER")
+                # p.define_output("R")
+
+                # p.connect_input_to_agent(from_input="I", to_agent="C")
+                # p.connect_agent_to_output(from_agent="C", to_output="R")
+                # p.connect_agent_to_agent(from_agent="C", to_agent="BP", to_agent_input="RESULT")  
+
+                ## W2
                 p = Plan(scope=worker.session)
-                # set input
-                a_value = 10
-                p.set_input_value("a", a_value)
-                # set plan
-                p.add_input_to_agent_step("a", "COUNTER")
-                p.add_agent_to_agent_step("COUNTER", self.name, to_param="RESULT")
+                p.define_input("I", value=10)
+                # p.define_agent("COUNTER", label="C", properties={"f": 3})
+                # p.define_agent_input("DEFAULT", "COUNTER")
+                # p.define_agent_output("DEFAULT", "C")
+                # p.define_agent("BASIC_PLANNER", label="BP")
+                # p.define_agent_input("RESULT", "BASIC_PLANNER")
+                p.define_output("R")
+
+                p.connect_input_to_agent(from_input="I", to_agent="COUNTER")
+                p.connect_agent_to_output(from_agent="COUNTER", to_output="R")
+                p.connect_agent_to_agent(from_agent="COUNTER", to_agent="BASIC_PLANNER", to_agent_input="RESULT")  
+
+                # define_input(self, name, label=None, value=None, stream=None, properties={}, save=False):
+                # define_output(self, name, label=None, value=None, stream=None, properties={}, save=False):
+                # define_agent(self, name, label=None, properties={}, save=False):
+                # define_agent_input(self, name, agent, label=None, stream=None, properties={}, save=False):
+                # define_agent_output(self, name, agent, label=None, properties={}, save=False):   
+                # connect_input_to_agent(self, from_input=None, to_agent=None, to_agent_input=None):
+                # connect_agent_to_agent(self, from_agent=None, from_agent_output=None, to_agent=None, to_agent_input=None):
+                # connect_agent_to_output(self, from_agent=None, from_agent_output=None, to_output=None):
+                # connect_input_to_output(self, from_input=None, to_output=None): 
                 
                 # submit plan
                 p.submit(worker)

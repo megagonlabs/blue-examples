@@ -1,10 +1,9 @@
 #/bin/bash
 echo 'Building docker image...'
+echo "${BLUE_CORE_DOCKER_ORG}/blue-basic_planner:${BLUE_DEPLOY_VERSION}"
+echo "plaforms: ${BLUE_BUILD_PLATFORM}"
 
 # build docker
-docker build --no-cache -t blue-agent-basic_planner:latest -f Dockerfile.agent .
-
-# tag image
-docker tag blue-agent-basic_planner:latest blue-agent-basic_planner:$(git rev-parse --abbrev-ref HEAD)-$(git rev-parse --short HEAD)
+docker buildx build --platform ${BLUE_BUILD_PLATFORM} --no-cache --push -t ${BLUE_DEV_DOCKER_ORG}/blue-basic_planner:${BLUE_DEPLOY_VERSION} -f Dockerfile.agent .
 
 echo 'Done...'

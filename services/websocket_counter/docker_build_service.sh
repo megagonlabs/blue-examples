@@ -1,10 +1,9 @@
 #/bin/bash
 echo 'Building WebSocketCounter Service...'
+echo "${BLUE_CORE_DOCKER_ORG}/blue-service-websocket_counter:${BLUE_DEPLOY_VERSION}"
+echo "plaforms: ${BLUE_BUILD_PLATFORM}"
 
 # build docker
-docker build --no-cache -t blue-service-websocket_counter:latest -f Dockerfile.service .
-
-# tag image
-docker tag blue-service-websocket_counter:latest blue-service-websocket_counter:$(git rev-parse --abbrev-ref HEAD)-$(git rev-parse --short HEAD)
+docker buildx build --platform ${BLUE_BUILD_PLATFORM} --no-cache --push -t ${BLUE_DEV_DOCKER_ORG}/blue-service-websocket_counter:${BLUE_DEPLOY_VERSION} -f Dockerfile.service .
 
 echo 'Done...'
