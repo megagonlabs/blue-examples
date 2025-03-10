@@ -24,16 +24,16 @@ graph LR;
     A(User) -->|user utterence| B(Dialogue Manager);
     B -->|1 Pass input| C(Intent Classifier);
     C -->|Intent | B;
-    B -->|2 Initiate task plan| D(Blue Coordinator:  3 run plan);
+    B -->|2 Initiate task plan| D(Blue Coordinator #10; #40;3 run plan#41;);
     D -->|Execution results| B;
     B -->|4 Post-process & respond| A;
 ```
 
 ## Try it out
 
-### Prerequisites.
+## Prerequisites
 
-To try this out, you'll need to deploy the dialogue manager agent, and create a session with the required agents, make sure the data source is corrected registered and available.
+To try this out, you'll need to deploy the dialogue manager agent, create a session with the required agents, and ensure that the data source is correctly registered and available.
 
 [TODO: pointer to Blue installer instruction with agent group]
 
@@ -47,13 +47,14 @@ Agent list:
 -   OPENAI\_\_\_SUMMARIZER
 -   DialogManager
 -   NL2SQL
-    database: sghr
+
+Database: sghr
 
 ### Example Utterances
 
-| **Natural Language Utterance**                                              | **Intent**  | **Action**                                                    |
-| --------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------- |
-| what is the most frequently advertised manager role in jurong?              | investigate | NL2SQL->QUERYEXECUTOR                                         |
-| I'm looking for a job of a project manager in jurong                        | job_search  | OPENAI\_\_\_EXTRACTOR-> NL2SQL -> QUERYEXECUTOR               |
-| I want a summary of the top 5 jobs with the highest minmum salary in jurong | summarize   | OPENAI\_\_\_EXTRACTOR-> NL2SQL -> QUERYEXECUTOR -> SUMMARIZER |
-| I want help improving my resume                                             | OOD         | falls back to default ROGUEAGENT                              |
+| **Natural Language Utterance**                                                       | **Intent**  | **Action**                                                    |
+| ------------------------------------------------------------------------------------ | ----------- | ------------------------------------------------------------- |
+| I want to investigate the average minimum salary of project manager jobs in jurong   | investigate | NL2SQL->QUERYEXECUTOR                                         |
+| I'm looking for a job of a project manager in jurong with a minimum salary of 4000   | job_search  | OPENAI\_\_\_EXTRACTOR-> NL2SQL -> QUERYEXECUTOR               |
+| Can I get a summary of project manager roles in jurong with a minimum salary of 8000 | summarize   | OPENAI\_\_\_EXTRACTOR-> NL2SQL -> QUERYEXECUTOR -> SUMMARIZER |
+| I want help improving my resume                                                      | OOD         | falls back to default ROGUEAGENT                              |
