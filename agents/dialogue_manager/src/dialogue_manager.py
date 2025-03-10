@@ -71,7 +71,7 @@ class DialogueManagerAgent(OpenAIAgent):
 
     #### INTENT
     def identify_intent(self, worker, data, id=None):
-        logging.info('Identifying intent')
+        logging.info("Identifying intent")
 
         logging.info(str(data))
         inp = f"\nUser text: {data}.\nPossible intents: {self.properties['intents']}."
@@ -80,44 +80,82 @@ class DialogueManagerAgent(OpenAIAgent):
         # set input
         p.define_input("DEFAULT", value=inp)
         # set plan
-        p.connect_input_to_agent(from_input="DEFAULT", to_agent='OPENAI___CLASSIFIER')
-        p.connect_agent_to_agent(from_agent='OPENAI___CLASSIFIER', to_agent=self.name, to_agent_input='INTENT')
-        
+        p.connect_input_to_agent(from_input="DEFAULT", to_agent="OPENAI___CLASSIFIER")
+        p.connect_agent_to_agent(
+            from_agent="OPENAI___CLASSIFIER",
+            to_agent=self.name,
+            to_agent_input="INTENT",
+        )
+
         # submit plan
         p.submit(worker)
 
-        logging.info('Sent off intent classification request')
+        logging.info("Sent off intent classification request")
         return
-    
+
     def build_intent_plan(self, worker, intent):
-        logging.info('Building intent plan')
+        logging.info("Building intent plan")
         logging.info(intent)
         p = Plan(scope=worker.prefix)
-        if intent == 'investigate':
+        if intent == "investigate":
             p.define_input("DEFAULT", value=self.user_input)
-            p.connect_input_to_agent(from_input="DEFAULT", to_agent='NL2SQL___INPLAN')
-            p.connect_agent_to_agent(from_agent='NL2SQL___INPLAN', to_agent='QUERYEXECUTOR', to_agent_input='DEFAULT')
-            p.connect_agent_to_agent(from_agent='QUERYEXECUTOR', to_agent=self.name, to_agent_input='RESULT')
-        elif intent == 'job_search':
+            p.connect_input_to_agent(from_input="DEFAULT", to_agent="NL2SQL")
+            p.connect_agent_to_agent(
+                from_agent="NL2SQL", to_agent="QUERYEXECUTOR", to_agent_input="DEFAULT"
+            )
+            p.connect_agent_to_agent(
+                from_agent="QUERYEXECUTOR", to_agent=self.name, to_agent_input="RESULT"
+            )
+        elif intent == "job_search":
             p.define_input("DEFAULT", value=self.user_input)
-            p.connect_input_to_agent(from_input="DEFAULT", to_agent='OPENAI___EXTRACTOR')
-            p.connect_agent_to_agent(from_agent='OPENAI___EXTRACTOR', to_agent='NL2SQL___INPLAN', to_agent_input='DEFAULT')
-            p.connect_agent_to_agent(from_agent='NL2SQL___INPLAN', to_agent='QUERYEXECUTOR', to_agent_input='DEFAULT')
-            p.connect_agent_to_agent(from_agent='QUERYEXECUTOR', to_agent=self.name, to_agent_input='RESULT')
-        elif intent == 'summarize':
+            p.connect_input_to_agent(
+                from_input="DEFAULT", to_agent="OPENAI___EXTRACTOR"
+            )
+            p.connect_agent_to_agent(
+                from_agent="OPENAI___EXTRACTOR",
+                to_agent="NL2SQL",
+                to_agent_input="DEFAULT",
+            )
+            p.connect_agent_to_agent(
+                from_agent="NL2SQL", to_agent="QUERYEXECUTOR", to_agent_input="DEFAULT"
+            )
+            p.connect_agent_to_agent(
+                from_agent="QUERYEXECUTOR", to_agent=self.name, to_agent_input="RESULT"
+            )
+        elif intent == "summarize":
             p.define_input("DEFAULT", value=self.user_input)
-            p.connect_input_to_agent(from_input="DEFAULT", to_agent='OPENAI___EXTRACTOR')
-            p.connect_agent_to_agent(from_agent='OPENAI___EXTRACTOR', to_agent='NL2SQL___INPLAN', to_agent_input='DEFAULT')
-            p.connect_agent_to_agent(from_agent='NL2SQL___INPLAN', to_agent='QUERYEXECUTOR', to_agent_input='DEFAULT')
-            p.connect_agent_to_agent(from_agent='QUERYEXECUTOR', to_agent='SUMMARIZER', to_agent_input='DEFAULT')
-            p.connect_agent_to_agent(from_agent='SUMMARIZER', to_agent=self.name, to_agent_input='RESULT')
+            p.connect_input_to_agent(
+                from_input="DEFAULT", to_agent="OPENAI___EXTRACTOR"
+            )
+            p.connect_agent_to_agent(
+                from_agent="OPENAI___EXTRACTOR",
+                to_agent="NL2SQL",
+                to_agent_input="DEFAULT",
+            )
+            p.connect_agent_to_agent(
+                from_agent="NL2SQL", to_agent="QUERYEXECUTOR", to_agent_input="DEFAULT"
+            )
+            p.connect_agent_to_agent(
+                from_agent="QUERYEXECUTOR",
+                to_agent="SUMMARIZER",
+                to_agent_input="DEFAULT",
+            )
+            p.connect_agent_to_agent(
+                from_agent="SUMMARIZER", to_agent=self.name, to_agent_input="RESULT"
+            )
         else:
             p.define_input("DEFAULT", value=self.user_input)
-            p.connect_input_to_agent(from_input="DEFAULT", to_agent='OPENAI___ROGUEAGENT')
-            p.connect_agent_to_agent(from_agent='OPENAI___ROGUEAGENT', to_agent=self.name, to_agent_input='RESULT')
+            p.connect_input_to_agent(
+                from_input="DEFAULT", to_agent="OPENAI___ROGUEAGENT"
+            )
+            p.connect_agent_to_agent(
+                from_agent="OPENAI___ROGUEAGENT",
+                to_agent=self.name,
+                to_agent_input="RESULT",
+            )
 
         p.submit(worker)
-        logging.info('Submitted intent plan')
+        logging.info("Submitted intent plan")
         return
 
     # def next_action(self, intent):
@@ -138,18 +176,18 @@ class DialogueManagerAgent(OpenAIAgent):
         elif input == "INTENT":
             if message.isData():
                 data = message.getData()
-                logging.info('Data type')
+                logging.info("Data type")
                 logging.info(type(data))
                 logging.info(str(data))
 
-                intent = json.loads(data)['intent']
+                intent = json.loads(data)["intent"]
                 self.build_intent_plan(worker, intent)
 
         elif input == "RESULT":
             if message.isData():
                 if worker:
                     data = message.getData()
-                    logging.info('In results')
+                    logging.info("In results")
                     logging.info(data)
                     return data
 
