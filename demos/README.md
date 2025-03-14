@@ -1,8 +1,8 @@
 # Blue Example Demos
 
 Basics:
-* [basic_counter](): 
-* [basic_planner]():   
+* [basic_counter](): Build a simple agent that counts words
+* [basic_planner](): Buidl a simple agent that executes a plan
 
 Base Agents:
 * [nl2sql](): Translate user input text to SQL and execute it with data in registry.
