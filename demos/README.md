@@ -1,7 +1,5 @@
 # Blue Example Demos
 
-* [nl2sql](nl2sql): 
-
 Basics:
 * [basic_counter](): 
 * [basic_planner]():   
