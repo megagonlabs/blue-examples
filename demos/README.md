@@ -1,7 +1,7 @@
 # Blue Example Demos
 
 Basics:
-* [basic_counter](): Build a simple agent that counts words
+* [counter](counter): Build a simple agent that counts words 
 * [basic_planner](): Buidl a simple agent that executes a plan
 
 Base Agents:

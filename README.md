@@ -15,8 +15,9 @@ As part of installation, there is example data you can explore blue with, as sho
 
 ![example_data_registry](./docs/images/example_data_registry.png)
 
-To allow blue agents discover the example data you will need to sync to extract schema and other metadata.
-To do so, click on `postgres_example` dataset in the registry. Then, select `Actions` and `Sync`.
+To allow blue agents discover the example data you will need to sync to extract schema and other metadata into the data registry.
+You can do so using the blue web application. Once logged in, first click in `Data` under registries, and then click on `postgres_example` dataset in the registry. 
+Then, select `Actions` and `Sync`.
 
 If you reload the page now you should see `postgres` database listed under `Databases`. If you click click on `postgres` and then `public` you can explore the database schema.
 
