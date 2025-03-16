@@ -26,7 +26,7 @@ The agent outputs a number representing the number of words in input:
 
 ---
 
-## Base Properties
+## Properties
 
 - **Listener:**
   - `listens.DEFAULT`: Includes "USER" to listen to USER agent output
