@@ -12,6 +12,9 @@ and connects:
   
 Plan object is then written to the stream and with the help of the `COORDINATOR` agent it is executed.
 
+The following animation displays a user entering some text to trigger the Basic Planner agent to kick off the plan, the counter agent responding.
+When the debug mode is opened it shows more clearly what is happening. First, the input variable is written to a stream and then the plan is written, invoking the Counter agent, as part of the plan.
+
 ![Demo of Basic Planner agent](/docs/images/basic_planner.gif)
 
 ---
