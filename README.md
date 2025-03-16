@@ -9,6 +9,10 @@ Or you can check out:
 * [template](agents/template): a template starter agent
 * [interactive template](agents/template_interactive): a template starter agent with interactive forms
 
+## openai service
+
+Many of the examples in this repo use `OPENAI` service as the backend service of the agent. As such before trying these demos you need to create and start the `OPENAI` service. Please refer to the [Installation Documentation - Start Service](https://github.com/rit-git/blue/blob/v0.9/LOCAL-INSTALLATION.md#start-services) to do so, if you havent' already done so.
+
 ## example data
 
 As part of installation, there is example data you can explore blue with, as shown below:
