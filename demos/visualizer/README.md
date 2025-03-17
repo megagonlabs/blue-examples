@@ -1,28 +1,21 @@
 # Visualizer
 
-Basic Planner is an agent to demonstrate basic functioning of a plan. A plan is declarative specification of a workflow where inputs and outputs from various agents are connected to achieve an outcome. See [Plan](https://github.com/rit-git/blue/tree/v0.9/agents) in the development guide for more detailed description.
+Visualizer is an agent to that has a built in template property (`template`) for visualizing data that is populated from query results. Queries can either be specified in natural language or SQL, through `questions` and `queries` properties. Each question (or query) in these properties have an id and the corresponding natural language question or sql query (optionally source for SQL). Once all queries are executed the template can refer to query results through these ids within the template. The visualization template is expressed in [vega-lite](https://vega.github.io/). 
 
-The basic planner simply creates a plan, comprised of:
-* an input variable, `I`, with a value
-* an output variable, `R`, to collect the result
-and connects:
-* I to `COUNTER` agent, `DEFAULT` input
-* `COUNTER` agent, 'DEFAULT` output to `R`, as well as,
-* `COUNTER` agent, 'DEFAULT` back to `BASIC_PLANNER` agent input `RESULT`,
-  
-Plan object is then written to the stream and with the help of the `COORDINATOR` agent it is executed.
 
-The following animation displays a user entering some text to trigger the Basic Planner agent to kick off the plan, the counter agent responding.
-When the debug mode is opened it shows more clearly what is happening. First, the input variable is written to a stream and then the plan is written, invoking the Counter agent, as part of the plan.
+The following animation displays a visualizer agent issuing a single natural language query and rendering a visualization with the query result:
 
-![Demo of Basic Planner agent](/docs/images/basic_planner.gif)
+![Demo of Visualizer agent](/docs/images/visualizer.gif)
 
 ---
 
 ## Features
 
-- **Plan:** Uses plan to define a workflow
-- **Coordinator Agent:** Coordinates the execution of the plan issuing instructions to agents
+- **Natural Language Queries:** Allows users to specify any number of natural language queries
+- **SQL Queries:** Allows users to specifies queries directly in SQL
+- **Coordinator Agent:** Users coordinator agent to instruct NL2SQL (for NL queries) and QUERY_EXECUTOR (for SQL queries) agents.
+- **Templates:** Uses templates where data from queries can be substituted
+- **Visualizations:** Renders charts for any vega-lite specification
   
 ---
 
@@ -30,28 +23,25 @@ When the debug mode is opened it shows more clearly what is happening. First, th
 
 ### Input
 
-- **RESULT:** Captures result of the plan.
+- **DEFAULT:** Triggers execution of queries.
 
 ### Output
 
-- **DEFAULT:** Plan written, tagged with `PLAN`
+- **VIS:** Visualization in vega
 
 ---
 
 ## Properties
-
-- **Listener:**
-  - `listens.DEFAULT`: Includes "USER" to listen to USER agent output, only to trigger plan execution.
-
-### Configuration (UI)
-
-None required
+ 
+- `template`: vega-lite specification of a visualization, with substitutions for ids for each each query results
+- `questions`: id and question pairs expressed in natural language
+- `queries`: id and query pairs expressed in SQL
 
 ---
 
 ## Flow Diagram
 
-Below is an overview of the process flow for the Counter agent:
+Below is an overview of the process flow for the Visualizer agent:
 
 ```mermaid
 graph LR;
@@ -65,25 +55,29 @@ graph LR;
 
 ## Code Overview
 
-The `BASIC_PLANNER` agent is defined [here](https://github.com/rit-git/blue-examples/blob/v0.9/agents/basic_planer/src/basic_planner_agent.py)
+The `VISUALIZER` agent is defined [here](https://github.com/rit-git/blue/blob/v0.9/lib/blue/agents/visualizer.py))
 
 - **Processing:**
-  - Plan object created, and submitted
-  - Result processed and displayed
+  - Iterate over all questions:
+    - Create a plan for each question invoking the `NL2SQL` agent
+    - Store query result by query id
+  - Iterate over all queries:
+    - Create a plan for each query invoking the `QUERY_EXECUTOR` agent
+    - Store query result by query id
+  - Subsitute query results in template by the respective query ids
+  - Render visualization
 
 ---
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the agent.
+To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Visualize Skills by Frequency Agent` (`VISUALIZER___SKILLS_BY_FREQUENCY`), `Task Coordinator Agent` (`COORDINATOR`), `Query Executor Agent` (`QUERY_EXECUTOR`), and `NL-to-SQL Agent` (`NL2SQL`)
 
-If the `Counter Example` (`COUNTER`) agent in your agent registry is listening to `USER` streams go ahead and remove it so you can see the Task Coordinator agent invoking it directly. 
-
-Once deployed create a new session and add the `Basic Planner` (`BASIC_PLANNER`), `Counter Example` (`COUNTER`), `Task Coordinator` (`COORDINATOR`) agents to the session. 
+Once deployed create a new session and add the above agents to the session. 
 
 In the UI, enter some text.
 
 | **User Input** | **Result** |
 |--------------------------------|---------|
-| 'go' | -- |
+| 'go' | <bar chart>  |
 
