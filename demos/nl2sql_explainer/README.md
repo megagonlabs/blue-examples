@@ -7,11 +7,11 @@ To do so, you won't even need to write any code. You will simply need to make su
 
 If you check the tags property of the `NL-to-SQL Interactive Agent` you will see that its `DEFAULT` output stream is tagged as `QUERY`:
 
-![NL2SQL tag](/docs/images/nl2sql_tag.gif)
+![NL2SQL tag](/docs/images/nl2sql_tag.png)
 
 and the `listens` property of the `OpenAI Query Explainer Agent` is configured such that its `DEFAULT` input stream is set to listen to streams tagged with `QUERY`:
 
-![Explainer_listens](/docs/images/explainer_listens.gif)
+![Explainer_listens](/docs/images/explainer_listens.png)
 
 That is all you need to chain agents.
 
