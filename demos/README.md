@@ -6,6 +6,7 @@ Basics:
 
 Base Agents:
 * [nl2sql](nl2sql): Translate user input text to SQL and execute it with data in registry.
+* [visualizer](visualizer): Create a visualization from several sql and natural language queries.
 * [documenter](documenter): Create a document from natural language and SQL queries
 * [summarizer](summarizer): Summarize natural language and SQL queries in natural language
 * [presenter](presenter): Show interactive forms and extact data
