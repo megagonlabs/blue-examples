@@ -79,5 +79,5 @@ In the UI, enter some text.
 
 | **User Input** | **Result** |
 |--------------------------------|---------|
-| 'go' | <bar chart>  |
+| 'go' | bar chart |
 
