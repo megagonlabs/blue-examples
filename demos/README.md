@@ -13,10 +13,9 @@ Base Agents:
 
 Chaining Agents:
 * [nl2sql_explainer](nl2sql_explainer): Translate user input text to SQL and execute it and explain results 
-* [nl2sql_visualizer](nl2sql_visualizer): Translate user input text to SQL and execute it and visualize results 
 
 
 Experimental:
 * [intent_classifier](intent_classifier): Identify user intent 
 * [dialogue_manager](dialogue_manager): Identify user intent and execute plans
-* [text_semantics](text_semantics): Process text documents with semantic extraction and filtering
+* [text_semantic_operators](text_semantics): Process text documents with semantic extract and filter operator agents
