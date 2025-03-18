@@ -80,5 +80,5 @@ In the UI, enter some text.
 
 | **User Input** | **Result** |
 |--------------------------------|---------|
-| 'show' | markdown document |
+| 'software engineer' | markdown document |
 
