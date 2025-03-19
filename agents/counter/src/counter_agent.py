@@ -30,8 +30,10 @@ class CounterAgent(Agent):
                 stream_data = worker.get_data('stream')
             
             # output to stream
-            output_data = len(stream_data)
-            return [output_data, Message.EOS]
+            text = " ".join(stream_data)
+            count = len(text.split(" "))
+            
+            return [count, Message.EOS]
         
         elif message.isBOS():
             # init stream to empty array
