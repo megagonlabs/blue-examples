@@ -17,7 +17,8 @@ For demonstration purposes, we focus on three user intents: **investigate**, **j
 
 As shown in this example animation, the user can ask investigating questions, search for job openings or get summarized insights about several jobs.
 
-[TODO: Animation/ screenshot]
+![Demo of dialogue manager agent](/docs/images/DM_example1.png)
+![Demo of dialogue manager agent](/docs/images/DM_example2.png)
 
 ## How it works
 
@@ -40,21 +41,21 @@ graph LR;
 
 ## Prerequisites
 
-1. Install and deploy blue orchastration platform following the link here (TODO: add public link). Agents and data used in this demo will be automatically loaded at installation.
-2. Deploy agents: In the Agent Registry, deploy the following agents. To deploy an agent, go to its correpsonding agent card, click the `Actions` button on the top righ corner, and then click `Deploy`.
-    1. DIALOGUE MANAGER
-    2. OPENAI
-    3. NL2SQL
-    4. COORDINATOR
-    5. QUERY EXECUTOR
-3. Sync data: In the Data Registry, go to the data card of the example db `postgres_example` and click `Actions-> Sync`.
-4. Start a session with pre-configured agent group and try it out. To do so, go to the Blue home page and click `Test the Dialogue Manager`
+1. **Install and deploy blue orchastration platform:** Follow the link here (TODO: add public link). Agents and data used in this demo will be automatically loaded at installation.
+2. **Deploy agents:** In the Agent Registry, deploy the following agents. To deploy an agent, go to its correpsonding agent card, click the `Actions` button on the top righ corner, and then click `Deploy`.
+    1. Dialogue Manager
+    2. OpenAI Agent
+    3. NL-to-SQL Agent
+    4. Task Coordinator Agent
+    5. Query Executor Agent
+3. **Sync data:** In the Data Registry, go to the data card of the example db `postgres_example` and click `Actions-> Sync`.
+4. **Start a session** with pre-configured agent group and try it out. To do so, go to the Blue home page and click `Test the Dialogue Manager`
 
 ### Example Utterances
 
 | **Natural Language Utterance**                                                     | **Intent**  | **Action**                                                                |
 | ---------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------- |
-| I want to investigate the average minimum salary of project manager jobs in jurong | investigate | NL2SQL->QUERYEXECUTOR                                                     |
+| I want to investigate the 10 most common skills required for project manager jobs  | investigate | NL2SQL->QUERYEXECUTOR                                                     |
 | I'm looking for a job of a project manager in jurong with a minimum salary of 4000 | job_search  | OPENAI\_\_\_EXTRACTOR-> NL2SQL -> QUERYEXECUTOR                           |
 | Please generate a report for the top 5 project manager jobs in jurong              | summarize   | OPENAI\_\_\_EXTRACTOR-> NL2SQL -> QUERYEXECUTOR -> OPENAI\_\_\_SUMMARIZER |
 | I want help improving my resume                                                    | OOD         | falls back to default ROGUEAGENT                                          |
