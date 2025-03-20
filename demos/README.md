@@ -16,6 +16,8 @@ Chaining Agents:
 
 
 Experimental:
-* [intent_classifier](intent_classifier): Identify user intent 
 * [dialogue_manager](dialogue_manager): Identify user intent and execute plans
-* [text_semantic_operators](text_semantics): Process text documents with semantic extract and filter operator agents
+
+Text Operator Agents:
+* [semantic extractor](semantic_extractor): Process text to extract entities
+* [semantic filter](semantic_filter): Process text to filter 
