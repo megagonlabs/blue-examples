@@ -6,7 +6,7 @@ Semantic Extractor is an `OPENAI` agent designed to extract entities from input 
 
 The following animation displays a user entering some text to trigger the Semantic Extractor agent to extract entities such as occupation sector, skills, and certifications.
 
-![Demo of Semantic Extractor agent](/docs/images/semantic_extrator.gif)
+![Demo of Semantic Extractor agent](/docs/images/semantic_extractor.gif)
 
 ---
 
