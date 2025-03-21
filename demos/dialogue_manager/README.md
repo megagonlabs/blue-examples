@@ -1,10 +1,15 @@
-# Simple Chat app using Dialogue Manager Agent
+# Dialogue Manager Agent for Chat Applications
 
-This example demonstrates how to build a simple chat application that interacts with users by leveraging a dialogue manager and a set of Blue agents.
+Dialogue Manager is an agent to help developers build chat applications. It demonstrates use of `OPENAI Intent Classifier Agent`(OPENAI___INTENT_CLASSIFIER) to identify intent and then map intents to plans to execute a series of agents to respond to user's intent. See [Plan](https://github.com/rit-git/blue/tree/v0.9/agents) in the development guide for more detailed description.
 
-Imagine having access to a multi-modal data source about the local job market, equiped with agents capable of converting natural language into data queries (e.g., NL2SQL). Using these resources, the chat app assists job seekers in exploring market trends and finding job opportunities.
+This demo shows how to build a simple chat application that interacts with users by leveraging the Dialogue Manager and a set of other agents.
 
-For demonstration purposes, we focus on three user intents: **investigate**, **job_search**, and **summarize**.
+
+The following animation displays the Dialogue Manager in action for a job search use case, assists job seekers in exploring market trends and finding job opportunities:
+
+![Demo of Dialog Manager agent](/docs/images/dialogue_manager.gif)
+
+In the above example, there are three intents: **investigate**, **job_search**, and **summarize**.
 
 1. investigate: The user is requesting job market statistics or insights that can be fulfilled by a single SQL query (e.g., "What is the average salary for data scientists in Jurong?").
 2. job_search: The user is searching for job postings that match specific criteria (e.g., "Show me remote software engineer jobs with at least 5 years of experience.").
@@ -13,19 +18,13 @@ For demonstration purposes, we focus on three user intents: **investigate**, **j
 
 4. OOD (Out of Domain): The user’s request does not fit into any of the above categories.
 
-## Dialogue Manager in action
 
-As shown in this example animation, the user can ask investigating questions, search for job openings or get summarized insights about several jobs.
+## Flow Diagram
 
-![Demo of dialogue manager agent](/docs/images/DM_example1.png)
-![Demo of dialogue manager agent](/docs/images/DM_example2.png)
-
-## How it works
-
-1. The dialogue manager continuously listens for user input and passes it to an intent classification agent.
-2. Once the intent is identified, the dialogue manager initiates a task plan. (In this demo, plans for each intent class are predefined for simplicity. In a more practical scenario, a more intelligent planning agent would be invoked.)
-3. The Blue coordinator picks up and executes the plan.
-4. Upon completion, the execution results are returned to the dialogue manager, which may perform optional post-processing before presenting the response to the user.
+1. The Dialogue Manager continuously listens for user input and passes it to the Intent Classifier agent.
+2. Once the intent is identified, the Dialogue Manager initiates a task plan. (Note: In this demo, plans for each intent class are predefined for simplicity. In a more practical scenario, a more intelligent planning agent would be invoked)
+3. The Task Coordinator picks up the plan and start execution.
+4. Upon completion, the execution results are returned to the Dialogue Manager, which may perform optional post-processing before presenting the response to the user.
 
 ```mermaid
 graph LR;
@@ -39,17 +38,11 @@ graph LR;
 
 ## Try it out
 
-## Prerequisites
+This demo uses the example data `postgres_example` and `OPENAI` service. Please make sure to follow the aditional steps required to get them ready in the blue-examples [documentation](https://github.com/rit-git/blue-examples/tree/v0.9?tab=readme-ov-file#blue-examples)
 
-1. **Install and deploy blue orchastration platform:** Follow the link here (TODO: add public link). Agents and data used in this demo will be automatically loaded at installation.
-2. **Deploy agents:** In the Agent Registry, deploy the following agents. To deploy an agent, go to its correpsonding agent card, click the `Actions` button on the top righ corner, and then click `Deploy`.
-    1. Dialogue Manager
-    2. OpenAI Agent
-    3. NL-to-SQL Agent
-    4. Task Coordinator Agent
-    5. Query Executor Agent
-3. **Sync data:** In the Data Registry, go to the data card of the example db `postgres_example` and click `Actions-> Sync`.
-4. **Start a session** with pre-configured agent group and try it out. To do so, go to the Blue home page and click `Test the Dialogue Manager`
+Additionally, to try out this demo, follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Dialogue Manager` (`DIALOGUE_MANAGER`), `OpenAI Agent` (`OPENAI`), `Query Executor Agent` (`QUERY_EXECUTOR`),  `NL-to-SQL Agent` (`NL2SQL`), and `Task Coordinator Agent` (`COORDINATOR`).
+
+To start a session with all these agents, you can simply go to Blue home page and click `Try out the Dialogue Manager`
 
 ### Example Utterances
 
