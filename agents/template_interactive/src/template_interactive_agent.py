@@ -33,15 +33,12 @@ class TemplateInteractiveAgent(Agent):
                     form_id = data["form_id"]
                     action = data["action"]
 
-                
-                    # get form stream
-                    form_data_stream = stream.replace("EVENT", "OUTPUT:FORM")
-
+        
                     # when the user clicked DONE
                     if action == "DONE":
                         # gather all data, check if first_name is set
-                        first_name = worker.get_stream_data("first_name.value", stream=form_data_stream)
-                        last_name = worker.get_stream_data("last_name.value", stream=form_data_stream)
+                        first_name = worker.get_data("first_name.value")
+                        last_name = worker.get_data("last_name.value")
                         first_name_filled = not pydash.is_empty(pydash.strings.trim(first_name))
                         last_name_filled = not pydash.is_empty(pydash.strings.trim(last_name))
 
@@ -117,15 +114,14 @@ class TemplateInteractiveAgent(Agent):
                                 return [ "Hello, " + first_name + " " + last_name, Message.EOS ]
                     else:
                         path = data["path"]
-                        timestamp = worker.get_stream_data(path + ".timestamp", stream=form_data_stream)
+                        timestamp = worker.get_data(path + ".timestamp")
                         if timestamp is None or data["timestamp"] > timestamp:
-                            worker.set_stream_data(
+                            worker.set_data(
                                 path,
                                 {
                                     "value": data["value"],
                                     "timestamp": data["timestamp"],
-                                },
-                                stream=form_data_stream
+                                }
                             )
         else:
             if message.isEOS():
