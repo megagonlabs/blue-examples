@@ -38,7 +38,7 @@ The following animation displays a user entering some text to trigger the Semant
 ## Code Overview
 
 
-The `OPENAI___SEMANTIC_EXTRAXTOR` agent is a derivative agent of the `OPENAI` agent. You can find the code of `OPENAI` agent [here](https://github.com/rit-git/blue/blob/v0.9/lib/blue/agents/openai.py)
+The `OPENAI___SEMANTIC_EXTRACTOR` agent is a derivative agent of the `OPENAI` agent. You can find the code of `OPENAI` agent [here](https://github.com/rit-git/blue/blob/v0.9/lib/blue/agents/openai.py)
 
 - **Processing:**
   - Prompt constructed using aget property `entites` and input text `input`
