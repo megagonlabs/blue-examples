@@ -35,20 +35,6 @@ The following animation displays a presenter agent showing a form to the user an
 - `triggers`: keywords to trigger execution (optional)
 ---
 
-## Flow Diagram
-
-Below is an overview of the process flow for the Presenter agent:
-
-```mermaid
-graph LR;
-    A[USER: Text] --> B[BASIC_PLANNER: Plan] --> C[COORDINATOR: Instructions]
-    D[BASIC_PLANNER] --> I[I]
-    E[Instruction] --> F[COUNTER] --> G[BASIC_PLANNER: Result]
-    F[COUNTER] --> R[R]
-```
-
----
-
 ## Code Overview
 
 The `PRESENTER` agent is defined [here](https://github.com/rit-git/blue/blob/v0.9/lib/blue/agents/presenter.py))
@@ -61,9 +47,9 @@ The `PRESENTER` agent is defined [here](https://github.com/rit-git/blue/blob/v0.
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Presenter Example Agent` (`PRESENTER___EXAMPLE`).
+To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Presenter Agent` (`PRESENTER`).
 
-Once deployed create a new session and add the above agent to the session. 
+Once deployed create a new session and add the above agent to the session. Note: For this example add `Presenter Agent - Example` (`PRESENTER___EXAMPLE`) instead of `Presenter Agent` (`PRESENTER`).
 
 In the UI, enter some text.
 
