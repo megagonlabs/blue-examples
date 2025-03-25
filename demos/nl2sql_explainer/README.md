@@ -11,6 +11,8 @@ If you check the tags property of the `NL-to-SQL Interactive Agent` you will see
 
 and the `listens` property of the `OpenAI Query Explainer Agent` is configured such that its `DEFAULT` input stream is set to listen to streams tagged with `QUERY`, if not temporarily change it.
 
+Note: If the `tags` property of the `OpenAI Query Explainer Agent` is configured such that it contains `HIDDEN` temporarily remove it, so that the query results are shown to the user.
+
 ![Explainer_listens](/docs/images/explainer_listens.png)
 
 That is all you need to chain agents.
