@@ -81,9 +81,9 @@ If the `Counter Example` (`COUNTER`) agent in your agent registry is listening t
 
 Once deployed create a new session and add the `Planner Agent - Example` (`BASIC_PLANNER`), `Counter Agent - Example` (`COUNTER`), `Task Coordinator Agent` (`COORDINATOR`) agents to the session. 
 
-In the UI, enter some text.
+In the UI, enter some text to trigger the `BASIC_PLANNER` agent.
 
 | **User Input** | **Result** |
 |--------------------------------|---------|
-| 'go' | -- |
+| 'go' | 8 |
 
