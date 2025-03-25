@@ -63,7 +63,7 @@ The `COUNTER` agent is defined [here](https://github.com/rit-git/blue-examples/b
 
 To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the agent.
 
-Once deployed create a new session and add the `Counter Example` (`COUNTER`)agent to the session.
+Once deployed create a new session and add the `Counter Agent - Example` (`COUNTER`)agent to the session.
 
 In the UI, enter some text.
 
