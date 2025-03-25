@@ -126,7 +126,7 @@ The base `NL2SQL` agent is defined [here](https://github.com/rit-git/blue/blob/d
 
 This demo uses the example data `postgres_example` and `OPENAI` service. Please make sure to follow the aditional steps required to get them ready in the blue-examples [documentation](https://github.com/rit-git/blue-examples/tree/v0.9?tab=readme-ov-file#blue-examples)
 
-Additionally, to try out this demo, follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy `NL-to-SQL Agent - Interactive` (`NL2SQL___INTERACTIVE`) agent.
+Additionally, to try out this demo, follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy `NL-to-SQL Agent` (`NL2SQL`) agent and add the `NL-to-SQL Agent - Interactive` (`NL2SQL___INTERACTIVE`) agent to a session.
 
 To start a session with the abve agents, you can simply go to Blue home page and click `Try out the NL2SQL agent`
 
