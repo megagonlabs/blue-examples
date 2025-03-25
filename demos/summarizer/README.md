@@ -39,20 +39,6 @@ The following animation displays a summarizer agent issuing a single natural lan
 
 ---
 
-## Flow Diagram
-
-Below is an overview of the process flow for the Summarizer agent:
-
-```mermaid
-graph LR;
-    A[USER: Text] --> B[BASIC_PLANNER: Plan] --> C[COORDINATOR: Instructions]
-    D[BASIC_PLANNER] --> I[I]
-    E[Instruction] --> F[COUNTER] --> G[BASIC_PLANNER: Result]
-    F[COUNTER] --> R[R]
-```
-
----
-
 ## Code Overview
 
 The `SUMMARIZER` agent is defined [here](https://github.com/rit-git/blue/blob/v0.9/lib/blue/agents/summarizer.py))
@@ -72,9 +58,9 @@ The `SUMMARIZER` agent is defined [here](https://github.com/rit-git/blue/blob/v0
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Summarizer Skill Agent` (`SUMMARIZER___SKILL`), `Task Coordinator Agent` (`COORDINATOR`), `Query Executor Agent` (`QUERY_EXECUTOR`),  and `NL-to-SQL Agent` (`NL2SQL`).
+To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Summarizer Agent` (`SUMMARIZER`), `Task Coordinator Agent` (`COORDINATOR`), `Query Executor Agent` (`QUERY_EXECUTOR`),  and `NL-to-SQL Agent` (`NL2SQL`) agents.
 
-Once deployed create a new session and add the above agents to the session. 
+Once deployed create a new session and add the above agents to the session. Note: For this example add `Summarizer Agent - Example` (`SUMMARIZER___EXAMPLE`) instead of `Summarizer Agent` (`SUMMARIZER`).
 
 In the UI, enter some text.
 
