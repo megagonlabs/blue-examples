@@ -9,7 +9,7 @@ If you check the tags property of the `NL-to-SQL Interactive Agent` you will see
 
 ![NL2SQL tag](/docs/images/nl2sql_tag.png)
 
-and the `listens` property of the `OpenAI Query Explainer Agent` is configured such that its `DEFAULT` input stream is set to listen to streams tagged with `QUERY`:
+and the `listens` property of the `OpenAI Query Explainer Agent` is configured such that its `DEFAULT` input stream is set to listen to streams tagged with `QUERY`, if not temporarily change it.
 
 ![Explainer_listens](/docs/images/explainer_listens.png)
 
@@ -25,7 +25,7 @@ The following animation shows the chaining of agents in action:
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy `NL2SQL` and `OPENAI` agents. Also make sure that you are already running the `OPENAI` service.
+To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy `NL-to-SQL Agent` (`NL2SQL`) and `OpenAI Agent` (`OPENAI`) agents. Also, make sure that you are already running the `OPENAI` service.
 
 Once deployed create a new session and add the `NL-to-SQL Interactive Agent` (`NL2SQL___INTERACTIVE`) and `OpenAI Query Explainer Agent` (`OPENAI___QUERY_EXPLAINER`)  agents to the session. 
 
