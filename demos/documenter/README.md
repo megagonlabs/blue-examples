@@ -39,20 +39,6 @@ The following animation displays a documenter agent issuing a single natural lan
 
 ---
 
-## Flow Diagram
-
-Below is an overview of the process flow for the Documenter agent:
-
-```mermaid
-graph LR;
-    A[USER: Text] --> B[BASIC_PLANNER: Plan] --> C[COORDINATOR: Instructions]
-    D[BASIC_PLANNER] --> I[I]
-    E[Instruction] --> F[COUNTER] --> G[BASIC_PLANNER: Result]
-    F[COUNTER] --> R[R]
-```
-
----
-
 ## Code Overview
 
 The `DOCUMENTER` agent is defined [here](https://github.com/rit-git/blue/blob/v0.9/lib/blue/agents/documenter.py))
