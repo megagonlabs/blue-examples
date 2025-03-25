@@ -58,9 +58,9 @@ The `DOCUMENTER` agent is defined [here](https://github.com/rit-git/blue/blob/v0
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Document Builder Skill Hiliter Agent` (`DOCUMENTER___SKILLS_HILITER`), `Task Coordinator Agent` (`COORDINATOR`), `Query Executor Agent` (`QUERY_EXECUTOR`),  `NL-to-SQL Agent` (`NL2SQL`), and `OPENAI Hiliter Agent` (`OPENAI___HILITER`)
+To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Document Builder Agent` (`DOCUMENTER`), `Task Coordinator Agent` (`COORDINATOR`), `Query Executor Agent` (`QUERY_EXECUTOR`),  `NL-to-SQL Agent` (`NL2SQL`), and `OPENAI Agent` (`OPENAI`) agents.
 
-Once deployed create a new session and add the above agents to the session. 
+Once deployed create a new session and add the above agents to the session. Note: For this example add `Document Builder Agent - Example` (`DOCUMENTER___EXAMPLE`) and `OPENAI Hiliter Agent` (`OPENAI___HILITER`) agents.
 
 In the UI, enter some text.
 
