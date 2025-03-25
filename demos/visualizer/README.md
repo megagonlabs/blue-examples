@@ -57,9 +57,9 @@ The `VISUALIZER` agent is defined [here](https://github.com/rit-git/blue/blob/v0
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Visualize Skills by Frequency Agent` (`VISUALIZER___SKILLS_BY_FREQUENCY`), `Task Coordinator Agent` (`COORDINATOR`), `Query Executor Agent` (`QUERY_EXECUTOR`), and `NL-to-SQL Agent` (`NL2SQL`)
+To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Visualizer Agent` (`VISUALIZER`), `Task Coordinator Agent` (`COORDINATOR`), `Query Executor Agent` (`QUERY_EXECUTOR`), and `NL-to-SQL Agent` (`NL2SQL`) agents.
 
-Once deployed create a new session and add the above agents to the session. 
+Once deployed create a new session and add the above agents to the session. Note: For this example you need to add `Visualizer Agent - Example` (`VISUALIZER___EXAMPLE`) agent instead of `VISUALIZER`.
 
 In the UI, enter some text.
 
