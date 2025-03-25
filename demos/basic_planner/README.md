@@ -79,7 +79,7 @@ To try out the agent, first follow the [quickstart guide](https://github.com/rit
 
 If the `Counter Example` (`COUNTER`) agent in your agent registry is listening to `USER` streams go ahead and remove it so you can see the Task Coordinator agent invoking it directly. 
 
-Once deployed create a new session and add the `Basic Planner` (`BASIC_PLANNER`), `Counter Example` (`COUNTER`), `Task Coordinator` (`COORDINATOR`) agents to the session. 
+Once deployed create a new session and add the `Planner Agent - Example` (`BASIC_PLANNER`), `Counter Agent - Example` (`COUNTER`), `Task Coordinator Agent` (`COORDINATOR`) agents to the session. 
 
 In the UI, enter some text.
 
