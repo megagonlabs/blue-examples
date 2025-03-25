@@ -56,13 +56,15 @@ The agent uses a set of properties to control its behavior. Key properties inclu
   - `openai.api`: Specifies the API to use (e.g., "ChatCompletion").
   - `openai.model`: Model selection such as `"gpt-4o"`.
   - `openai.temperature`: Set to `0` for deterministic outputs.
-  - `openai.max_tokens`: Limits the number of tokens (e.g., `512`).
+  - `openai.max_tokens`: Limits the number of tokens (e.g., `512`)
+ 
 
 - **Input/Output Settings:**
   - `output_path`: JSONPath to extract the generated output.
   - `input_json`, `input_context`, `input_context_field`, `input_field`: Define how input data is structured.
   - `input_template`: Uses the `NL2SQL_PROMPT` which embeds the protocols, data sources, context, and the question.
-
+  - `output_transformations`: Specifies text transformations on the output (e.g., removal of markdown code fences).
+  
 - **SQL Query Requirements:**
   - `nl2q_valid_query_prefixes`: Valid SQL prefixes (e.g., "SELECT") to ensure query correctness.
   - `nl2q_force_query_prefixes`: Forces queries to start with allowed prefixes.
@@ -76,7 +78,8 @@ The agent uses a set of properties to control its behavior. Key properties inclu
 
 - **Execution Settings:**
   - `nl2q_execute`: If true, the generated SQL query is executed on the selected data source.
-  - `output_transformations`: Specifies text transformations on the output (e.g., removal of markdown code fences).
+  - `nl2q_output_filters`: List of fields (e.g. `question`, `source`, `query`, `result`, `error`, or `all`) to include in the returned result
+  - `nl2q_output_max_results`: If not null, limits the maximum number of results returned in output
 
 These properties are initialized in the `agent_properties` dictionary and then loaded into the agent during its initialization phase.
 
