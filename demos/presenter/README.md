@@ -2,7 +2,7 @@
 
 Presenter agents displays an interactive form to the user and outputs the data collected. Form is specified declaratively along with the schema of the underlying data collected. Presenter agent can  optionally be triggered through a set of keywords. The data collected is output as JSON following the data schema. Form specification uses a custom version on [JSON Forms](https://jsonforms.io/docs/).
 
-See [Form Designer Tool](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md#form-designer) to learn more about how to design UIs.
+See [Form Designer Tool](https://github.com/megagonlabs/blue/blob/v0.9/QUICK-START.md#form-designer) to learn more about how to design UIs.
 
 The following animation displays a presenter agent showing a form to the user and output collected data.
 
@@ -37,7 +37,7 @@ The following animation displays a presenter agent showing a form to the user an
 
 ## Code Overview
 
-The `PRESENTER` agent is defined [here](https://github.com/rit-git/blue/blob/v0.9/lib/blue/agents/presenter.py))
+The `PRESENTER` agent is defined [here](https://github.com/megagonlabs/blue/blob/v0.9/lib/blue/agents/presenter.py))
 
 - **Processing:**
   - Create form
@@ -47,7 +47,7 @@ The `PRESENTER` agent is defined [here](https://github.com/rit-git/blue/blob/v0.
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Presenter Agent` (`PRESENTER`).
+To try out the agent, first follow the [quickstart guide](https://github.com/megagonlabs/blue/blob/v0.9/QUICK-START.md) to deploy the `Presenter Agent` (`PRESENTER`).
 
 Once deployed create a new session and add the above agent to the session. Note: For this example add `Presenter Agent - Example` (`PRESENTER___EXAMPLE`) instead of `Presenter Agent` (`PRESENTER`).
 

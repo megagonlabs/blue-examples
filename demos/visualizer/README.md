@@ -41,7 +41,7 @@ The following animation displays a visualizer agent issuing a single natural lan
 
 ## Code Overview
 
-The `VISUALIZER` agent is defined [here](https://github.com/rit-git/blue/blob/v0.9/lib/blue/agents/visualizer.py))
+The `VISUALIZER` agent is defined [here](https://github.com/megagonlabs/blue/blob/v0.9/lib/blue/agents/visualizer.py))
 
 - **Processing:**
   - Iterate over all questions:
@@ -57,7 +57,7 @@ The `VISUALIZER` agent is defined [here](https://github.com/rit-git/blue/blob/v0
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Visualizer Agent` (`VISUALIZER`), `Task Coordinator Agent` (`COORDINATOR`), `Query Executor Agent` (`QUERY_EXECUTOR`), and `NL-to-SQL Agent` (`NL2SQL`) agents.
+To try out the agent, first follow the [quickstart guide](https://github.com/megagonlabs/blue/blob/v0.9/QUICK-START.md) to deploy the `Visualizer Agent` (`VISUALIZER`), `Task Coordinator Agent` (`COORDINATOR`), `Query Executor Agent` (`QUERY_EXECUTOR`), and `NL-to-SQL Agent` (`NL2SQL`) agents.
 
 Once deployed create a new session and add the above agents to the session. Note: For this example you need to add `Visualizer Agent - Example` (`VISUALIZER___EXAMPLE`) agent instead of `VISUALIZER`.
 

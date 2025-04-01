@@ -38,7 +38,7 @@ The following animation displays a user entering some text to trigger the Semant
 ## Code Overview
 
 
-The `OPENAI___SEMANTIC_EXTRACTOR` agent is a derivative agent of the `OPENAI` agent. You can find the code of `OPENAI` agent [here](https://github.com/rit-git/blue/blob/v0.9/lib/blue/agents/openai.py)
+The `OPENAI___SEMANTIC_EXTRACTOR` agent is a derivative agent of the `OPENAI` agent. You can find the code of `OPENAI` agent [here](https://github.com/megagonlabs/blue/blob/v0.9/lib/blue/agents/openai.py)
 
 - **Processing:**
   - Prompt constructed using aget property `entites` and input text `input`
@@ -48,7 +48,7 @@ The `OPENAI___SEMANTIC_EXTRACTOR` agent is a derivative agent of the `OPENAI` ag
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `OPENAI` agent. In addition the `OPENAI` service should be running as specified in the [installation guide](https://github.com/rit-git/blue/blob/v0.9/LOCAL-INSTALLATION.md#start-services)
+To try out the agent, first follow the [quickstart guide](https://github.com/megagonlabs/blue/blob/v0.9/QUICK-START.md) to deploy the `OPENAI` agent. In addition the `OPENAI` service should be running as specified in the [installation guide](https://github.com/megagonlabs/blue/blob/v0.9/LOCAL-INSTALLATION.md#start-services)
 
 Once deployed create a new session and add the `OPENAI Semantic Extractor Agent - Example` (`OPENAI___SEMANTIC_EXTRACTOR_EXAMPLE`) agent to the session. 
 

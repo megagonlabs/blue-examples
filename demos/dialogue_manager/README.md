@@ -1,6 +1,6 @@
 # Dialogue Manager Agent for Chat Applications
 
-Dialogue Manager is an agent to help developers build chat applications. It demonstrates use of `OPENAI Intent Classifier Agent`(OPENAI___INTENT_CLASSIFIER) to identify intent and then map intents to plans to execute a series of agents to respond to user's intent. See [Plan](https://github.com/rit-git/blue/tree/v0.9/agents) in the development guide for more detailed description.
+Dialogue Manager is an agent to help developers build chat applications. It demonstrates use of `OPENAI Intent Classifier Agent`(OPENAI___INTENT_CLASSIFIER) to identify intent and then map intents to plans to execute a series of agents to respond to user's intent. See [Plan](https://github.com/megagonlabs/blue/tree/v0.9/agents) in the development guide for more detailed description.
 
 This demo shows how to build a simple chat application that interacts with users by leveraging the Dialogue Manager and a set of other agents.
 
@@ -38,9 +38,9 @@ graph LR;
 
 ## Try it out
 
-This demo uses the example data `postgres_example` and `OPENAI` service. Please make sure to follow the aditional steps required to get them ready in the blue-examples [documentation](https://github.com/rit-git/blue-examples/tree/v0.9?tab=readme-ov-file#blue-examples)
+This demo uses the example data `postgres_example` and `OPENAI` service. Please make sure to follow the aditional steps required to get them ready in the blue-examples [documentation](https://github.com/megagonlabs/blue-examples/tree/v0.9?tab=readme-ov-file#blue-examples)
 
-Additionally, to try out this demo, follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Dialogue Manager` (`DIALOGUE_MANAGER`), `OpenAI Agent` (`OPENAI`), `Query Executor Agent` (`QUERY_EXECUTOR`),  `NL-to-SQL Agent` (`NL2SQL`), and `Task Coordinator Agent` (`COORDINATOR`).
+Additionally, to try out this demo, follow the [quickstart guide](https://github.com/megagonlabs/blue/blob/v0.9/QUICK-START.md) to deploy the `Dialogue Manager` (`DIALOGUE_MANAGER`), `OpenAI Agent` (`OPENAI`), `Query Executor Agent` (`QUERY_EXECUTOR`),  `NL-to-SQL Agent` (`NL2SQL`), and `Task Coordinator Agent` (`COORDINATOR`).
 
 To start a session with all these agents, you can simply go to Blue home page and click `Try out the Dialogue Manager`
 

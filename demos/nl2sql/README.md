@@ -106,7 +106,7 @@ graph LR;
 
 ## Code Structure of Base NL2SQL Agent
 
-The base `NL2SQL` agent is defined [here](https://github.com/rit-git/blue/blob/dev/lib/blue/agents/nl2q.py)
+The base `NL2SQL` agent is defined [here](https://github.com/megagonlabs/blue/blob/dev/lib/blue/agents/nl2q.py)
 
 - **Initialization:**
   - The agent class `NL2SQLAgent` extends `OpenAIAgent` and initializes by setting default properties and establishing the data registry.
@@ -124,9 +124,9 @@ The base `NL2SQL` agent is defined [here](https://github.com/rit-git/blue/blob/d
 
 ## Try it out
 
-This demo uses the example data `postgres_example` and `OPENAI` service. Please make sure to follow the aditional steps required to get them ready in the blue-examples [documentation](https://github.com/rit-git/blue-examples/tree/v0.9?tab=readme-ov-file#blue-examples)
+This demo uses the example data `postgres_example` and `OPENAI` service. Please make sure to follow the aditional steps required to get them ready in the blue-examples [documentation](https://github.com/megagonlabs/blue-examples/tree/v0.9?tab=readme-ov-file#blue-examples)
 
-Additionally, to try out this demo, follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy `NL-to-SQL Agent` (`NL2SQL`) agent and add the `NL-to-SQL Agent - Interactive` (`NL2SQL___INTERACTIVE`) agent to a session.
+Additionally, to try out this demo, follow the [quickstart guide](https://github.com/megagonlabs/blue/blob/v0.9/QUICK-START.md) to deploy `NL-to-SQL Agent` (`NL2SQL`) agent and add the `NL-to-SQL Agent - Interactive` (`NL2SQL___INTERACTIVE`) agent to a session.
 
 To start a session with the abve agents, you can simply go to Blue home page and click `Try out the NL2SQL agent`
 

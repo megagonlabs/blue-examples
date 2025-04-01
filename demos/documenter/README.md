@@ -41,7 +41,7 @@ The following animation displays a documenter agent issuing a single natural lan
 
 ## Code Overview
 
-The `DOCUMENTER` agent is defined [here](https://github.com/rit-git/blue/blob/v0.9/lib/blue/agents/documenter.py))
+The `DOCUMENTER` agent is defined [here](https://github.com/megagonlabs/blue/blob/v0.9/lib/blue/agents/documenter.py))
 
 - **Processing:**
   - Iterate over all questions:
@@ -58,7 +58,7 @@ The `DOCUMENTER` agent is defined [here](https://github.com/rit-git/blue/blob/v0
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the `Document Builder Agent` (`DOCUMENTER`), `Task Coordinator Agent` (`COORDINATOR`), `Query Executor Agent` (`QUERY_EXECUTOR`),  `NL-to-SQL Agent` (`NL2SQL`), and `OPENAI Agent` (`OPENAI`) agents.
+To try out the agent, first follow the [quickstart guide](https://github.com/megagonlabs/blue/blob/v0.9/QUICK-START.md) to deploy the `Document Builder Agent` (`DOCUMENTER`), `Task Coordinator Agent` (`COORDINATOR`), `Query Executor Agent` (`QUERY_EXECUTOR`),  `NL-to-SQL Agent` (`NL2SQL`), and `OPENAI Agent` (`OPENAI`) agents.
 
 Once deployed create a new session and add the above agents to the session. Note: For this example add `Document Builder Agent - Example` (`DOCUMENTER___EXAMPLE`) and `OPENAI Hiliter Agent` (`OPENAI___HILITER`) agents.
 

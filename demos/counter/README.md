@@ -50,7 +50,7 @@ graph LR;
 
 ## Code Overview
 
-The `COUNTER` agent is defined [here](https://github.com/rit-git/blue-examples/blob/v0.9/agents/counter/src/counter_agent.py)
+The `COUNTER` agent is defined [here](https://github.com/megagonlabs/blue-examples/blob/v0.9/agents/counter/src/counter_agent.py)
 
 - **Processing:**
   - Each data message is added to agent memory
@@ -61,7 +61,7 @@ The `COUNTER` agent is defined [here](https://github.com/rit-git/blue-examples/b
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the agent.
+To try out the agent, first follow the [quickstart guide](https://github.com/megagonlabs/blue/blob/v0.9/QUICK-START.md) to deploy the agent.
 
 Once deployed create a new session and add the `Counter Agent - Example` (`COUNTER`)agent to the session.
 

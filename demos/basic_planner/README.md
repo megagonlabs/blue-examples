@@ -1,6 +1,6 @@
 # Basic Planner
 
-Basic Planner is an agent to demonstrate basic functioning of a plan. A plan is declarative specification of a workflow where inputs and outputs from various agents are connected to achieve an outcome. See [Plan](https://github.com/rit-git/blue/tree/v0.9/agents) in the development guide for more detailed description.
+Basic Planner is an agent to demonstrate basic functioning of a plan. A plan is declarative specification of a workflow where inputs and outputs from various agents are connected to achieve an outcome. See [Plan](https://github.com/megagonlabs/blue/tree/v0.9/agents) in the development guide for more detailed description.
 
 The basic planner simply creates a plan, comprised of:
 * an input variable, `I`, with a value
@@ -65,7 +65,7 @@ graph LR;
 
 ## Code Overview
 
-The `BASIC_PLANNER` agent is defined [here](https://github.com/rit-git/blue-examples/blob/v0.9/agents/basic_planer/src/basic_planner_agent.py)
+The `BASIC_PLANNER` agent is defined [here](https://github.com/megagonlabs/blue-examples/blob/v0.9/agents/basic_planer/src/basic_planner_agent.py)
 
 - **Processing:**
   - Plan object created, and submitted
@@ -75,7 +75,7 @@ The `BASIC_PLANNER` agent is defined [here](https://github.com/rit-git/blue-exam
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/v0.9/QUICK-START.md) to deploy the agent.
+To try out the agent, first follow the [quickstart guide](https://github.com/megagonlabs/blue/blob/v0.9/QUICK-START.md) to deploy the agent.
 
 If the `Counter Example` (`COUNTER`) agent in your agent registry is listening to `USER` streams go ahead and remove it so you can see the Task Coordinator agent invoking it directly. 
 

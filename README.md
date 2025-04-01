@@ -11,7 +11,7 @@ Or you can check out:
 
 ## openai service
 
-Many of the examples in this repo use `OPENAI` service as the backend service of the agent. As such before trying these demos you need to create and start the `OPENAI` service. Please refer to the [Installation Documentation - Start Service](https://github.com/rit-git/blue/blob/v0.9/LOCAL-INSTALLATION.md#start-services) to do so, if you havent' already done so.
+Many of the examples in this repo use `OPENAI` service as the backend service of the agent. As such before trying these demos you need to create and start the `OPENAI` service. Please refer to the [Installation Documentation - Start Service](https://github.com/megagonlabs/blue/blob/v0.9/LOCAL-INSTALLATION.md#start-services) to do so, if you havent' already done so.
 
 ## example data
 
