@@ -103,7 +103,7 @@ class AgenticEmployerAgent(Agent):
         worker.write_progress(progress_id=worker.sid, label='Issuing question:' + question, value=self.current_step/self.num_steps)
 
         # plan
-        p = Plan(prefix=worker.prefix)
+        p = Plan(scope=worker.prefix)
         # set input
         p.define_input(name, value=question)
         # set plan
@@ -122,7 +122,7 @@ class AgenticEmployerAgent(Agent):
         worker.write_progress(progress_id=worker.sid, label='Issuing query:' + query, value=self.current_step/self.num_steps)
 
         # plan
-        p = Plan(prefix=worker.prefix)
+        p = Plan(scope=worker.prefix)
         # set input
         p.define_input(name, value=query)
         # set plan
@@ -251,7 +251,7 @@ class AgenticEmployerAgent(Agent):
             worker = self.create_worker(None)
 
         # plan
-        p = Plan(prefix=worker.prefix)
+        p = Plan(scope=worker.prefix)
         # set input
         p.define_input("jd", value="JD")
         # set plan
@@ -266,7 +266,7 @@ class AgenticEmployerAgent(Agent):
             worker = self.create_worker(None)
 
         # plan
-        p = Plan(prefix=worker.prefix)
+        p = Plan(scope=worker.prefix)
         # set input
         p.define_input("js", value=str(job_seeker_id))
         # set plan
@@ -311,7 +311,7 @@ class AgenticEmployerAgent(Agent):
         p = None
         # DEMO
         if list_code == "new":
-            p = Plan(prefix=worker.prefix)
+            p = Plan(scope=worker.prefix)
             # set input
             p.define_input("sq", value=query)
             # set plan
@@ -320,7 +320,7 @@ class AgenticEmployerAgent(Agent):
             p.connect_input_to_agent(from_input="sq", to_agent="SUMMARIZER___RECENTP3")
         else:
             # plan
-            p = Plan(prefix=worker.prefix)
+            p = Plan(scope=worker.prefix)
             # set input
             p.define_input("sq", value=query)
             # set plan
@@ -367,7 +367,7 @@ class AgenticEmployerAgent(Agent):
             query = string_utils.safe_substitute(query_template, **properties, **context)
 
         # plan
-        p = Plan(prefix=worker.prefix)
+        p = Plan(scope=worker.prefix)
         # set input
         p.define_input("cq", value=query)
         # set plan
@@ -463,7 +463,7 @@ class AgenticEmployerAgent(Agent):
 
 
                         # plan
-                        p = Plan(prefix=worker.prefix)
+                        p = Plan(scope=worker.prefix)
                         # set input
                         p.define_input(action + "_" + scope + "_" + "INPUT", value=data)
                         
@@ -511,7 +511,7 @@ class AgenticEmployerAgent(Agent):
             properties = self.properties
 
         # plan
-        p = Plan(prefix=worker.prefix)
+        p = Plan(scope=worker.prefix)
     
         # set plan
         p.connect_agent_to_agent(from_agent="USER", to_agent="OPENAI___CLASSIFIER", from_agent_output="TEXT")
@@ -599,7 +599,7 @@ class AgenticEmployerAgent(Agent):
         logging.info("ISSUE NL QUERY:" + expanded_question)
 
         # plan
-        p = Plan(prefix=worker.prefix)
+        p = Plan(scope=worker.prefix)
         # set input
         p.define_input("question", value=expanded_question)
         # set plan
