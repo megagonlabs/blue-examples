@@ -99,16 +99,13 @@ class AgenticEmployerAgent(Agent):
         if worker == None:
             worker = self.create_worker(None)
 
-        # progress
-        worker.write_progress(progress_id=worker.sid, label='Issuing question:' + question, value=self.current_step/self.num_steps)
-
         # plan
         p = Plan(scope=worker.prefix)
         # set input
         p.define_input(name, value=question)
         # set plan
-        p.connect_input_to_agent(from_input=name, to_agent="NL2Q")
-        p.connect_agent_to_agent(from_agent="NL2Q", to_agent=self.name, to_agent_input=to_param_prefix + name)
+        p.connect_input_to_agent(from_input=name, to_agent="NL2SQL___AE")
+        p.connect_agent_to_agent(from_agent="NL2SQL___AE", to_agent=self.name, to_agent_input=to_param_prefix + name)
         
         # submit plan
         p.submit(worker)
@@ -117,9 +114,6 @@ class AgenticEmployerAgent(Agent):
 
         if worker == None:
             worker = self.create_worker(None)
-
-        # progress
-        worker.write_progress(progress_id=worker.sid, label='Issuing query:' + query, value=self.current_step/self.num_steps)
 
         # plan
         p = Plan(scope=worker.prefix)
@@ -255,7 +249,7 @@ class AgenticEmployerAgent(Agent):
         # set input
         p.define_input("jd", value="JD")
         # set plan
-        p.connect_input_to_agent(from_input="jd", to_agent="DOCUMENTER___JD")
+        p.connect_input_to_agent(from_input="jd", to_agent="DOCUMENTER___AE_JD")
         
         # submit plan
         p.submit(worker)
@@ -270,7 +264,7 @@ class AgenticEmployerAgent(Agent):
         # set input
         p.define_input("js", value=str(job_seeker_id))
         # set plan
-        p.connect_input_to_agent(from_input="js", to_agent="DOCUMENTER___JOBSEEKER")
+        p.connect_input_to_agent(from_input="js", to_agent="DOCUMENTER___AE_JOBSEEKER")
         
         # submit plan
         p.submit(worker)
@@ -301,11 +295,11 @@ class AgenticEmployerAgent(Agent):
             query = string_utils.safe_substitute(query_template, **properties, **context)
             
         # choose summarizer agent
-        summarizer = "SUMMARIZER___LIST"
+        summarizer = "SUMMARIZER___AE_LIST"
         if list_code == "all":
-            summarizer = "SUMMARIZER___ALL"
+            summarizer = "SUMMARIZER___AE_ALL"
         elif list_code == "new":
-            summarizer = "SUMMARIZER___RECENT"
+            summarizer = "SUMMARIZER___AE_RECENT"
 
         
         p = None
@@ -315,9 +309,9 @@ class AgenticEmployerAgent(Agent):
             # set input
             p.define_input("sq", value=query)
             # set plan
-            p.connect_input_to_agent(from_input="sq", to_agent="SUMMARIZER___RECENTP1")
-            p.connect_input_to_agent(from_input="sq", to_agent="SUMMARIZER___RECENTP2")
-            p.connect_input_to_agent(from_input="sq", to_agent="SUMMARIZER___RECENTP3")
+            p.connect_input_to_agent(from_input="sq", to_agent="SUMMARIZER___AE_RECENT_P1")
+            p.connect_input_to_agent(from_input="sq", to_agent="SUMMARIZER___AE_RECENT_P2")
+            p.connect_input_to_agent(from_input="sq", to_agent="SUMMARIZER___AE_RECENT_P3")
         else:
             # plan
             p = Plan(scope=worker.prefix)
@@ -371,7 +365,7 @@ class AgenticEmployerAgent(Agent):
         # set input
         p.define_input("cq", value=query)
         # set plan
-        p.connect_input_to_agent(from_input="cq", to_agent="CLUSTERER___JOBSEEKER")
+        p.connect_input_to_agent(from_input="cq", to_agent="CLUSTERER___AE_JOBSEEKER")
 
         # submit plan
         p.submit(worker)
@@ -432,7 +426,7 @@ class AgenticEmployerAgent(Agent):
                     action_properties = scope_actions[action]
 
                     if 'plan' in action_properties:
-                        p = action_properties['plan']
+                        steps = action_properties['plan']
 
                         # create worker if not given
                         if worker == None:
@@ -468,7 +462,7 @@ class AgenticEmployerAgent(Agent):
                         p.define_input(action + "_" + scope + "_" + "INPUT", value=data)
                         
                         # substitue self
-                        for step in p:
+                        for step in steps:
                             f = step[0]
                             t = step[1]
 
@@ -514,8 +508,9 @@ class AgenticEmployerAgent(Agent):
         p = Plan(scope=worker.prefix)
     
         # set plan
-        p.connect_agent_to_agent(from_agent="USER", to_agent="OPENAI___CLASSIFIER", from_agent_output="TEXT")
-        p.connect_agent_to_agent(from_agent="OPENAI___CLASSIFIER", to_agent=self.name, to_agent_input="INTENT")
+        p.define_input("TEXT", stream=input_stream)
+        p.connect_input_to_agent(from_input="TEXT", to_agent="OPENAI___INTENT_CLASSIFIER_AE")
+        p.connect_agent_to_agent(from_agent="OPENAI___INTENT_CLASSIFIER_AE", to_agent=self.name, to_agent_input="INTENT")
         # submit plan
         p.submit(worker)
 
@@ -603,8 +598,8 @@ class AgenticEmployerAgent(Agent):
         # set input
         p.define_input("question", value=expanded_question)
         # set plan
-        p.connect_input_to_agent(from_input="question", to_agent="NL2Q")
-        p.connect_agent_to_agent(from_agent="NL2Q", to_agent="OPENAI___EXPLAINER")
+        p.connect_input_to_agent(from_input="question", to_agent="NL2SQL___AE")
+        p.connect_agent_to_agent(from_agent="NL2SQL___AE", to_agent="OPENAI___QUERY_EXPLAINER")
         
         # submit plan
         p.submit(worker)
