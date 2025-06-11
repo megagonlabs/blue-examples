@@ -1,0 +1,41 @@
+---
+version: '3.8'
+x-blue-common:
+  &blue-common
+  # build: .
+  image: python:3.9.0
+  environment:
+    &blue-common-env
+    BLUE__PROPERTIES: '{"platform.name":"eser", "platform.deploy.target":"localhost", "api.server":"10.0.163.164", "db.host":"blue_db_redis",  "agent_registry.name":"default", "data_registry.name":"default", "embeddings_model":"/blue_data/models/paraphrase-MiniLM-L6-v2"}'
+    
+services:
+  basic_calculator:
+    image: megagonlabs/blue-tool-basic_calculator-private
+    hostname: blue_tool_basic_calculator
+    ports:
+      - 8123:8123
+    deploy:
+      placement:
+        constraints:
+          - node.labels.target == service
+    networks:
+      - blue_platform_eser_network_bridge
+    volumes:
+      - blue_eser_data:/blue_data
+    command: --name basic_calculator --platform eser --properties '''{}'''
+    labels:
+      blue.tool: "eser.basic_calculator"
+    environment:
+      <<: *blue-common-env
+    env_file:
+      - basic_calculator.env
+    restart: always
+
+networks:
+  blue_platform_eser_network_bridge:
+      external: true
+
+volumes:
+  blue_eser_data:
+      external: true
+
