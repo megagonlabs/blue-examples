@@ -12,12 +12,17 @@ from blue.tools.servers.mcp_server import MCPToolServer
 from blue.tools.tool import Tool
 
 #### functions
-def add(numbers=None):
-     result = 0
-     for number in numbers:
-         result += number
-     return result
- 
+def add(numbers: list[int]) -> int:
+    result = 0
+    for number in numbers:
+        result += int(number)
+    return result
+
+
+def get_weather(city_name: str) -> str:
+    return "39 F, sunny."
+
+
 # set log level
 logging.getLogger().setLevel(logging.INFO)
 logging.basicConfig(format="%(asctime)s [%(levelname)s] [%(process)d:%(threadName)s:%(thread)d](%(filename)s:%(lineno)d) %(name)s -  %(message)s", level=logging.ERROR, datefmt="%Y-%m-%d %H:%M:%S")
@@ -30,23 +35,29 @@ class WeatherToolServer(MCPToolServer):
 
 
     def initialize_tools(self):
-        ## add tools here
-
-        # add tool
         add_tool = Tool(
             name = "add",
             description = "adds numbers and returns the addition as a result",
             properties = {},
             function = add,
-            parameters = {
-                "numbers": { "type": "list[Union[int, str]", "required": True}           
-            },
+            parameters = {},
             validator = lambda params: 'numbers' in params and type(params['numbers']) == list and all([type(number) in [int, float] for number in params['numbers']]),
             explainer = lambda output, params:  { "output": output, "params": params}
         )
         self.add_tool(add_tool)
 
-        # 
+        weather_tool = Tool(
+            name = "get_weather",
+            description = "Gets the weather for a given city.",
+            properties = {},
+            function = get_weather,
+            parameters = {},
+            validator = None,
+            explainer = None
+        )
+        self.add_tool(weather_tool)
+
+        
     
 if __name__ == "__main__":
     logging.info('starting.')
@@ -76,8 +87,9 @@ if __name__ == "__main__":
         print("---")
 
     # create tool server
-    t = WeatherToolServer(name=args.name, properties=properties)
+    tool_server = WeatherToolServer(name=args.name, properties=properties)
 
     # run
-    t.start()
+    tool_server.start()
     
+ 
