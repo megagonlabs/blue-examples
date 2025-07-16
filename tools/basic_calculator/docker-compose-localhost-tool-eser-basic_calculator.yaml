@@ -10,7 +10,7 @@ x-blue-common:
     
 services:
   basic_calculator:
-    image: megagonlabs/blue-tool-basic_calculator-private
+    image: megagonlabs/blue-tool-basic_calculator-private:latest
     hostname: blue_tool_basic_calculator
     ports:
       - 8123:8123
