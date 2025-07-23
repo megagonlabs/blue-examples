@@ -90,23 +90,27 @@ class DialogueManagerAgent(OpenAIAgent):
             return
 
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
+        conversation_memory = properties['conversation_memory']
         stream = message.getStream()
 
         if not worker: 
             worker = self.create_worker(None)
         
-        if not worker.get_session_data("CONVERSATION_HISTORY"):
+        if conversation_memory and not worker.get_session_data("CONVERSATION_HISTORY"):
             worker.set_session_data("CONVERSATION_HISTORY", [])
 
         if input == "DEFAULT":
             if message.isData():
                 data = message.getData()
                 data = f'{{"role": "user", "content": {data}}}'
-                worker.append_session_data("CONVERSATION_HISTORY", data)
-                conversation_history = worker.get_session_data("CONVERSATION_HISTORY")
-                conversation_history = "\n".join(conversation_history)
-                logging.info(f"Conversation History: {conversation_history}")
-                self.intent_rewriter(worker, conversation_history)
+                if conversation_memory:
+                    worker.append_session_data("CONVERSATION_HISTORY", data)
+                    conversation_history = worker.get_session_data("CONVERSATION_HISTORY")
+                    conversation_history = "\n".join(conversation_history)
+                    logging.info(f"Conversation History: {conversation_history}")
+                    self.intent_rewriter(worker, conversation_history)
+                else:
+                    self.intent_rewriter(worker, data)
 
         elif input == "INTENT":
             if message.isData():
@@ -123,8 +127,9 @@ class DialogueManagerAgent(OpenAIAgent):
                 worker.write_data(assistant_response, output="TEXT")
                 worker.write_eos(output="TEXT")
 
-                assistant_response = f'{{"role": "assistant", "content": {assistant_response}}}'
-                worker.append_session_data("CONVERSATION_HISTORY", assistant_response)
+                if conversation_memory:
+                    assistant_response = f'{{"role": "assistant", "content": {assistant_response}}}'
+                    worker.append_session_data("CONVERSATION_HISTORY", assistant_response)
                 return
 
         elif input == "RESULT":
