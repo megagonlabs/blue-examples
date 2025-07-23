@@ -71,20 +71,61 @@ class DialogueManagerAgent(OpenAIAgent):
         logging.info(f"Built plan for intent: {intent}")
         return f"Executing plan for intent: {intent}."
 
+    def intent_rewriter(self, worker, data, id=None):
+            p = Plan(scope=worker.prefix)
+            # set input
+            inp = f"Conversation History:\n{data}"
+            p.define_input("DEFAULT", value=inp)
+            # set plan
+            p.connect_input_to_agent(from_input="DEFAULT", to_agent=self.properties['intent_rewriter_agent'])
+            p.connect_agent_to_agent(
+                from_agent=self.properties['intent_rewriter_agent'],
+                to_agent=self.name,
+                to_agent_input="INTENT_REWRITER",
+            )
+            # submit plan
+            p.submit(worker)
+
+            logging.info("Sent off intent rewriting request")
+            return
+
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
         stream = message.getStream()
+
+        if not worker: 
+            worker = self.create_worker(None)
+        
+        if not worker.get_session_data("CONVERSATION_HISTORY"):
+            worker.set_session_data("CONVERSATION_HISTORY", [])
 
         if input == "DEFAULT":
             if message.isData():
                 data = message.getData()
-                self.user_input = data
-                self.identify_intent(worker, data)
+                data = f'{{"role": "user", "content": {data}}}'
+                worker.append_session_data("CONVERSATION_HISTORY", data)
+                conversation_history = worker.get_session_data("CONVERSATION_HISTORY")
+                conversation_history = "\n".join(conversation_history)
+                logging.info(f"Conversation History: {conversation_history}")
+                self.intent_rewriter(worker, conversation_history)
 
         elif input == "INTENT":
             if message.isData():
                 data = message.getData()
                 intent = json.loads(data)["intent"]
                 return self.build_action_plan(worker, intent)
+        
+        elif input == "INTENT_REWRITER":
+            if message.isData():
+                data = message.getData()
+                rewrite = json.loads(data)["rewrite"]
+
+                assistant_response = f"Your task is: {rewrite}"
+                worker.write_data(assistant_response, output="TEXT")
+                worker.write_eos(output="TEXT")
+
+                assistant_response = f'{{"role": "assistant", "content": {assistant_response}}}'
+                worker.append_session_data("CONVERSATION_HISTORY", assistant_response)
+                return
 
         elif input == "RESULT":
             if message.isData():
