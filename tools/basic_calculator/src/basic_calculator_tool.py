@@ -41,7 +41,6 @@ class BasicCalculatorToolServer(MCPToolServer):
             description="adds numbers and returns the addition as a result",
             properties={},
             function=add,
-            parameters={},
             validator=lambda params: 'numbers' in params and type(params['numbers']) == list and all([type(number) in [int, float] for number in params['numbers']]),
             explainer=lambda output, params: {"output": output, "params": params},
         )
