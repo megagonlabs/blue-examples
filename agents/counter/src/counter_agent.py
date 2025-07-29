@@ -8,10 +8,6 @@ from blue.agent import Agent, AgentFactory
 from blue.stream import Message
 from blue.session import Session
 
-# set log level
-logging.getLogger().setLevel(logging.INFO)
-logging.basicConfig(format="%(asctime)s [%(levelname)s] [%(process)d:%(threadName)s:%(thread)d](%(filename)s:%(lineno)d) %(name)s -  %(message)s", level=logging.ERROR, datefmt="%Y-%m-%d %H:%M:%S")
-
 
 ############################
 ### Agent.CounterAgent
@@ -22,7 +18,18 @@ class CounterAgent(Agent):
             kwargs['name'] = "COUNTER"
         super().__init__(**kwargs)
 
+    ####### inputs / outputs
+    def _initialize_inputs(self):
+        self.add_input("DEFAULT", description="input text", includes=["USER"])
+
+    def _initialize_outputs(self):
+        self.add_output("DEFAULT", description="number of words counted")
+
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
+        self.logger.info("processing:")
+        self.logger.info(message.toJSON())
+        if properties:
+            self.logger.info(json.dumps(properties))
         if message.isEOS():
             # get all data received from stream
             stream_data = ""
