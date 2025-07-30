@@ -16,9 +16,17 @@ from blue.utils import tool_utils
 
 #### functions
 def add(numbers: list[int]) -> int:
+    logging.info(f"`add` called with: {numbers}")
     result = 0
     for number in numbers:
         result += int(number)
+    logging.info(f"`add` result: {result}")
+    return result
+
+def sub(number1: int, number2: int) -> int:
+    logging.info(f"`sub` called with: {number1}, {number2}")
+    result = int(number1) - int(number2)
+    logging.info(f"`sub` result: {result}")
     return result
 
 
@@ -43,7 +51,15 @@ class BasicCalculatorToolServer(MCPToolServer):
             validator=lambda params: 'numbers' in params and type(params['numbers']) == list and all([type(number) in [int, float] for number in params['numbers']]),
             explainer=lambda output, params: {"output": output, "params": params},
         )
+        sub_tool = Tool(
+            "sub",
+            sub,
+            description="subtracts two numbers and returns the result",
+            validator=lambda params: 'number1' in params and type(params['number1']) in [int, float] and 'number2' in params and type(params['number2']) in [int, float],
+            explainer=lambda output, params: {"output": output, "params": params},
+        )
         self.add_tool(add_tool)
+        self.add_tool(sub_tool)
 
 
 if __name__ == "__main__":
