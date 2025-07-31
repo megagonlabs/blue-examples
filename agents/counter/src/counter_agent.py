@@ -20,41 +20,37 @@ class CounterAgent(Agent):
 
     ####### inputs / outputs
     def _initialize_inputs(self):
-        self.add_input("DEFAULT", description="input text", includes=["USER"])
+        self.add_input("DEFAULT", description="input text")
 
     def _initialize_outputs(self):
         self.add_output("DEFAULT", description="number of words counted")
 
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
-        self.logger.info("processing:")
-        self.logger.info(message.toJSON())
-        if properties:
-            self.logger.info(json.dumps(properties))
         if message.isEOS():
             # get all data received from stream
             stream_data = ""
             if worker:
                 stream_data = worker.get_data('stream')
-            
+
             # output to stream
             text = " ".join(stream_data)
             count = len(text.split(" "))
-            
+
             return [count, Message.EOS]
-        
+
         elif message.isBOS():
             # init stream to empty array
             if worker:
-                worker.set_data('stream',[])
+                worker.set_data('stream', [])
         elif message.isData():
             # store data value
             data = message.getData()
-            logging.info(data)
-            
+
             if worker:
                 worker.append_data('stream', data)
-    
+
         return None
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -65,12 +61,11 @@ if __name__ == "__main__":
     parser.add_argument('--serve', type=str)
     parser.add_argument('--platform', type=str, default='default')
     parser.add_argument('--registry', type=str, default='default')
- 
+
     args = parser.parse_args()
-   
+
     # set logging
     logging.getLogger().setLevel(args.loglevel.upper())
-
 
     # set properties
     properties = {}
@@ -78,10 +73,10 @@ if __name__ == "__main__":
     if p:
         # decode json
         properties = json.loads(p)
-    
+
     if args.serve:
         platform = args.platform
-        
+
         af = AgentFactory(_class=CounterAgent, _name=args.serve, _registry=args.registry, platform=platform, properties=properties)
         af.wait()
     else:
@@ -100,5 +95,3 @@ if __name__ == "__main__":
         # wait for session
         if session:
             session.wait()
-
-
