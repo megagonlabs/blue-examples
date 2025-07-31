@@ -12,7 +12,10 @@ from blue.plan import Plan
 
 # set log level
 logging.getLogger().setLevel(logging.INFO)
-logging.basicConfig(format="%(asctime)s [%(levelname)s] [%(process)d:%(threadName)s:%(thread)d](%(filename)s:%(lineno)d) %(name)s -  %(message)s", level=logging.ERROR, datefmt="%Y-%m-%d %H:%M:%S")
+logging.basicConfig(
+    format="%(asctime)s [%(levelname)s] [%(process)d:%(threadName)s:%(thread)d](%(filename)s:%(lineno)d) %(name)s -  %(message)s", level=logging.ERROR, datefmt="%Y-%m-%d %H:%M:%S"
+)
+
 
 ############################
 ### Agent.BasicPlannerAgent
@@ -23,6 +26,13 @@ class BasicPlannerAgent(Agent):
             kwargs['name'] = "BASIC_PLANNER"
         super().__init__(**kwargs)
 
+    ####### inputs / outputs
+    def _initialize_inputs(self):
+        self.add_input("DEFAULT", description="trigger", includes=["USER"])
+
+    def _initialize_outputs(self):
+        return
+
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
         if input == "DEFAULT":
 
@@ -30,15 +40,25 @@ class BasicPlannerAgent(Agent):
                 ### create a basic plan
                 # plan with a scope of session
 
+                # BASIC PLAN EXAMPLE
+                # p = Plan(scope=worker.session)
+                # p.define_input("I", value="Count the number of words in this sentence...")
+                # p.define_output("R")
+
+                # p.connect_input_to_agent(from_input="I", to_agent="COUNTER")
+                # p.connect_agent_to_output(from_agent="COUNTER", to_output="R")
+                # p.connect_agent_to_agent(from_agent="COUNTER", to_agent="BASIC_PLANNER", to_agent_input="RESULT")
+
+                # AGENT WITH LABEL
                 p = Plan(scope=worker.session)
                 p.define_input("I", value="Count the number of words in this sentence...")
                 p.define_output("R")
+                p.define_agent("COUNTER", label="C", properties={"C": "CCC"})
 
-                p.connect_input_to_agent(from_input="I", to_agent="COUNTER")
-                p.connect_agent_to_output(from_agent="COUNTER", to_output="R")
-                p.connect_agent_to_agent(from_agent="COUNTER", to_agent="BASIC_PLANNER", to_agent_input="RESULT")  
+                p.connect_input_to_agent(from_input="I", to_agent="C")
+                p.connect_agent_to_output(from_agent="C", to_output="R")
+                p.connect_agent_to_agent(from_agent="C", to_agent="BASIC_PLANNER", to_agent_input="RESULT")
 
-                
                 # submit plan
                 p.submit(worker)
 
@@ -58,12 +78,11 @@ if __name__ == "__main__":
     parser.add_argument('--serve', type=str)
     parser.add_argument('--platform', type=str, default='default')
     parser.add_argument('--registry', type=str, default='default')
- 
+
     args = parser.parse_args()
-   
+
     # set logging
     logging.getLogger().setLevel(args.loglevel.upper())
-
 
     # set properties
     properties = {}
@@ -71,10 +90,10 @@ if __name__ == "__main__":
     if p:
         # decode json
         properties = json.loads(p)
-    
+
     if args.serve:
         platform = args.platform
-        
+
         af = AgentFactory(_class=BasicPlannerAgent, _name=args.serve, _registry=args.registry, platform=platform, properties=properties)
         af.wait()
     else:
@@ -93,5 +112,3 @@ if __name__ == "__main__":
         # wait for session
         if session:
             session.wait()
-
-
