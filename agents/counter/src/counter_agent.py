@@ -26,10 +26,6 @@ class CounterAgent(Agent):
         self.add_output("DEFAULT", description="number of words counted")
 
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
-        self.logger.info("processing:")
-        self.logger.info(message.toJSON())
-        if properties:
-            self.logger.info(json.dumps(properties))
         if message.isEOS():
             # get all data received from stream
             stream_data = ""
@@ -49,7 +45,6 @@ class CounterAgent(Agent):
         elif message.isData():
             # store data value
             data = message.getData()
-            logging.info(data)
 
             if worker:
                 worker.append_data('stream', data)
