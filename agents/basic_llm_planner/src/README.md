@@ -47,3 +47,9 @@ This is a basic implementation of a LLM (Large Language Model) planner. The goal
    - The result will be returned to this agent as `RESULT_EXECUTION`.
 4. **Show Execution Result:**
    - On receiving `RESULT_EXECUTION`, log the result and show it on the UI.
+
+
+## Changelog
+- **v0.1.0** (2025-07-23): Initial version with basic task decomposition (no execution)
+- **v1.0.0** (2025-07-30): Initial version with basic task decomposition and execution
+- **v1.1.0** (2025-08-01): Updated the code following the latest Blue changes ([#921](https://github.com/rit-git/blue/issues/921)). Some minor refactoring and code cleanup.

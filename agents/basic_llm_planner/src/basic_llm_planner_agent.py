@@ -147,7 +147,12 @@ sample_plan_text = """{
     ]
 }"""
 
-basic_llm_planner_properties = {}
+basic_llm_planner_properties = {
+    "decomposer_input_template": DECOMPOSER_PROMPT,
+    "executor_input_template": EXECUTOR_PROMPT,
+    "openai.model": "gpt-4.1-mini-2025-04-14",
+    "openai.max_tokens": 1024,
+}
 
 
 ############################
@@ -166,6 +171,13 @@ class BasicLLMPlannerAgent(Agent):
         for key in basic_llm_planner_properties:
             self.properties[key] = basic_llm_planner_properties[key]
 
+    ####### inputs / outputs
+    def _initialize_inputs(self):
+        self.add_input("DEFAULT", description="trigger", includes=["USER"])
+
+    def _initialize_outputs(self):
+        return
+
     def decompose_task(self, worker=None):
         """Call an OpenAI agent to decompose a task into subtasks"""
         user_input = ""
@@ -181,19 +193,21 @@ class BasicLLMPlannerAgent(Agent):
         # set input
         p.define_input("DEFAULT", value=user_input)
         # define an task decomposer agent
-        properties = {"input_template": DECOMPOSER_PROMPT}
+        properties = {
+            "input_template": self.properties["decomposer_input_template"],
+            "openai.model": self.properties["openai.model"],
+            "openai.max_tokens": self.properties["openai.max_tokens"],
+        }
         # logging.info(PROMPT)
         p.define_agent(
             "OPENAI___ROGUEAGENT",
-            label="OPENAI___ROGUEAGENT___TASK_DECOMPOSER",
+            label="TASK_DECOMPOSER",
             properties=properties,
         )
         # set plan
-        p.connect_input_to_agent(
-            from_input="DEFAULT", to_agent="OPENAI___ROGUEAGENT___TASK_DECOMPOSER"
-        )
+        p.connect_input_to_agent(from_input="DEFAULT", to_agent="TASK_DECOMPOSER")
         p.connect_agent_to_agent(
-            from_agent="OPENAI___ROGUEAGENT___TASK_DECOMPOSER",
+            from_agent="TASK_DECOMPOSER",
             to_agent=self.name,
             to_agent_input="RESULT_PLAN",
         )
@@ -205,7 +219,6 @@ class BasicLLMPlannerAgent(Agent):
         return
 
     def run_task(self, worker, plan):
-        # For now, assume that
         # (1) nodes are indexed from 0, with smaller indices being executed first.
         # (2) the workflow is strictly linear.
         # (3) the edges are sorted in the order of execution.
@@ -221,21 +234,21 @@ class BasicLLMPlannerAgent(Agent):
                 input="{input}",
             )
 
-            # For now, we assume that there are only handful of tools available (tool_discovery=False)
+            # For now, we assume that there are only a few tools available (tool_discovery=False)
             # and we can use the same OpenAI agent for all subtasks.
             action_plan.define_agent(
-                f"OPENAI___ROGUEAGENT_{index}",
-                label=f"OPENAI___ROGUEAGENT___SUBTASK_EXECUTOR_{index}",
+                "OPENAI___ROGUEAGENT",
+                label=f"SUBTASK_EXECUTOR_{index}",
                 properties={
-                    "openai.model": "gpt-4.1-mini-2025-04-14",
-                    "openai.max_tokens": 1024,
+                    "openai.model": self.properties["openai.model"],
+                    "openai.max_tokens": self.properties["openai.max_tokens"],
                     "input_template": prompt,
                     "use_tools": True,
                     "tool_discovery": False,
                 },
             )
             logging.info(
-                f"Defined subtask executor: OPENAI___ROGUEAGENT___SUBTASK_EXECUTOR_{index} with prompt: {prompt}"
+                f"Defined subtask executor: SUBTASK_EXECUTOR_{index} with prompt: {prompt}"
             )
 
         # Define message flow
@@ -245,31 +258,31 @@ class BasicLLMPlannerAgent(Agent):
                 # Connect the user input to the first subtask executor
                 action_plan.connect_input_to_agent(
                     from_input="DEFAULT",
-                    to_agent="OPENAI___ROGUEAGENT___SUBTASK_EXECUTOR_0",
+                    to_agent="SUBTASK_EXECUTOR_0",
                     to_agent_input="DEFAULT",
                 )
                 logging.info(
-                    "Connected input to first subtask executor: OPENAI___ROGUEAGENT___SUBTASK_EXECUTOR_0 [DEFAULT]"
+                    "Connected input to first subtask executor: SUBTASK_EXECUTOR_0 [DEFAULT]"
                 )
                 continue
             # Connect the agent to the next agent
             action_plan.connect_agent_to_agent(
-                from_agent=f"OPENAI___ROGUEAGENT___SUBTASK_EXECUTOR_{index - 1}",
-                to_agent=f"OPENAI___ROGUEAGENT___SUBTASK_EXECUTOR_{index}",
+                from_agent=f"SUBTASK_EXECUTOR_{index - 1}",
+                to_agent=f"SUBTASK_EXECUTOR_{index}",
                 to_agent_input="DEFAULT",
             )
             logging.info(
-                f"Connected subtask executor: OPENAI___ROGUEAGENT___SUBTASK_EXECUTOR_{index - 1} to OPENAI___ROGUEAGENT___SUBTASK_EXECUTOR_{index} [DEFAULT]"
+                f"Connected subtask executor: SUBTASK_EXECUTOR_{index - 1} to SUBTASK_EXECUTOR_{index} [DEFAULT]"
             )
 
         # Connect the last agent to this planner agent to show the result on the UI
         action_plan.connect_agent_to_agent(
-            from_agent=f"OPENAI___ROGUEAGENT___SUBTASK_EXECUTOR_{len(plan['nodes']) - 1}",
+            from_agent=f"SUBTASK_EXECUTOR_{len(plan['nodes']) - 1}",
             to_agent=self.name,
             to_agent_input="RESULT_EXECUTION",
         )
         logging.info(
-            f"Connected last subtask executor: OPENAI___ROGUEAGENT___SUBTASK_EXECUTOR_{len(plan['nodes']) - 1} to this planner agent: {self.name} [RESULT_EXECUTION]"
+            f"Connected last subtask executor: SUBTASK_EXECUTOR_{len(plan['nodes']) - 1} to this planner agent: {self.name} [RESULT_EXECUTION]"
         )
 
         # Submit the subtask
@@ -299,7 +312,9 @@ class BasicLLMPlannerAgent(Agent):
                     output = " ".join(worker.get_data("stream"))
                 logging.info(f"Task decomposition result: {output}")
 
-                return_message = f"Generated plan:\n{output}"  # this will be shown on the UI
+                return_message = (
+                    f"Generated plan:\n{output}"  # this will be shown on the UI
+                )
 
                 # For demo purpose, use the sample plan for testing
                 logging.info(f"Sample user input: {sample_user_input}")
@@ -328,9 +343,14 @@ class BasicLLMPlannerAgent(Agent):
                     ]
                 self.run_task(worker, plan_dag)
 
-                return_message += "\n\nFor demo purpose, using a pre-defined sample below.\n"
+                return_message += (
+                    "\n\nFor demo purpose, using a pre-defined sample below.\n"
+                )
                 return_message += f"User input: {sample_user_input}\nPlan:\n{output}"
-                return [return_message, Message.EOS,]
+                return [
+                    return_message,
+                    Message.EOS,
+                ]
             elif message.isBOS():
                 # Initialize stream to empty array
                 if worker:
