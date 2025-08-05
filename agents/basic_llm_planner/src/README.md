@@ -6,28 +6,20 @@ This is a basic implementation of a LLM (Large Language Model) planner. The goal
 - **Output:** A directed acyclic graph (DAG) of execution agents.
 
 
-## v1: Plan Generation and Execution
+## v1.1: Plan Generation and Execution
 
 - Given a user input, decompose the task into sub-tasks using the OpenAI agent (`OPENAI___ROGUEAGENT`).
 - Show the plan and execute it by assigning the sub-tasks to the `OPENAI___ROGUEAGENT` agent with tools.
-    - Currently, Blue does not allow us to use the same agent template with different properties within the same plan.
-    - Therefore, we need to create distinct templates on the UI beforehand: `OPENAI___ROGUEAGENT_0`, `OPENAI___ROGUEAGENT_1`, etc.
-        - For the current demo, **we need 4 templates:** `OPENAI___ROGUEAGENT_0`, `OPENAI___ROGUEAGENT_1`, `OPENAI___ROGUEAGENT_2`, and `OPENAI___ROGUEAGENT_3`.
 
 **Setup**
 
-- Create the agent templates `OPENAI___ROGUEAGENT_0`, ... `OPENAI___ROGUEAGENT_4` by copying the `OPENAI___ROGUEAGENT` template.
 - Build and run the basic calculator tool.
     - Update the configuration on the UI to have `add` and `sub` under the basic calculator tool.
 - Build and run this agent.
 - In the session, include the following agents:
     - `BASIC_LLM_PLANNER` (this agent)
     - `COORDINATOR` (for executing the plan)
-    - `OPENAI___ROGUEAGENT` (for the task decomposition)
-    - `OPENAI___ROGUEAGENT_0` (for the first sub-task)
-    - `OPENAI___ROGUEAGENT_1` (for the second sub-task)
-    - `OPENAI___ROGUEAGENT_2` (for the third sub-task)
-    - `OPENAI___ROGUEAGENT_3` (for the fourth sub-task)
+    - Note: With the latest blue library/platform, `OPENAI___ROGUEAGENT` is automatically added to the session by the coordinator.
 
 
 **Workflow in `default_processor()`**
