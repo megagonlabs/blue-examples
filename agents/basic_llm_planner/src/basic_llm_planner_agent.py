@@ -4,12 +4,11 @@ import argparse
 import logging
 import json
 
-from blue.stream import Message
-
-###### Blue
 from blue.agent import Agent, AgentFactory
-from blue.session import Session
+from blue.agents.openai import OpenAIAgent
 from blue.plan import Plan
+from blue.session import Session
+from blue.stream import Message
 
 # set log level
 logging.getLogger().setLevel(logging.INFO)
@@ -148,17 +147,26 @@ sample_plan_text = """{
 }"""
 
 basic_llm_planner_properties = {
-    "decomposer_input_template": DECOMPOSER_PROMPT,
     "executor_input_template": EXECUTOR_PROMPT,
-    "openai.model": "gpt-4.1-mini-2025-04-14",
+    "input_context_field": "content",
+    "input_context": "$[0]",
+    "input_field": "messages",
+    "input_json": "[{\"role\":\"user\"}]",
+    "input_template": DECOMPOSER_PROMPT,
+    "openai.api": "ChatCompletion",
+    "openai.frequency_penalty": 0,
     "openai.max_tokens": 1024,
+    "openai.model": "gpt-4.1-mini-2025-04-14",
+    "openai.presence_penalty": 0,
+    "openai.temperature": 0,
+    "openai.top_p": 1,
 }
 
 
 ############################
 ### Agent.BasicLLMPlannerAgent
 #
-class BasicLLMPlannerAgent(Agent):
+class BasicLLMPlannerAgent(OpenAIAgent):
     def __init__(self, **kwargs):
         if "name" not in kwargs:
             kwargs["name"] = "BASIC_LLM_PLANNER"
@@ -179,7 +187,7 @@ class BasicLLMPlannerAgent(Agent):
         return
 
     def decompose_task(self, worker=None):
-        """Call an OpenAI agent to decompose a task into subtasks"""
+        """Call an OpenAI service to decompose a task into subtasks"""
         user_input = ""
 
         if worker:
@@ -188,35 +196,10 @@ class BasicLLMPlannerAgent(Agent):
         worker.set_data("user_input", user_input)
         logging.info(f"worker.get_data('user_input'): {worker.get_data('user_input')}")
 
-        # What if worker is None?
-        p = Plan(scope=worker.prefix)
-        # set input
-        p.define_input("DEFAULT", value=user_input)
-        # define an task decomposer agent
-        properties = {
-            "input_template": self.properties["decomposer_input_template"],
-            "openai.model": self.properties["openai.model"],
-            "openai.max_tokens": self.properties["openai.max_tokens"],
-        }
-        # logging.info(PROMPT)
-        p.define_agent(
-            "OPENAI___ROGUEAGENT",
-            label="TASK_DECOMPOSER",
-            properties=properties,
-        )
-        # set plan
-        p.connect_input_to_agent(from_input="DEFAULT", to_agent="TASK_DECOMPOSER")
-        p.connect_agent_to_agent(
-            from_agent="TASK_DECOMPOSER",
-            to_agent=self.name,
-            to_agent_input="RESULT_PLAN",
-        )
-
-        # submit plan
-        p.submit(worker)
-
-        logging.info("Sent off task decomposition request")
-        return
+        # Call the OpenAI API to decompose the task
+        plan_text = self.execute_api_call(user_input, properties={}, additional_data={})
+        logging.info("Decomposed task plan: {plan_text}".format(plan_text=plan_text))
+        return plan_text
 
     def run_task(self, worker, plan):
         # (1) nodes are indexed from 0, with smaller indices being executed first.
@@ -294,22 +277,7 @@ class BasicLLMPlannerAgent(Agent):
             if message.isEOS():
                 # Decompose task
                 # The result will return to this agent as RESULT_PLAN
-                self.decompose_task(worker)
-            elif message.isBOS():
-                # Initialize stream to empty array
-                if worker:
-                    worker.set_data("stream", [])
-            elif message.isData():
-                # Store data value
-                data = message.getData()
-
-                if worker:
-                    worker.append_data("stream", str(data))
-        elif input == "RESULT_PLAN":
-            if message.isEOS():
-                output = ""
-                if worker:
-                    output = " ".join(worker.get_data("stream"))
+                output = self.decompose_task(worker)
                 logging.info(f"Task decomposition result: {output}")
 
                 return_message = (
@@ -356,9 +324,8 @@ class BasicLLMPlannerAgent(Agent):
                 if worker:
                     worker.set_data("stream", [])
             elif message.isData():
-                # Store result from OpenAI agent
+                # Store data value
                 data = message.getData()
-                logging.info(f"Received task decomposition: {data}")
 
                 if worker:
                     worker.append_data("stream", str(data))
