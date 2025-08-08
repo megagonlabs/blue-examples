@@ -46,7 +46,7 @@ class DialogueManagerAgent(OpenAIAgent):
 
         p = Plan(scope=worker.prefix)
         # set input
-        p.define_input("DEFAULT", value=inp)
+        p.define_input(label="DEFAULT", value=inp)
         # set plan
         p.connect_input_to_agent(from_input="DEFAULT", to_agent=self.properties['intent_classifier_agent'])
         p.connect_agent_to_agent(
@@ -68,7 +68,7 @@ class DialogueManagerAgent(OpenAIAgent):
 
         p = Plan(scope=worker.prefix)
         plan_diagram = self.properties['intents'][intent]['plan']
-        p.define_input(plan_diagram[0][1], value=self.user_input)
+        p.define_input(label=plan_diagram[0][1], value=self.user_input)
         p.connect_input_to_agent(from_input=plan_diagram[0][1], to_agent=plan_diagram[0][0])
         for i in range(1, len(plan_diagram)):
             p.connect_agent_to_agent(from_agent=plan_diagram[i - 1][0], to_agent=plan_diagram[i][0], to_agent_input=plan_diagram[i][1])
@@ -88,7 +88,7 @@ class DialogueManagerAgent(OpenAIAgent):
         elif input == "INTENT":
             if message.isData():
                 data = message.getData()
-                intent = json.loads(data)["intent"]
+                intent = data['intent']
                 return self.build_action_plan(worker, intent)
 
         elif input == "RESULT":

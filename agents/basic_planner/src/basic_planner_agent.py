@@ -51,9 +51,9 @@ class BasicPlannerAgent(Agent):
 
                 # AGENT WITH LABEL
                 p = Plan(scope=worker.session)
-                p.define_input("I", value="Count the number of words in this sentence...")
-                p.define_output("R")
-                p.define_agent("COUNTER", label="C", properties={"C": "CCC"})
+                p.define_input(label="I", value="Count the number of words in this sentence...")
+                p.define_output(label="R")
+                p.define_agent(name="COUNTER", label="C", properties={"C": "CCC"})
 
                 p.connect_input_to_agent(from_input="I", to_agent="C")
                 p.connect_agent_to_output(from_agent="C", to_output="R")
