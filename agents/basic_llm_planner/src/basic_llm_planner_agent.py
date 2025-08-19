@@ -1,14 +1,17 @@
 ###### Parsers, Formats, Utils
-
 import argparse
 import logging
 import json
+
 
 from blue.agent import Agent, AgentFactory
 from blue.agents.openai import OpenAIAgent
 from blue.plan import Plan
 from blue.session import Session
 from blue.stream import Message
+from llm_plan_utils import LLMPlan
+from prompts import *
+from demonstrations import *
 
 # set log level
 logging.getLogger().setLevel(logging.INFO)
@@ -18,136 +21,11 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
-DECOMPOSER_PROMPT = """\
-You are a planner responsible for generating high-level action plans to solve arbitrary tasks.
-
-## Objective
-
-Decompose the input task into smaller, manageable **subtasks** that can be executed by **agents capable of calling external tools**.
-
-Each subtask should:
-* Be represented as a **node** in a dependency graph.
-* Contain a **high-level name** describing the subtask.
-* Include a **detailed, executable instruction** for the agent, specifying how to perform the subtask and how to **utilize context from its dependencies**.
-* Each subtask instruction should be self-contained and self-explanatory: given the appropriate context or the output of previous nodes, another agent should be able to complete the subtask without needing to understand the overall task.
-* Choose the granularity of subtasks carefully, ensuring that each subtask is solvable by an agent equipped with tools. If the user task is very simple, it is acceptable to generate a plan with only a single subtask.
-
-
-## Structure
-
-Represent the plan as a **Directed Acyclic Graph (DAG)** where:
-
-* Each **node** includes:
-  * `index`: an integer index representing the node's position in the graph
-  * `name`: a concise, high-level description of the subtask
-  * `instruction`: a detailed instruction tailored to the agent, including how to incorporate inputs from incoming nodes. Use the `{{index}}` placeholder to indicate where the agent should use the output from previous nodes.
-* Each **edge** represents a **dependency requirement** between nodes (e.g., the output of one node is required as input for another). The edges should be represented as pairs of node indices, indicating the direction of the dependency.
-
-
-## Formatting Instructions
-
-* Output format (JSON):
-```json
-{
-  "nodes": [
-    {
-      "index": "node index",
-      "name": "subtask name",
-      "instruction": "detailed and context-aware instruction for the agent",
-      ...
-    },
-    ...
-  ],
-  "edges": [
-    ["from_node_index", "to_node_index"],
-    ...
-  ]
-}
-```
-* Do **not** include any additional text or explanations.
-* Do **not** wrap the JSON output in code blocks or markdown formatting.
-
-
-## Example
-
-Input: Chris earned $1000 in his job, and he spent $200 on a new phone. He also bought a new laptop for $800. Pat returned $100 to Chris for a previous loan. How much money does Chris have left?
-
-```json
-{
-    "nodes": [
-        {
-            "index": 0,
-            "name": "Identify income",
-            "instruction": "Identify the total income from Chris's job."
-        },
-        {
-            "index": 1,
-            "name": "Subtract phone cost",
-            "instruction": "Subtract $200 from [0]."
-        },
-        {
-            "index": 2,
-            "name": "Subtract laptop cost",
-            "instruction": "Subtract $800 from [1]."
-        },
-        {
-            "index": 3,
-            "name": "Add loan repayment",
-            "instruction": "Add $100 to [2]."
-        }
-    ],
-    "edges": [
-        ["0", "1"],
-        ["1", "2"],
-        ["2", "3"]
-    ]
-}
-```
-
-## Input
-
-${input}"""
-
-EXECUTOR_PROMPT = """You're a helpful assistant. Return only the output (numerical value) without any additional text or formatting.
-
-Task: {name}
-{instruction}
-
-[{parent_index}] = ${input}"""
-
-sample_user_input = "Chris earned $1000 in his job, and he spent $200 on a new phone. He also bought a new laptop for $800. Pat returned $100 to Chris for a previous loan. How much money does Chris have left?"
-sample_plan_text = """{
-    "nodes": [
-        {
-            "index": 0,
-            "name": "Identify income",
-            "instruction": "Identify the total income from Chris's job."
-        },
-        {
-            "index": 1,
-            "name": "Subtract phone cost",
-            "instruction": "Subtract $200 from [0]."
-        },
-        {
-            "index": 2,
-            "name": "Subtract laptop cost",
-            "instruction": "Subtract $800 from [1]."
-        },
-        {
-            "index": 3,
-            "name": "Add loan repayment",
-            "instruction": "Add $100 to [2]."
-        }
-    ],
-    "edges": [
-        ["0", "1"],
-        ["1", "2"],
-        ["2", "3"]
-    ]
-}"""
+USER_TASK_INPUT = 'USERTASK'
+SUBTASK_LAEBL = "SUBTASK_EXECUTOR_{idx}"
 
 basic_llm_planner_properties = {
-    "executor_input_template": EXECUTOR_PROMPT,
+    #"executor_input_template": EXECUTOR_PROMPT,
     "input_context_field": "content",
     "input_context": "$[0]",
     "input_field": "messages",
@@ -161,7 +39,6 @@ basic_llm_planner_properties = {
     "openai.temperature": 0,
     "openai.top_p": 1,
 }
-
 
 ############################
 ### Agent.BasicLLMPlannerAgent
@@ -186,21 +63,97 @@ class BasicLLMPlannerAgent(OpenAIAgent):
     def _initialize_outputs(self):
         return
 
-    def decompose_task(self, worker=None):
+    def decompose_task(self, user_input):
         """Call an OpenAI service to decompose a task into subtasks"""
-        user_input = ""
 
-        if worker:
-            user_input = " ".join(worker.get_data("stream"))
-
-        worker.set_data("user_input", user_input)
-        logging.info(f"worker.get_data('user_input'): {worker.get_data('user_input')}")
 
         # Call the OpenAI API to decompose the task
-        plan_text = self.execute_api_call(user_input, properties={}, additional_data={})
+        #plan_text = self.execute_api_call(user_input, properties={}, additional_data={})
+        plan_text = sample_plan_text2
+
         logging.info("Decomposed task plan: {plan_text}".format(plan_text=plan_text))
         return plan_text
+    
 
+
+    def compile_action_plan(self, worker, plan, task):
+        """
+        Converts LLM plan to a valid blue plan and submit
+        """
+        llm_plan = LLMPlan(plan)
+        action_plan = Plan(scope=worker.prefix)
+
+        # define input 
+        action_plan.define_input(USER_TASK_INPUT, value = task)
+
+        for idx, node in llm_plan.nodes.items():
+
+            prompt = EXECUTOR_PROMPT2.format(
+                agent_id = node['index'],
+                name=node["name"],
+                instruction=node["instruction"],
+                context="{input}"
+            )
+            
+            in_coming = llm_plan.get_incoming(idx)
+            if len(in_coming) == 0:
+                in_coming = [USER_TASK_INPUT] # provide global user task to all source nodes
+
+            # define agents 
+            node_label = SUBTASK_LAEBL.format(idx=idx)
+            action_plan.define_agent(
+                "BLOCKING_OPENAI_AGENT",
+                label=node_label,
+                properties={
+                    "openai.model": self.properties["openai.model"],
+                    "openai.max_tokens": self.properties["openai.max_tokens"],
+                    "input_template": prompt,
+                    "use_tools": True,
+                    "tool_discovery": False,
+                    'wait_for_inputs': in_coming
+                },
+            )
+            logging.info(
+                        f"Defined subtask executor: {node_label} with prompt: {prompt}, wait on {in_coming}"
+                    )
+            
+            # connect agents
+            for src in in_coming:
+                if src == USER_TASK_INPUT:
+                    action_plan.connect_input_to_agent(from_input=USER_TASK_INPUT,
+                                                    to_agent=node_label,
+                                                    to_agent_input=USER_TASK_INPUT)
+                    logging.info(
+                            f"Connected INPUT {USER_TASK_INPUT} to AGENT {node_label}"
+                        )
+                else:
+                    src_label = SUBTASK_LAEBL.format(idx=src)
+                    action_plan.connect_agent_to_agent(from_agent=src_label,
+                                                    to_agent=node_label,
+                                                    to_agent_input=f"FROM_{src}")
+                    logging.info(
+                            f"Connected AGENT {src_label} to AGENT {node_label}"
+                        )
+
+        # connect sinking node back to planner
+        sink = llm_plan.get_sink()
+        sink_label = SUBTASK_LAEBL.format(idx=sink)
+
+        action_plan.connect_agent_to_agent(
+            from_agent=sink_label,
+            to_agent=self.name,
+            to_agent_input="RESULT_EXECUTION",
+        )
+        logging.info(
+            f"Connected sink node {sink_label} to this planner agent: {self.name} [RESULT_EXECUTION]"
+        )
+
+        return action_plan
+
+
+
+
+    # TODO: remove deprecated code for linear plan processing
     def run_task(self, worker, plan):
         # (1) nodes are indexed from 0, with smaller indices being executed first.
         # (2) the workflow is strictly linear.
@@ -277,18 +230,18 @@ class BasicLLMPlannerAgent(OpenAIAgent):
             if message.isEOS():
                 # Decompose task
                 # The result will return to this agent as RESULT_PLAN
-                output = self.decompose_task(worker)
+
+                user_input = ""
+                if worker:
+                    user_input = " ".join(worker.get_data("stream"))
+                logging.info(f"User input task:{user_input}")
+
+                output = self.decompose_task(user_input)
                 logging.info(f"Task decomposition result: {output}")
 
                 return_message = (
                     f"Generated plan:\n{output}"  # this will be shown on the UI
                 )
-
-                # For demo purpose, use the sample plan for testing
-                logging.info(f"Sample user input: {sample_user_input}")
-                worker.set_data("user_input", sample_user_input)
-                logging.info(f"Sample plan: {sample_plan_text}")
-                output = sample_plan_text
 
                 # Parse the output as JSON
                 try:
@@ -309,12 +262,11 @@ class BasicLLMPlannerAgent(OpenAIAgent):
                         f"Error parsing plan: {output}\nError message: {e}",
                         Message.EOS,
                     ]
-                self.run_task(worker, plan_dag)
+                 # Submit the subtask
+                action_plan = self.compile_action_plan(worker=worker, plan=plan_dag, task=user_input)
+                action_plan.submit(worker)
+                logging.info("Sent off subtask execution request")
 
-                return_message += (
-                    "\n\nFor demo purpose, using a pre-defined sample below.\n"
-                )
-                return_message += f"User input: {sample_user_input}\nPlan:\n{output}"
                 return [
                     return_message,
                     Message.EOS,
