@@ -25,7 +25,6 @@ USER_TASK_INPUT = 'USERTASK'
 SUBTASK_LAEBL = "SUBTASK_EXECUTOR_{idx}"
 
 basic_llm_planner_properties = {
-    #"executor_input_template": EXECUTOR_PROMPT,
     "input_context_field": "content",
     "input_context": "$[0]",
     "input_field": "messages",
@@ -38,6 +37,10 @@ basic_llm_planner_properties = {
     "openai.presence_penalty": 0,
     "openai.temperature": 0,
     "openai.top_p": 1,
+    "executor.openai.model": "gpt-4.1-mini-2025-04-14",
+    "executor.openai.max_tokens":1024,
+    "executor.use_tools":False,
+    "executor.tool_discovery":False
 }
 
 ############################
@@ -68,8 +71,8 @@ class BasicLLMPlannerAgent(OpenAIAgent):
 
 
         # Call the OpenAI API to decompose the task
-        #plan_text = self.execute_api_call(user_input, properties={}, additional_data={})
-        plan_text = sample_plan_text2
+        plan_text = self.execute_api_call(user_input, properties={}, additional_data={})
+        #plan_text = sample_plan_text2
 
         logging.info("Decomposed task plan: {plan_text}".format(plan_text=plan_text))
         return plan_text
@@ -105,12 +108,13 @@ class BasicLLMPlannerAgent(OpenAIAgent):
                 "BLOCKING_OPENAI_AGENT",
                 label=node_label,
                 properties={
-                    "openai.model": self.properties["openai.model"],
-                    "openai.max_tokens": self.properties["openai.max_tokens"],
+                    "openai.model": self.properties.get("executor.openai.model", self.properties["openai.model"]),
+                    "openai.max_tokens": self.properties.get("executor.openai.max_tokens", self.properties.get("openai.max_tokens")),
+                    "use_tools": self.properties.get("executor.use_tools", True),
+                    "tool_discovery": self.properties.get("executor.tool_discovery", False),
+
                     "input_template": prompt,
-                    "use_tools": True,
-                    "tool_discovery": False,
-                    'wait_for_inputs': in_coming
+                    'wait_for_inputs': in_coming   
                 },
             )
             logging.info(
