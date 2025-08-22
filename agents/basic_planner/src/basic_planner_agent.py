@@ -8,7 +8,7 @@ import re
 ###### Blue
 from blue.agent import Agent, AgentFactory
 from blue.session import Session
-from blue.plan import Plan
+from blue.agents.plan import AgenticPlan
 
 # set log level
 logging.getLogger().setLevel(logging.INFO)
@@ -41,7 +41,7 @@ class BasicPlannerAgent(Agent):
                 # plan with a scope of session
 
                 # BASIC PLAN EXAMPLE
-                # p = Plan(scope=worker.session)
+                # p = AgenticPlan(scope=worker.session)
                 # p.define_input("I", value="Count the number of words in this sentence...")
                 # p.define_output("R")
 
@@ -50,7 +50,7 @@ class BasicPlannerAgent(Agent):
                 # p.connect_agent_to_agent(from_agent="COUNTER", to_agent="BASIC_PLANNER", to_agent_input="RESULT")
 
                 # AGENT WITH LABEL
-                p = Plan(scope=worker.session)
+                p = AgenticPlan(scope=worker.session)
                 p.define_input(label="I", value="Count the number of words in this sentence...")
                 p.define_output(label="R")
                 p.define_agent(name="COUNTER", label="C", properties={"C": "CCC"})

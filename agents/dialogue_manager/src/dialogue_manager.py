@@ -9,7 +9,7 @@ from blue.agent import AgentFactory
 from blue.agents.openai import OpenAIAgent
 from blue.session import Session
 from blue.stream import ControlCode
-from blue.plan import Plan
+from blue.agents.plan import AgenticPlan
 from blue.utils import string_utils, json_utils, uuid_utils
 
 ##### Agent
@@ -44,7 +44,7 @@ class DialogueManagerAgent(OpenAIAgent):
         intents = [f"Name: {intent} | Description: {self.properties['intents'][intent]['description']}" for intent in self.properties['intents']]
         inp = f"\nUser text: {data}.\nPossible intents: {intents}."
 
-        p = Plan(scope=worker.prefix)
+        p = AgenticPlan(scope=worker.prefix)
         # set input
         p.define_input(label="DEFAULT", value=inp)
         # set plan
@@ -66,7 +66,7 @@ class DialogueManagerAgent(OpenAIAgent):
         if intent not in self.properties['intents']:
             return "User input not compatible with any of the specified intents."
 
-        p = Plan(scope=worker.prefix)
+        p = AgenticPlan(scope=worker.prefix)
         plan_diagram = self.properties['intents'][intent]['plan']
         p.define_input(label=plan_diagram[0][1], value=self.user_input)
         p.connect_input_to_agent(from_input=plan_diagram[0][1], to_agent=plan_diagram[0][0])
