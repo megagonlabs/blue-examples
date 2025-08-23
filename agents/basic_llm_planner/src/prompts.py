@@ -105,5 +105,5 @@ Fullfill the task and only return the answer.
 * DO NOT include any explanations.
 Subtask : {name}
 Instruction: {instruction}
-Context(ouput of depending agents) : ${context}
+Context(output of depending agents) : ${context}
 """
