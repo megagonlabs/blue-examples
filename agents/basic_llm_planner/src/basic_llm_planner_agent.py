@@ -12,6 +12,7 @@ from blue.stream import Message
 from llm_plan_utils import LLMPlan
 from prompts import *
 from demonstrations import *
+from pydantic import ValidationError
 
 # set log level
 logging.getLogger().setLevel(logging.INFO)
@@ -72,7 +73,7 @@ class BasicLLMPlannerAgent(OpenAIAgent):
 
         # Call the OpenAI API to decompose the task
         plan_text = self.execute_api_call(user_input, properties={}, additional_data={})
-        #plan_text = sample_plan_text2
+
 
         logging.info("Decomposed task plan: {plan_text}".format(plan_text=plan_text))
         return plan_text
@@ -155,80 +156,6 @@ class BasicLLMPlannerAgent(OpenAIAgent):
         return action_plan
 
 
-
-
-    # TODO: remove deprecated code for linear plan processing
-    def run_task(self, worker, plan):
-        # (1) nodes are indexed from 0, with smaller indices being executed first.
-        # (2) the workflow is strictly linear.
-        # (3) the edges are sorted in the order of execution.
-        action_plan = Plan(scope=worker.prefix)
-
-        # Define executors
-        for node in plan["nodes"]:
-            index = node["index"]
-            prompt = EXECUTOR_PROMPT.format(
-                name=node["name"],
-                instruction=node["instruction"],
-                parent_index="context" if index == 0 else index - 1,
-                input="{input}",
-            )
-
-            # For now, we assume that there are only a few tools available (tool_discovery=False)
-            # and we can use the same OpenAI agent for all subtasks.
-            action_plan.define_agent(
-                "OPENAI___ROGUEAGENT",
-                label=f"SUBTASK_EXECUTOR_{index}",
-                properties={
-                    "openai.model": self.properties["openai.model"],
-                    "openai.max_tokens": self.properties["openai.max_tokens"],
-                    "input_template": prompt,
-                    "use_tools": True,
-                    "tool_discovery": False,
-                },
-            )
-            logging.info(
-                f"Defined subtask executor: SUBTASK_EXECUTOR_{index} with prompt: {prompt}"
-            )
-
-        # Define message flow
-        action_plan.define_input("DEFAULT", value=worker.get_data("user_input"))
-        for index in range(len(plan["nodes"])):
-            if index == 0:
-                # Connect the user input to the first subtask executor
-                action_plan.connect_input_to_agent(
-                    from_input="DEFAULT",
-                    to_agent="SUBTASK_EXECUTOR_0",
-                    to_agent_input="DEFAULT",
-                )
-                logging.info(
-                    "Connected input to first subtask executor: SUBTASK_EXECUTOR_0 [DEFAULT]"
-                )
-                continue
-            # Connect the agent to the next agent
-            action_plan.connect_agent_to_agent(
-                from_agent=f"SUBTASK_EXECUTOR_{index - 1}",
-                to_agent=f"SUBTASK_EXECUTOR_{index}",
-                to_agent_input="DEFAULT",
-            )
-            logging.info(
-                f"Connected subtask executor: SUBTASK_EXECUTOR_{index - 1} to SUBTASK_EXECUTOR_{index} [DEFAULT]"
-            )
-
-        # Connect the last agent to this planner agent to show the result on the UI
-        action_plan.connect_agent_to_agent(
-            from_agent=f"SUBTASK_EXECUTOR_{len(plan['nodes']) - 1}",
-            to_agent=self.name,
-            to_agent_input="RESULT_EXECUTION",
-        )
-        logging.info(
-            f"Connected last subtask executor: SUBTASK_EXECUTOR_{len(plan['nodes']) - 1} to this planner agent: {self.name} [RESULT_EXECUTION]"
-        )
-
-        # Submit the subtask
-        action_plan.submit(worker)
-        logging.info("Sent off subtask execution request")
-
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
         if input == "DEFAULT":
             if message.isEOS():
@@ -247,28 +174,24 @@ class BasicLLMPlannerAgent(OpenAIAgent):
                     f"Generated plan:\n{output}"  # this will be shown on the UI
                 )
 
-                # Parse the output as JSON
                 try:
                     plan_dag = json.loads(output)
-                    if "nodes" not in plan_dag:
-                        return [
-                            f"Error: the plan text does not contain a 'nodes' field: {output}",
-                            Message.EOS,
-                        ]
-                    if "edges" not in plan_dag:
-                        return [
-                            f"Error: the plan text does not contain a 'edges' field: {output}",
-                            Message.EOS,
-                        ]
-                except json.JSONDecodeError as e:
-                    logging.error(f"Failed to parse plan JSON: {e}")
+                    action_plan = self.compile_action_plan(worker=worker, plan=plan_dag, task=user_input)
+                    action_plan.submit(worker)
+
+                except ValidationError as e:
+                    logging.error(f"Invalid plan: {e}")
                     return [
-                        f"Error parsing plan: {output}\nError message: {e}",
+                        f"Invalid plan: {e}",
                         Message.EOS,
                     ]
-                 # Submit the subtask
-                action_plan = self.compile_action_plan(worker=worker, plan=plan_dag, task=user_input)
-                action_plan.submit(worker)
+                except Exception as e:
+                    logging.error(f"Error submitting plan: {e}")
+                    return [
+                        f"Error submitting plan: {e}",
+                        Message.EOS,
+                    ]
+                
                 logging.info("Sent off subtask execution request")
 
                 return [
