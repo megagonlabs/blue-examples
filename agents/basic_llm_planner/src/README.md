@@ -11,7 +11,7 @@ This is a basic implementation of a LLM (Large Language Model) planner. The goal
 
 ### Plan and execute
 1. Create and deploy this agent with a proper name (e.g., BASIC_LLM_PLANNER) and the following configuration
- ```json
+ ```python
     {
       "input_context_field": "content",
       "input_json": "[{\"role\": \"user\"}]",
@@ -85,8 +85,8 @@ To test with the Math example, build and run the `basic calculator tool`. Update
 By default, the coordinator will send the output of the final (sink) node back to the emitting planner (BASIC_LLM_PLANNER:RESULT_EXECUTION). The planner will process such input by directly sending it back to the UI.
 When you need to direct final plan execution results to another agent, set the following properites. For example, if the dialogue manager is calling the planner to plan and execute a task, it can specify:
 ```json
-"executor.plan_return_to_agent": DIALOGUE_MANAGER
-"executor.plan_return_to_agent_input":FROM_PLANNER
+"executor.plan_return_to_agent": "DIALOGUE_MANAGER"
+"executor.plan_return_to_agent_input":"FROM_PLANNER"
 ```
 
 ## More Under the Hood
