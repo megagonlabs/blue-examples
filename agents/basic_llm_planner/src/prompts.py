@@ -12,6 +12,13 @@ Each subtask should:
 * Each subtask instruction should be self-contained and self-explanatory: given the appropriate context or the output of previous nodes, another agent should be able to complete the subtask without needing to understand the overall task.
 * Choose the granularity of subtasks carefully, ensuring that each subtask is solvable by an agent equipped with tools. If the user task is very simple, it is acceptable to generate a plan with only a single subtask.
 
+{% if task_description %}
+
+## Task
+
+{{ task_description }}
+
+{% endif %}
 
 ## Structure
 
@@ -20,7 +27,7 @@ Represent the plan as a **Directed Acyclic Graph (DAG)** where:
 * Each **node** includes:
   * `index`: an integer index representing the node's position in the graph
   * `name`: a concise, high-level description of the subtask
-  * `instruction`: a detailed instruction tailored to the agent, including how to incorporate inputs from incoming nodes. Use the `{{index}}` placeholder to indicate where the agent should use the output from previous nodes.
+  * `instruction`: a detailed instruction tailored to the agent, including how to incorporate inputs from incoming nodes. Use the `Agent_<index>` placeholder to indicate where the agent should use the output from previous nodes.
 * Each **edge** represents a **dependency requirement** between nodes (e.g., the output of one node is required as input for another). The edges should be represented as pairs of node indices, indicating the direction of the dependency.
 
 
@@ -46,44 +53,18 @@ Represent the plan as a **Directed Acyclic Graph (DAG)** where:
 ```
 * Do **not** include any additional text or explanations.
 * Do **not** wrap the JSON output in code blocks or markdown formatting.
+{% if demonstrations %}
 
+## Examples
+{% for demonstration in demonstrations %}
+Input: {{ demonstration["input"] }}
 
-## Example
-
-Input: Chris earned $1000 in his job, and he spent $200 on a new phone. He also bought a new laptop for $800. Pat returned $100 to Chris for a previous loan. How much money does Chris have left?
-
-```json
-{
-    "nodes": [
-        {
-            "index": 0,
-            "name": "Identify income",
-            "instruction": "Identify the total income from Chris's job."
-        },
-        {
-            "index": 1,
-            "name": "Subtract phone cost",
-            "instruction": "Subtract $200 from [0]."
-        },
-        {
-            "index": 2,
-            "name": "Subtract laptop cost",
-            "instruction": "Subtract $800 from [1]."
-        },
-        {
-            "index": 3,
-            "name": "Add loan repayment",
-            "instruction": "Add $100 to [2]."
-        }
-    ],
-    "edges": [
-        ["0", "1"],
-        ["1", "2"],
-        ["2", "3"]
-    ]
-}
+```
+{{ demonstration["output"] }}
 ```
 
+{% endfor %}
+{% endif %}
 ## Input
 
 ${input}"""
@@ -100,7 +81,7 @@ You will be provided with:
 * Subtask instructions specific to your role.
 * Context in the form of outputs from previous agents, which you may need to build upon or continue processing. The context will be formatted as a dictionary containing the outputs of all agents on which your work depends.
 
-Fullfill the task and only return the answer. 
+Fullfill the task and only return the answer.
 * DO NOT repeat the context, use necessary context to perform the task.
 * DO NOT include any explanations.
 Subtask : {name}

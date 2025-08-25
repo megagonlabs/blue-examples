@@ -10,6 +10,7 @@ from blue.session import Session
 from blue.stream import Message
 from pydantic import ValidationError
 
+from demonstrations import DECOMPOSER_DEMONSTRATIONS
 from llm_plan_utils import LLMPlan
 from prompts import DECOMPOSER_PROMPT, EXECUTOR_PROMPT2
 
@@ -21,14 +22,14 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
-USER_TASK_INPUT = 'USERTASK'
-SUBTASK_LAEBL = "SUBTASK_EXECUTOR_{idx}"
+USER_TASK_INPUT = "USERTASK"
+SUBTASK_LABEL = "SUBTASK_EXECUTOR_{idx}"
 
 basic_llm_planner_properties = {
     "input_context_field": "content",
     "input_context": "$[0]",
     "input_field": "messages",
-    "input_json": "[{\"role\":\"user\"}]",
+    "input_json": '[{"role":"user"}]',
     "input_template": DECOMPOSER_PROMPT,
     "openai.api": "ChatCompletion",
     "openai.frequency_penalty": 0,
@@ -37,11 +38,14 @@ basic_llm_planner_properties = {
     "openai.presence_penalty": 0,
     "openai.temperature": 0,
     "openai.top_p": 1,
+    "decomposer.task_description": None,
+    "decomposer.demonstrations": DECOMPOSER_DEMONSTRATIONS,
     "executor.openai.model": "gpt-4.1-mini-2025-04-14",
-    "executor.openai.max_tokens":1024,
-    "executor.use_tools":False,
-    "executor.tool_discovery":False
+    "executor.openai.max_tokens": 1024,
+    "executor.use_tools": False,
+    "executor.tool_discovery": False,
 }
+
 
 ############################
 ### Agent.BasicLLMPlannerAgent
@@ -69,15 +73,15 @@ class BasicLLMPlannerAgent(OpenAIAgent):
     def decompose_task(self, user_input):
         """Call an OpenAI service to decompose a task into subtasks"""
 
-
         # Call the OpenAI API to decompose the task
-        plan_text = self.execute_api_call(user_input, properties={}, additional_data={})
-
+        properties = {
+            "task_description": self.properties.get("decomposer.task_description", None),
+            "demonstrations": self.properties.get("decomposer.demonstrations", [])
+        }
+        plan_text = self.execute_api_call(user_input, properties=properties, additional_data={})
 
         logging.info("Decomposed task plan: {plan_text}".format(plan_text=plan_text))
         return plan_text
-
-
 
     def compile_action_plan(self, worker, plan: dict, task: str):
         """
@@ -87,61 +91,70 @@ class BasicLLMPlannerAgent(OpenAIAgent):
         action_plan = Plan(scope=worker.prefix)
 
         # define input
-        action_plan.define_input(USER_TASK_INPUT, value = task)
+        action_plan.define_input(USER_TASK_INPUT, value=task)
 
         for idx, node in llm_plan.nodes.items():
-
             prompt = EXECUTOR_PROMPT2.format(
-                agent_id = node['index'],
+                agent_id=node["index"],
                 name=node["name"],
                 instruction=node["instruction"],
-                context="{input}"
+                context="{input}",
             )
 
             in_coming = llm_plan.get_incoming(idx)
             if len(in_coming) == 0:
-                in_coming = [USER_TASK_INPUT] # provide global user task to all source nodes
+                in_coming = [
+                    USER_TASK_INPUT
+                ]  # provide global user task to all source nodes
 
             # define agents
-            node_label = SUBTASK_LAEBL.format(idx=idx)
+            node_label = SUBTASK_LABEL.format(idx=idx)
             action_plan.define_agent(
                 "BLOCKING_OPENAI_AGENT",
                 label=node_label,
                 properties={
-                    "openai.model": self.properties.get("executor.openai.model", self.properties["openai.model"]),
-                    "openai.max_tokens": self.properties.get("executor.openai.max_tokens", self.properties.get("openai.max_tokens")),
+                    "openai.model": self.properties.get(
+                        "executor.openai.model", self.properties["openai.model"]
+                    ),
+                    "openai.max_tokens": self.properties.get(
+                        "executor.openai.max_tokens",
+                        self.properties.get("openai.max_tokens"),
+                    ),
                     "use_tools": self.properties.get("executor.use_tools", True),
-                    "tool_discovery": self.properties.get("executor.tool_discovery", False),
-
+                    "tool_discovery": self.properties.get(
+                        "executor.tool_discovery", False
+                    ),
                     "input_template": prompt,
-                    'wait_for_inputs': in_coming
+                    "wait_for_inputs": in_coming,
                 },
             )
             logging.info(
-                        f"Defined subtask executor: {node_label} with prompt: {prompt}, wait on {in_coming}"
-                    )
+                f"Defined subtask executor: {node_label} with prompt: {prompt}, wait on {in_coming}"
+            )
 
             # connect agents
             for src in in_coming:
                 if src == USER_TASK_INPUT:
-                    action_plan.connect_input_to_agent(from_input=USER_TASK_INPUT,
-                                                    to_agent=node_label,
-                                                    to_agent_input=USER_TASK_INPUT)
+                    action_plan.connect_input_to_agent(
+                        from_input=USER_TASK_INPUT,
+                        to_agent=node_label,
+                        to_agent_input=USER_TASK_INPUT,
+                    )
                     logging.info(
-                            f"Connected INPUT {USER_TASK_INPUT} to AGENT {node_label}"
-                        )
+                        f"Connected INPUT {USER_TASK_INPUT} to AGENT {node_label}"
+                    )
                 else:
-                    src_label = SUBTASK_LAEBL.format(idx=src)
-                    action_plan.connect_agent_to_agent(from_agent=src_label,
-                                                    to_agent=node_label,
-                                                    to_agent_input=f"FROM_{src}")
-                    logging.info(
-                            f"Connected AGENT {src_label} to AGENT {node_label}"
-                        )
+                    src_label = SUBTASK_LABEL.format(idx=src)
+                    action_plan.connect_agent_to_agent(
+                        from_agent=src_label,
+                        to_agent=node_label,
+                        to_agent_input=f"FROM_{src}",
+                    )
+                    logging.info(f"Connected AGENT {src_label} to AGENT {node_label}")
 
-        # connect sinking node back to planner
+        # connect the sink node back to planner
         sink = llm_plan.get_sink()
-        sink_label = SUBTASK_LAEBL.format(idx=sink)
+        sink_label = SUBTASK_LABEL.format(idx=sink)
 
         action_plan.connect_agent_to_agent(
             from_agent=sink_label,
@@ -153,7 +166,6 @@ class BasicLLMPlannerAgent(OpenAIAgent):
         )
 
         return action_plan
-
 
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
         if input == "DEFAULT":
@@ -175,7 +187,9 @@ class BasicLLMPlannerAgent(OpenAIAgent):
 
                 try:
                     plan_dag = json.loads(output)
-                    action_plan = self.compile_action_plan(worker=worker, plan=plan_dag, task=user_input)
+                    action_plan = self.compile_action_plan(
+                        worker=worker, plan=plan_dag, task=user_input
+                    )
                     action_plan.submit(worker)
 
                 except ValidationError as e:

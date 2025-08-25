@@ -60,3 +60,8 @@ sample_plan_text2 = """{
         ["2", "3"]
     ]
 }"""
+
+DECOMPOSER_DEMONSTRATIONS = [
+    {"input": sample_user_input, "output": sample_plan_text},
+    {"input": sample_input2, "output": sample_plan_text2},
+]
