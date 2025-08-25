@@ -22,8 +22,9 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
-USER_TASK_INPUT = "USERTASK"
-SUBTASK_LABEL = "SUBTASK_EXECUTOR_{idx}"
+USER_TASK_INPUT = 'USERTASK'
+SUBTASK_LAEBL = "SUBTASK_EXECUTOR_{idx}"
+RESULT_EXECUTION = "RESULT_EXECUTION"
 
 basic_llm_planner_properties = {
     "input_context_field": "content",
@@ -41,11 +42,13 @@ basic_llm_planner_properties = {
     "decomposer.task_description": None,
     "decomposer.demonstrations": DECOMPOSER_DEMONSTRATIONS,
     "executor.openai.model": "gpt-4.1-mini-2025-04-14",
-    "executor.openai.max_tokens": 1024,
-    "executor.use_tools": False,
-    "executor.tool_discovery": False,
+    "executor.openai.max_tokens":1024,
+    "executor.use_tools":False,
+    "executor.tool_discovery":False,
 }
-
+# to control where plan execution returns to 
+# "executor.plan_return_to_agent" default: self.name)
+# "executor.plan_return_to_agent_input", default RESULT_EXECUTION)
 
 ############################
 ### Agent.BasicLLMPlannerAgent
@@ -154,15 +157,19 @@ class BasicLLMPlannerAgent(OpenAIAgent):
 
         # connect the sink node back to planner
         sink = llm_plan.get_sink()
-        sink_label = SUBTASK_LABEL.format(idx=sink)
-
+        sink_label = SUBTASK_LAEBL.format(idx=sink)
+        return_to_agent=self.properties.get("executor.plan_return_to_agent", self.name)
+        return_to_agent_input=self.properties.get("executor.plan_return_to_agent_input", RESULT_EXECUTION)
+        logging.info(
+            f"TOAGENTS {return_to_agent}:{return_to_agent_input}"
+        )
         action_plan.connect_agent_to_agent(
             from_agent=sink_label,
-            to_agent=self.name,
-            to_agent_input="RESULT_EXECUTION",
+            to_agent=return_to_agent,
+            to_agent_input=return_to_agent_input
         )
         logging.info(
-            f"Connected sink node {sink_label} to this planner agent: {self.name} [RESULT_EXECUTION]"
+            f"Connected sink node {sink_label} to this planner agent: {return_to_agent}:{return_to_agent_input}"
         )
 
         return action_plan
@@ -221,7 +228,7 @@ class BasicLLMPlannerAgent(OpenAIAgent):
 
                 if worker:
                     worker.append_data("stream", str(data))
-        elif input == "RESULT_EXECUTION":
+        elif input == RESULT_EXECUTION:
             if message.isEOS():
                 output = ""
                 if worker:
