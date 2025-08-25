@@ -3,16 +3,15 @@ import argparse
 import logging
 import json
 
-
-from blue.agent import Agent, AgentFactory
+from blue.agent import AgentFactory
 from blue.agents.openai import OpenAIAgent
 from blue.plan import Plan
 from blue.session import Session
 from blue.stream import Message
-from llm_plan_utils import LLMPlan
-from prompts import *
-from demonstrations import *
 from pydantic import ValidationError
+
+from llm_plan_utils import LLMPlan
+from prompts import DECOMPOSER_PROMPT, EXECUTOR_PROMPT2
 
 # set log level
 logging.getLogger().setLevel(logging.INFO)
@@ -77,17 +76,17 @@ class BasicLLMPlannerAgent(OpenAIAgent):
 
         logging.info("Decomposed task plan: {plan_text}".format(plan_text=plan_text))
         return plan_text
-    
 
 
-    def compile_action_plan(self, worker, plan, task):
+
+    def compile_action_plan(self, worker, plan: dict, task: str):
         """
         Converts LLM plan to a valid blue plan and submit
         """
         llm_plan = LLMPlan(plan)
         action_plan = Plan(scope=worker.prefix)
 
-        # define input 
+        # define input
         action_plan.define_input(USER_TASK_INPUT, value = task)
 
         for idx, node in llm_plan.nodes.items():
@@ -98,12 +97,12 @@ class BasicLLMPlannerAgent(OpenAIAgent):
                 instruction=node["instruction"],
                 context="{input}"
             )
-            
+
             in_coming = llm_plan.get_incoming(idx)
             if len(in_coming) == 0:
                 in_coming = [USER_TASK_INPUT] # provide global user task to all source nodes
 
-            # define agents 
+            # define agents
             node_label = SUBTASK_LAEBL.format(idx=idx)
             action_plan.define_agent(
                 "BLOCKING_OPENAI_AGENT",
@@ -115,13 +114,13 @@ class BasicLLMPlannerAgent(OpenAIAgent):
                     "tool_discovery": self.properties.get("executor.tool_discovery", False),
 
                     "input_template": prompt,
-                    'wait_for_inputs': in_coming   
+                    'wait_for_inputs': in_coming
                 },
             )
             logging.info(
                         f"Defined subtask executor: {node_label} with prompt: {prompt}, wait on {in_coming}"
                     )
-            
+
             # connect agents
             for src in in_coming:
                 if src == USER_TASK_INPUT:
@@ -191,7 +190,7 @@ class BasicLLMPlannerAgent(OpenAIAgent):
                         f"Error submitting plan: {e}",
                         Message.EOS,
                     ]
-                
+
                 logging.info("Sent off subtask execution request")
 
                 return [
