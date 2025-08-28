@@ -62,7 +62,7 @@ This is a basic implementation of a LLM (Large Language Model) planner. The goal
 - `executor.openai.model` defaults to `openai.model` if note provided.
 
 
-2. Deploy [`BLOCKING_OPENAI_AGENT`](github.com/rit-git/blue/tree/dev/agents/blocking_openai_agent) (with this exact name) 
+2. Deploy [BLOCKING_OPENAI_AGENT](https://github.com/rit-git/blue/tree/dev/agents/blocking_openai_agent) (with this exact name) 
 ```json
 {
     "include_extra_input": true,
