@@ -5,7 +5,7 @@ import json
 
 from blue.agent import AgentFactory
 from blue.agents.openai import OpenAIAgent
-from blue.plan import Plan
+from blue.agents.plan import AgenticPlan
 from blue.session import Session
 from blue.stream import Message
 from pydantic import ValidationError
@@ -91,7 +91,7 @@ class BasicLLMPlannerAgent(OpenAIAgent):
         Converts LLM plan to a valid blue plan and submit
         """
         llm_plan = LLMPlan(plan)
-        action_plan = Plan(scope=worker.prefix)
+        action_plan = AgenticPlan(scope=worker.prefix)
 
         # define input
         action_plan.define_input(USER_TASK_INPUT, value=task)
