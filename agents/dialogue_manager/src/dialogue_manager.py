@@ -9,7 +9,7 @@ from blue.agent import AgentFactory
 from blue.agents.openai import OpenAIAgent
 from blue.session import Session
 from blue.stream import ControlCode
-from blue.plan import Plan
+from blue.agents.plan import AgenticPlan
 from blue.utils import string_utils, json_utils, uuid_utils
 
 ##### Agent
@@ -32,9 +32,8 @@ class DialogueManagerAgent(OpenAIAgent):
             kwargs["name"] = "DIALOGUE_MANAGER"
         super().__init__(**kwargs)
 
-    ####### inputs / outputs
     def _initialize_inputs(self):
-        self.add_input("DEFAULT", description="user input", includes=["USER"])
+        self.add_input("DEFAULT", description="trigger", includes=["USER"])
 
     def _initialize_outputs(self):
         return
@@ -44,7 +43,7 @@ class DialogueManagerAgent(OpenAIAgent):
         intents = [f"Name: {intent} | Description: {self.properties['intents'][intent]['description']}" for intent in self.properties['intents']]
         inp = f"\nUser text: {data}.\nPossible intents: {intents}."
 
-        p = Plan(scope=worker.prefix)
+        p = AgenticPlan(scope=worker.prefix)
         # set input
         p.define_input("DEFAULT", value=inp)
         # set plan
@@ -65,13 +64,15 @@ class DialogueManagerAgent(OpenAIAgent):
         """Given an intent class, determine next action and build the corresponding plan"""
         if intent not in self.properties['intents']:
             return "User input not compatible with any of the specified intents."
-
-        p = Plan(scope=worker.prefix)
+        
+        p = AgenticPlan(scope=worker.prefix)
         plan_diagram = self.properties['intents'][intent]['plan']
         p.define_input(plan_diagram[0][1], value=self.user_input)
         p.connect_input_to_agent(from_input=plan_diagram[0][1], to_agent=plan_diagram[0][0])
         for i in range(1, len(plan_diagram)):
-            p.connect_agent_to_agent(from_agent=plan_diagram[i - 1][0], to_agent=plan_diagram[i][0], to_agent_input=plan_diagram[i][1])
+             p.connect_agent_to_agent(
+                from_agent=plan_diagram[i-1][0], to_agent=plan_diagram[i][0], to_agent_input=plan_diagram[i][1]
+            )
         p.submit(worker)
         logging.info(f"Built plan for intent: {intent}")
         return f"Executing plan for intent: {intent}."
@@ -94,8 +95,45 @@ class DialogueManagerAgent(OpenAIAgent):
             logging.info("Sent off intent rewriting request")
             return
 
+    def intent_rewriter(self, worker, data, id=None):
+            p = AgenticPlan(scope=worker.prefix)
+            # set input
+            inp = f"Conversation History:\n{data}"
+            p.define_input("DEFAULT", value=inp)
+            # set plan
+            p.connect_input_to_agent(from_input="DEFAULT", to_agent=self.properties['intent_rewriter_agent'])
+            p.connect_agent_to_agent(
+                from_agent=self.properties['intent_rewriter_agent'],
+                to_agent=self.name,
+                to_agent_input="INTENT_REWRITER",
+            )
+            # submit plan
+            p.submit(worker)
+
+            logging.info("Sent off intent rewriting request")
+            return
+
+    def llm_planner(self, worker, data, id=None):
+        p = AgenticPlan(scope=worker.prefix)
+        # set input
+        # inp = f"Your task is:\n{data}"
+        p.define_input("DEFAULT", value=data)
+        # set plan
+        p.connect_input_to_agent(from_input="DEFAULT", to_agent=self.properties['llm_planner'])
+        p.connect_agent_to_agent(
+            from_agent=self.properties['llm_planner'],
+            to_agent=self.name,
+            to_agent_input="FROM_PLANNER",
+        )
+        # submit plan
+        p.submit(worker)
+
+        logging.info("Sent off llm planning request")
+        return
+
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
         conversation_memory = properties['conversation_memory']
+        logging.info(f"Conv memory: {conversation_memory}")
         stream = message.getStream()
 
         if not worker: 
@@ -107,13 +145,21 @@ class DialogueManagerAgent(OpenAIAgent):
         if input == "DEFAULT":
             if message.isData():
                 data = message.getData()
+                is_plan = False
+                if data.lower() == "plan":
+                    is_plan = True
                 data = f'{{"role": "user", "content": {data}}}'
+                logging.info(f"The input is: {data}")
                 if conversation_memory:
-                    worker.append_session_data("CONVERSATION_HISTORY", data)
-                    conversation_history = worker.get_session_data("CONVERSATION_HISTORY")
-                    conversation_history = "\n".join(conversation_history)
-                    logging.info(f"Conversation History: {conversation_history}")
-                    self.intent_rewriter(worker, conversation_history)
+                    if is_plan:
+                        rewrite = worker.get_session_data("REWRITE")
+                        return self.llm_planner(worker, rewrite)
+                    else:
+                        worker.append_session_data("CONVERSATION_HISTORY", data)
+                        conversation_history = worker.get_session_data("CONVERSATION_HISTORY")
+                        conversation_history = "\n".join(conversation_history)
+                        logging.info(f"Conversation History: {conversation_history}")
+                        self.intent_rewriter(worker, conversation_history)
                 else:
                     self.intent_rewriter(worker, data)
 
@@ -127,7 +173,7 @@ class DialogueManagerAgent(OpenAIAgent):
             if message.isData():
                 data = message.getData()
                 rewrite = json.loads(data)["rewrite"]
-
+                worker.set_session_data("REWRITE", rewrite)
                 assistant_response = f"Your task is: {rewrite}"
                 worker.write_data(assistant_response, output="TEXT")
                 worker.write_eos(output="TEXT")
@@ -143,6 +189,15 @@ class DialogueManagerAgent(OpenAIAgent):
                     data = message.getData()
                     return data
 
+        elif input == "FROM_PLANNER":
+            if message.isData():
+                if worker:
+                    data = message.getData()
+                    worker.write_data("The final answer is ::: ", output="TEXT")
+                    worker.write_data(data, output="TEXT")
+                    worker.write_eos(output="TEXT")
+                    return data
+            return
         return None
 
 
@@ -185,11 +240,15 @@ if __name__ == "__main__":
         if args.session:
             # join an existing session
             session = Session(cid=args.session)
-            a = DialogueManagerAgent(name=args.name, session=session, properties=properties)
+            a = DialogueManagerAgent(
+                name=args.name, session=session, properties=properties
+            )
         else:
             # create a new session
             session = Session()
-            a = DialogueManagerAgent(name=args.name, session=session, properties=properties)
+            a = DialogueManagerAgent(
+                name=args.name, session=session, properties=properties
+            )
 
         # wait for session
         if session:

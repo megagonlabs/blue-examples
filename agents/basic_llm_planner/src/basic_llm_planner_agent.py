@@ -68,7 +68,9 @@ class BasicLLMPlannerAgent(OpenAIAgent):
 
     ####### inputs / outputs
     def _initialize_inputs(self):
-        self.add_input("DEFAULT", description="trigger", includes=["USER"])
+        # self.add_input("DEFAULT", description="trigger", includes=["USER"])
+        self.add_input("DEFAULT", description="trigger", excludes=["USER"])
+        pass
 
     def _initialize_outputs(self):
         return
