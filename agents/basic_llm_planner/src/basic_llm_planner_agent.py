@@ -196,6 +196,21 @@ class BasicLLMPlannerAgent(OpenAIAgent):
 
                 try:
                     plan_dag = json.loads(output)
+                    llm_plan = LLMPlan(plan_dag)
+                    plan_only_mode = properties['plan_only_mode']
+                    if plan_only_mode:
+                        p = AgenticPlan(scope=worker.prefix)
+                        p.define_input("DEFAULT", value=plan_dag)
+                        # set plan
+                        p.connect_input_to_agent(from_input="DEFAULT", to_agent=self.name)
+                        p.connect_agent_to_agent(
+                            from_agent=self.name,
+                            to_agent=self.properties["executor.plan_return_to_agent"],
+                            to_agent_input=self.properties["executor.plan_return_to_agent_input"],
+                        )
+                        # submit plan
+                        p.submit(worker)
+                        return
                     action_plan = self.compile_action_plan(
                         worker=worker, plan=plan_dag, task=user_input
                     )

@@ -12,6 +12,14 @@ from blue.stream import ControlCode
 from blue.agents.plan import AgenticPlan
 from blue.utils import string_utils, json_utils, uuid_utils
 
+USER_INTENT_PROMPT = """\
+You will be provided a USER utterance. Your job is simple, either ask a clarifying question or return "plan".
+You should ask a clarifying question if the user task is vague or needs more information. In that case, return the clarification question you want. Keep it short. 
+
+If the user intent is now clear, then simply return "plan"
+
+${input}"""
+
 ##### Agent
 
 import util_functions
@@ -24,6 +32,25 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
+dialogue_manager_properties = {
+    "service_url": "ws://blue_service_openai:8001",
+    "input_context_field": "content",
+    "input_context": "$[0]",
+    "input_field": "messages",
+    "input_json": '[{"role":"user"}]',
+    "input_template": USER_INTENT_PROMPT,
+    "openai.api": "ChatCompletion",
+    "openai.frequency_penalty": 0,
+    "openai.max_tokens": 1024,
+    "openai.model": "gpt-4.1-mini-2025-04-14",
+    "openai.presence_penalty": 0,
+    "openai.temperature": 0,
+    "openai.top_p": 1,
+    "executor.openai.model": "gpt-4.1-mini-2025-04-14",
+    "executor.openai.max_tokens":1024,
+    "executor.use_tools":False,
+    "executor.tool_discovery":False,
+}
 
 class DialogueManagerAgent(OpenAIAgent):
 
@@ -32,11 +59,19 @@ class DialogueManagerAgent(OpenAIAgent):
             kwargs["name"] = "DIALOGUE_MANAGER"
         super().__init__(**kwargs)
 
+    def _initialize_properties(self):
+        super()._initialize_properties()
+
+        # init properties (override default properties)
+        for key in dialogue_manager_properties:
+            self.properties[key] = dialogue_manager_properties[key]
+
     def _initialize_inputs(self):
         self.add_input("DEFAULT", description="trigger", includes=["USER"])
 
     def _initialize_outputs(self):
         return
+
 
     #### INTENT
     def identify_intent(self, worker, data, id=None):
@@ -78,24 +113,6 @@ class DialogueManagerAgent(OpenAIAgent):
         return f"Executing plan for intent: {intent}."
 
     def intent_rewriter(self, worker, data, id=None):
-            p = Plan(scope=worker.prefix)
-            # set input
-            inp = f"Conversation History:\n{data}"
-            p.define_input("DEFAULT", value=inp)
-            # set plan
-            p.connect_input_to_agent(from_input="DEFAULT", to_agent=self.properties['intent_rewriter_agent'])
-            p.connect_agent_to_agent(
-                from_agent=self.properties['intent_rewriter_agent'],
-                to_agent=self.name,
-                to_agent_input="INTENT_REWRITER",
-            )
-            # submit plan
-            p.submit(worker)
-
-            logging.info("Sent off intent rewriting request")
-            return
-
-    def intent_rewriter(self, worker, data, id=None):
             p = AgenticPlan(scope=worker.prefix)
             # set input
             inp = f"Conversation History:\n{data}"
@@ -116,7 +133,6 @@ class DialogueManagerAgent(OpenAIAgent):
     def llm_planner(self, worker, data, id=None):
         p = AgenticPlan(scope=worker.prefix)
         # set input
-        # inp = f"Your task is:\n{data}"
         p.define_input("DEFAULT", value=data)
         # set plan
         p.connect_input_to_agent(from_input="DEFAULT", to_agent=self.properties['llm_planner'])
@@ -133,7 +149,7 @@ class DialogueManagerAgent(OpenAIAgent):
 
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
         conversation_memory = properties['conversation_memory']
-        logging.info(f"Conv memory: {conversation_memory}")
+        use_intent_rewrite = properties['use_intent_rewrite']
         stream = message.getStream()
 
         if not worker: 
@@ -145,23 +161,64 @@ class DialogueManagerAgent(OpenAIAgent):
         if input == "DEFAULT":
             if message.isData():
                 data = message.getData()
-                is_plan = False
-                if data.lower() == "plan":
-                    is_plan = True
-                data = f'{{"role": "user", "content": {data}}}'
-                logging.info(f"The input is: {data}")
-                if conversation_memory:
-                    if is_plan:
-                        rewrite = worker.get_session_data("REWRITE")
-                        return self.llm_planner(worker, rewrite)
-                    else:
-                        worker.append_session_data("CONVERSATION_HISTORY", data)
-                        conversation_history = worker.get_session_data("CONVERSATION_HISTORY")
-                        conversation_history = "\n".join(conversation_history)
-                        logging.info(f"Conversation History: {conversation_history}")
-                        self.intent_rewriter(worker, conversation_history)
+
+                # define properties for openai api call
+                properties = {
+                    "task_description": self.properties.get("decomposer.task_description", None),
+                    "demonstrations": self.properties.get("decomposer.demonstrations", [])
+                }
+                
+                if not conversation_memory:
+                    # no conversation memory --> no intent rewrite
+                    use_intent_rewrite = False
+                    assistant_response = self.execute_api_call(data, properties=properties, additional_data={})
                 else:
-                    self.intent_rewriter(worker, data)
+                    # dialogue policy
+                    conversation_history = worker.get_session_data("CONVERSATION_HISTORY")
+                    user_utterance = f'{{"role": "user", "content": {data}}}'
+                    conversation_history.append(user_utterance)
+                    conversation_history = "\n".join(conversation_history)
+                    assistant_response = self.execute_api_call(conversation_history, properties=properties, additional_data={})
+
+                # check whether to plan based on dialogue policy
+                # or if 3 turns of conversation have occurred
+                is_plan = False
+                if (
+                        assistant_response.lower() == "plan"
+                        or (conversation_memory and len(worker.get_session_data("CONVERSATION_HISTORY")) >= 7)
+                    ):
+                    is_plan = True
+                worker.set_session_data("IS_PLAN", is_plan)
+
+                data = f'{{"role": "user", "content": {data}}}'
+                if conversation_memory:
+                    worker.append_session_data("CONVERSATION_HISTORY", data)
+                    if not is_plan:
+                        # write clarification question
+                        worker.write_data(assistant_response, output="TEXT")
+                        worker.write_eos(output="TEXT")
+                        assistant_response = f'{{"role": "assistant", "content": {assistant_response}}}'
+                        worker.append_session_data("CONVERSATION_HISTORY", assistant_response)
+
+                    conversation_history = worker.get_session_data("CONVERSATION_HISTORY")
+                    conversation_history = "\n".join(conversation_history)
+
+                    if use_intent_rewrite: 
+                        # intent rewrite
+                        self.intent_rewriter(worker, conversation_history)
+                    
+                    if not use_intent_rewrite and is_plan: 
+                        # plan
+                        worker.write_data("Generating Plan", output="TEXT")
+                        worker.write_eos(output="TEXT")
+                        self.llm_planner(worker, conversation_history)
+
+                else:
+                    # if no conversation memory, generate plan
+                    worker.write_data("Generating Plan", output="TEXT")
+                    worker.write_eos(output="TEXT")
+                    self.llm_planner(worker, data)
+
 
         elif input == "INTENT":
             if message.isData():
@@ -173,15 +230,16 @@ class DialogueManagerAgent(OpenAIAgent):
             if message.isData():
                 data = message.getData()
                 rewrite = json.loads(data)["rewrite"]
-                worker.set_session_data("REWRITE", rewrite)
-                assistant_response = f"Your task is: {rewrite}"
-                worker.write_data(assistant_response, output="TEXT")
-                worker.write_eos(output="TEXT")
+                is_plan = worker.get_session_data("IS_PLAN")
 
-                if conversation_memory:
-                    assistant_response = f'{{"role": "assistant", "content": {assistant_response}}}'
-                    worker.append_session_data("CONVERSATION_HISTORY", assistant_response)
-                return
+                if is_plan:
+                    assistant_response = f"Generating Plan"
+                    worker.write_data(assistant_response, output="TEXT")
+                    worker.write_eos(output="TEXT")
+                    return self.llm_planner(worker, rewrite)
+                else:
+                    assistant_response = f"Intent: {rewrite}"
+                    return
 
         elif input == "RESULT":
             if message.isData():
@@ -196,7 +254,6 @@ class DialogueManagerAgent(OpenAIAgent):
                     worker.write_data("The final answer is ::: ", output="TEXT")
                     worker.write_data(data, output="TEXT")
                     worker.write_eos(output="TEXT")
-                    return data
             return
         return None
 
