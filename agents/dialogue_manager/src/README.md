@@ -7,6 +7,7 @@ The current version of the Dialogue Manager supports:
 1. **Conversation Memory**: Storing, managing and retrieving the conversation thread with USER in current session. 
 2. **Intent Rewriting**: Rewriting the USER-ASSISTANT conversation to a concise, well-informed summary capturing the user's intent. 
 3. Integration with the `Basic LLM Planner` to output a decomposed task plan, given the user input
+4. **Re-plan**: allow user to update or further specify intents to re-plan
 
 ## Usage
 
@@ -114,7 +115,10 @@ The current version of the Dialogue Manager supports:
 ```json
 "executor.plan_return_to_agent": "DIALOGUE_MANAGER___EXAMPLE"
 "executor.plan_return_to_agent_input":"FROM_PLANNER"
+"plan_only_mode": true
 ```
+
+Set `plan_only_mode` to `false` to also perform execution of plan
 
 4. Deploy the `COORDINATOR`, `BLOCKING_OPENAI_AGENT`, `OPENAI_AGENT`
 
