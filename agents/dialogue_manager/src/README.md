@@ -97,13 +97,16 @@ The current version of the Dialogue Manager supports:
     "intent_action_agent": "OPENAI___INTENT_ACTION",
     "llm_planner": "BASIC_LLM_PLANNER___DM",
     "conversation_memory": true,
-    "use_intent_rewrite": true
+    "use_intent_rewrite": true,
+    "round_limit": 3
 }
 ```
 
 `use_intent_rewrite`: set to True, to utilize intent rewriting
 
 `conversation_memory`: set to True, to store and manage entire conversation history with user. If to use only latest user utterance, set to False. 
+
+`round_limit`: specifies the maximum number of conversation rounds before which the system should begin generating the plan (re-planning is still allowed)
 
 2. Deploy `OPENAI___INTENT_REWRITER`
 ```json
@@ -118,7 +121,9 @@ The current version of the Dialogue Manager supports:
 "plan_only_mode": true
 ```
 
-Set `plan_only_mode` to `false` to also perform execution of plan
+- Set `plan_only_mode` to `false` to also perform execution of plan
+
+- Add input `DEFAULT` which excludes `USER`
 
 4. Deploy the `COORDINATOR`, `BLOCKING_OPENAI_AGENT`, `OPENAI_AGENT`
 

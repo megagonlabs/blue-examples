@@ -11,14 +11,7 @@ from blue.session import Session
 from blue.stream import ControlCode
 from blue.agents.plan import AgenticPlan
 from blue.utils import string_utils, json_utils, uuid_utils
-
-USER_INTENT_PROMPT = """\
-You will be provided a USER utterance. Your job is simple, either ask a clarifying question or return "plan".
-You should ask a clarifying question if the user task is vague or needs more information. In that case, return the clarification question you want. Keep it short. 
-
-If the user intent is now clear, then simply return "plan"
-
-${input}"""
+from prompts import USER_INTENT_PROMPT
 
 ##### Agent
 
@@ -46,10 +39,6 @@ dialogue_manager_properties = {
     "openai.presence_penalty": 0,
     "openai.temperature": 0,
     "openai.top_p": 1,
-    "executor.openai.model": "gpt-4.1-mini-2025-04-14",
-    "executor.openai.max_tokens":1024,
-    "executor.use_tools":False,
-    "executor.tool_discovery":False,
 }
 
 class DialogueManagerAgent(OpenAIAgent):
@@ -72,8 +61,6 @@ class DialogueManagerAgent(OpenAIAgent):
     def _initialize_outputs(self):
         return
 
-
-    #### INTENT
     def identify_intent(self, worker, data, id=None):
         intents = [f"Name: {intent} | Description: {self.properties['intents'][intent]['description']}" for intent in self.properties['intents']]
         inp = f"\nUser text: {data}.\nPossible intents: {intents}."
@@ -113,24 +100,29 @@ class DialogueManagerAgent(OpenAIAgent):
         return f"Executing plan for intent: {intent}."
 
     def intent_rewriter(self, worker, data, id=None):
-            p = AgenticPlan(scope=worker.prefix)
-            # set input
-            inp = f"Conversation History:\n{data}"
-            p.define_input("DEFAULT", value=inp)
-            # set plan
-            p.connect_input_to_agent(from_input="DEFAULT", to_agent=self.properties['intent_rewriter_agent'])
-            p.connect_agent_to_agent(
-                from_agent=self.properties['intent_rewriter_agent'],
-                to_agent=self.name,
-                to_agent_input="INTENT_REWRITER",
-            )
-            # submit plan
-            p.submit(worker)
+        '''
+        Calls OPENAI Rewriter Agent
+        Returns a concise rewritten summary of the conversation history
+        '''
+        p = AgenticPlan(scope=worker.prefix)
+        # set input
+        inp = f"Conversation History:\n{data}"
+        p.define_input("DEFAULT", value=inp)
+        # set plan
+        p.connect_input_to_agent(from_input="DEFAULT", to_agent=self.properties['intent_rewriter_agent'])
+        p.connect_agent_to_agent(
+            from_agent=self.properties['intent_rewriter_agent'],
+            to_agent=self.name,
+            to_agent_input="INTENT_REWRITER",
+        )
+        # submit plan
+        p.submit(worker)
 
-            logging.info("Sent off intent rewriting request")
-            return
+        logging.info("Sent off intent rewriting request")
+        return
 
     def llm_planner(self, worker, data, id=None):
+        '''invokes Basic LLM Planner'''
         p = AgenticPlan(scope=worker.prefix)
         # set input
         p.define_input("DEFAULT", value=data)
@@ -148,8 +140,9 @@ class DialogueManagerAgent(OpenAIAgent):
         return
 
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
-        conversation_memory = properties['conversation_memory']
-        use_intent_rewrite = properties['use_intent_rewrite']
+        conversation_memory = properties.get('conversation_memory', True)   # use conv history
+        use_intent_rewrite = properties.get('use_intent_rewrite', True)     # use intent rewrite
+        round_limit = properties.get('round_limit', 3)                      # max conversation rounds before plan
         stream = message.getStream()
 
         if not worker: 
@@ -164,8 +157,8 @@ class DialogueManagerAgent(OpenAIAgent):
 
                 # define properties for openai api call
                 properties = {
-                    "task_description": self.properties.get("decomposer.task_description", None),
-                    "demonstrations": self.properties.get("decomposer.demonstrations", [])
+                    "task_description": self.properties.get("task_description", None),
+                    "demonstrations": self.properties.get("demonstrations", [])
                 }
                 
                 if not conversation_memory:
@@ -177,16 +170,15 @@ class DialogueManagerAgent(OpenAIAgent):
                     conversation_history = worker.get_session_data("CONVERSATION_HISTORY")
                     user_utterance = f'{{"role": "user", "content": {data}}}'
                     conversation_history.append(user_utterance)
-                    conversation_history = "\n".join(conversation_history)
-                    assistant_response = self.execute_api_call(conversation_history, properties=properties, additional_data={})
+                    assistant_response = self.execute_api_call("\n".join(conversation_history), properties=properties, additional_data={})
 
                 # check whether to plan based on dialogue policy
-                # or if 3 turns of conversation have occurred
+                # or if n turns of conversation have occurred
                 is_plan = False
-                if (
+                if  (
                         assistant_response.lower() == "plan"
-                        or (conversation_memory and len(worker.get_session_data("CONVERSATION_HISTORY")) >= 7)
-                    ):
+                        or (conversation_memory and (len(conversation_history)+1)/2 >= round_limit)
+                ):
                     is_plan = True
                 worker.set_session_data("IS_PLAN", is_plan)
 
