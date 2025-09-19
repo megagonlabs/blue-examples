@@ -46,7 +46,8 @@ basic_llm_planner_properties = {
     "executor.use_tools":False,
     "executor.tool_discovery":False,
 }
-# to control where plan execution returns to 
+
+# to control where plan execution returns to
 # "executor.plan_return_to_agent" default: self.name)
 # "executor.plan_return_to_agent_input", default RESULT_EXECUTION)
 
@@ -210,6 +211,7 @@ class BasicLLMPlannerAgent(OpenAIAgent):
                         # submit plan
                         p.submit(worker)
                         return
+
                     action_plan = self.compile_action_plan(
                         worker=worker, plan=plan_dag, task=user_input
                     )

@@ -9,7 +9,7 @@ import re
 from blue.agent import Agent, AgentFactory
 from blue.session import Session
 from blue.stream import ControlCode
-from blue.plan import Plan
+from blue.agents.plan import AgenticPlan
 from blue.utils import json_utils, string_utils, uuid_utils
 
 ##### Agent Specific
@@ -17,7 +17,10 @@ import ui_builders
 
 # set log level
 logging.getLogger().setLevel(logging.INFO)
-logging.basicConfig(format="%(asctime)s [%(levelname)s] [%(process)d:%(threadName)s:%(thread)d](%(filename)s:%(lineno)d) %(name)s -  %(message)s", level=logging.ERROR, datefmt="%Y-%m-%d %H:%M:%S")
+logging.basicConfig(
+    format="%(asctime)s [%(levelname)s] [%(process)d:%(threadName)s:%(thread)d](%(filename)s:%(lineno)d) %(name)s -  %(message)s", level=logging.ERROR, datefmt="%Y-%m-%d %H:%M:%S"
+)
+
 
 ##############################
 ### Agent.AgenticEmployerAgent
@@ -27,7 +30,7 @@ class AgenticEmployerAgent(Agent):
         if "name" not in kwargs:
             kwargs["name"] = "AGENTIC_EMPLOYER"
         super().__init__(**kwargs)
-        
+
     def _initialize(self, properties=None):
         super()._initialize(properties=properties)
 
@@ -35,12 +38,7 @@ class AgenticEmployerAgent(Agent):
 
     def _start(self):
         super()._start()
-        welcome_message = (
-            "Hi! \n\n"
-            "I’m here to help you find the perfect candidates for your JDs.\n"
-            "Let’s get started!\n"
-            "Select a JD to work on...\n"
-        )
+        welcome_message = "Hi! \n\n" "I’m here to help you find the perfect candidates for your JDs.\n" "Let’s get started!\n" "Select a JD to work on...\n"
 
         # say welcome, show form
         if self.session:
@@ -49,14 +47,14 @@ class AgenticEmployerAgent(Agent):
 
             # init session
             self.init_session()
-            
+
             # ats form
             self.show_ats_form(properties=self.properties)
-            
+
             # get lists
             self.get_lists(properties=self.properties)
 
-            # get job postings 
+            # get job postings
             self.get_job_postings(properties=self.properties)
 
     def init_session(self):
@@ -79,17 +77,14 @@ class AgenticEmployerAgent(Agent):
         worker.set_session_data("LISTS", self.lists)
         worker.set_session_data("LIST_ID", self.selected_list_id)
 
-
     def write_to_new_stream(self, worker, content, output, id=None, tags=None, scope="worker"):
-        
+
         # create a unique id
         if id is None:
             id = uuid_utils.create_uuid()
 
         if worker:
-            output_stream = worker.write_data(
-                content, output=output, id=id, tags=tags, scope=scope
-            )
+            output_stream = worker.write_data(content, output=output, id=id, tags=tags, scope=scope)
             worker.write_eos(output=output, id=id, scope=scope)
 
         return output_stream
@@ -100,13 +95,13 @@ class AgenticEmployerAgent(Agent):
             worker = self.create_worker(None)
 
         # plan
-        p = Plan(scope=worker.prefix)
+        p = AgenticPlan(scope=worker.prefix)
         # set input
         p.define_input(name, value=question)
         # set plan
         p.connect_input_to_agent(from_input=name, to_agent="NL2SQL___AE")
         p.connect_agent_to_agent(from_agent="NL2SQL___AE", to_agent=self.name, to_agent_input=to_param_prefix + name)
-        
+
         # submit plan
         p.submit(worker)
 
@@ -116,17 +111,16 @@ class AgenticEmployerAgent(Agent):
             worker = self.create_worker(None)
 
         # plan
-        p = Plan(scope=worker.prefix)
+        p = AgenticPlan(scope=worker.prefix)
         # set input
         p.define_input(name, value=query)
         # set plan
         p.connect_input_to_agent(from_input=name, to_agent="QUERYEXECUTOR")
         p.connect_agent_to_agent(from_agent="QUERYEXECUTOR", to_agent=self.name, to_agent_input=to_param_prefix + name)
-        
+
         # submit plan
         p.submit(worker)
 
-    
     def issue_queries(self, properties=None, worker=None):
         if worker == None:
             worker = self.create_worker(None)
@@ -158,7 +152,7 @@ class AgenticEmployerAgent(Agent):
             properties = self.properties
 
         session_data = worker.get_all_session_data()
-        
+
         if type(from_list) == list:
             from_list = ",".join(map(str, from_list))
         else:
@@ -218,7 +212,7 @@ class AgenticEmployerAgent(Agent):
             if 'LIST' in properties['actions']:
                 list_actions = properties['actions']['LIST']
                 list_actions = list(list_actions.values())
-        
+
         if 'actions' in properties:
             if 'JOB_SEEKER' in properties['actions']:
                 job_seeker_actions = properties['actions']['JOB_SEEKER']
@@ -227,49 +221,43 @@ class AgenticEmployerAgent(Agent):
         form = ui_builders.build_ats_form(self.selected_job_posting_id, self.job_postings, self.lists, self.results, list_actions=list_actions, job_seeker_actions=job_seeker_actions)
         form['form_id'] = "ats"
 
-        # write form, updating existing if necessary 
+        # write form, updating existing if necessary
         # update = False
         if update:
-            worker.write_control(
-                ControlCode.UPDATE_FORM, form, output="FORM", id="ats", scope="agent", tags=["WORKSPACE"]
-            )
+            worker.write_control(ControlCode.UPDATE_FORM, form, output="FORM", id="ats", scope="agent", tags=["WORKSPACE"])
         else:
-            worker.write_control(
-                ControlCode.CREATE_FORM, form, output="FORM", id="ats", scope="agent", tags=["WORKSPACE"]
-            )
+            worker.write_control(ControlCode.CREATE_FORM, form, output="FORM", id="ats", scope="agent", tags=["WORKSPACE"])
 
-
-    def view_jd(self,  properties=None, worker=None):
+    def view_jd(self, properties=None, worker=None):
 
         if worker == None:
             worker = self.create_worker(None)
 
         # plan
-        p = Plan(scope=worker.prefix)
+        p = AgenticPlan(scope=worker.prefix)
         # set input
         p.define_input("jd", value="JD")
         # set plan
         p.connect_input_to_agent(from_input="jd", to_agent="DOCUMENTER___AE_JD")
-        
+
         # submit plan
         p.submit(worker)
-    
+
     def view_job_seeker(self, job_seeker_id, properties=None, worker=None):
 
         if worker == None:
             worker = self.create_worker(None)
 
         # plan
-        p = Plan(scope=worker.prefix)
+        p = AgenticPlan(scope=worker.prefix)
         # set input
         p.define_input("js", value=str(job_seeker_id))
         # set plan
         p.connect_input_to_agent(from_input="js", to_agent="DOCUMENTER___AE_JOBSEEKER")
-        
+
         # submit plan
         p.submit(worker)
 
-    
     def summarize_list(self, list_code, properties=None, worker=None):
 
         if worker == None:
@@ -293,7 +281,7 @@ class AgenticEmployerAgent(Agent):
             job_seekers_in_list_query_template = properties['job_seekers_in_list']
             query_template = job_seekers_in_list_query_template['query']
             query = string_utils.safe_substitute(query_template, **properties, **context)
-            
+
         # choose summarizer agent
         summarizer = "SUMMARIZER___AE_LIST"
         if list_code == "all":
@@ -301,11 +289,10 @@ class AgenticEmployerAgent(Agent):
         elif list_code == "new":
             summarizer = "SUMMARIZER___AE_RECENT"
 
-        
         p = None
         # DEMO
         if list_code == "new":
-            p = Plan(scope=worker.prefix)
+            p = AgenticPlan(scope=worker.prefix)
             # set input
             p.define_input("sq", value=query)
             # set plan
@@ -314,16 +301,15 @@ class AgenticEmployerAgent(Agent):
             p.connect_input_to_agent(from_input="sq", to_agent="SUMMARIZER___AE_RECENT_P3")
         else:
             # plan
-            p = Plan(scope=worker.prefix)
+            p = AgenticPlan(scope=worker.prefix)
             # set input
             p.define_input("sq", value=query)
             # set plan
             p.connect_input_to_agent(from_input="sq", to_agent=summarizer)
 
         # submit plan
-        if p: 
+        if p:
             p.submit(worker)
-
 
     def cluster_label_to_id(self, cluster_label):
         if cluster_label in self.cluster_id_by_label:
@@ -332,7 +318,7 @@ class AgenticEmployerAgent(Agent):
             cluster_id = uuid_utils.create_uuid()
             self.cluster_id_by_label[cluster_label] = cluster_id
             return cluster_id
-        
+
     def identify_clusters(self, list_code, properties=None, worker=None):
 
         if worker == None:
@@ -361,7 +347,7 @@ class AgenticEmployerAgent(Agent):
             query = string_utils.safe_substitute(query_template, **properties, **context)
 
         # plan
-        p = Plan(scope=worker.prefix)
+        p = AgenticPlan(scope=worker.prefix)
         # set input
         p.define_input("cq", value=query)
         # set plan
@@ -369,7 +355,7 @@ class AgenticEmployerAgent(Agent):
 
         # submit plan
         p.submit(worker)
-    
+
     def extract_job_posting_id(self, s):
         results = re.findall(r"\[\s*\+?#(-?\d+)\s*\]", s)
         if len(results) > 0:
@@ -392,16 +378,16 @@ class AgenticEmployerAgent(Agent):
 
         if scope is None:
             return None, None, None, None
-        
+
         # process s
-        si =  s.find(scope+"_")
+        si = s.find(scope + "_")
 
         # action
         action = None
         if si > 0:
-            action = s[:si-1]
+            action = s[: si - 1]
 
-        s = s[si+len(scope + "_"):]
+        s = s[si + len(scope + "_") :]
         ss = s.split("_")
         category = None
         id = ss[0]
@@ -410,11 +396,10 @@ class AgenticEmployerAgent(Agent):
 
         return scope, action, id, category
 
-
     def handle_action_with_plan(self, scope, action, data, properties=None, worker=None):
         if properties is None:
             properties = self.properties
-            
+
         actions = None
         if "actions" in properties:
             actions = properties['actions']
@@ -437,7 +422,7 @@ class AgenticEmployerAgent(Agent):
                         session_data = worker.get_all_session_data()
                         action_context = json_utils.merge_json(action_context, session_data)
 
-                        # input data 
+                        # input data
                         if 'input' in action_properties:
                             input = action_properties['input']
 
@@ -447,7 +432,7 @@ class AgenticEmployerAgent(Agent):
                                 list_code = data
                                 list_id = self.list_id_by_code[list_code]
                                 scope_data["LIST_ID"] = list_id
-                                scope_data["LIST_CODE"] = list_code 
+                                scope_data["LIST_CODE"] = list_code
 
                             # merge scope data to action context
                             action_context = json_utils.merge_json(action_context, scope_data)
@@ -455,12 +440,11 @@ class AgenticEmployerAgent(Agent):
                             if type(input) == str:
                                 data = string_utils.safe_substitute(input, **properties, **action_context)
 
-
                         # plan
-                        p = Plan(scope=worker.prefix)
+                        p = AgenticPlan(scope=worker.prefix)
                         # set input
                         p.define_input(action + "_" + scope + "_" + "INPUT", value=data)
-                        
+
                         # substitue self
                         for step in steps:
                             f = step[0]
@@ -489,11 +473,10 @@ class AgenticEmployerAgent(Agent):
                                 from_param = "DEFAULT"
                                 if len(fa) == 2:
                                     from_param = fa[1]
-                                p.connect_agent_to_agent(from_agent==from_agent, to_agent=to_agent, from_agent_output=from_param, to_agent_input=to_param)
+                                p.connect_agent_to_agent(from_agent == from_agent, to_agent=to_agent, from_agent_output=from_param, to_agent_input=to_param)
 
                         # submit plan
                         p.submit(worker)
-
 
     #### INTENT
     def identify_intent(self, input_stream, properties=None, worker=None):
@@ -505,15 +488,14 @@ class AgenticEmployerAgent(Agent):
             properties = self.properties
 
         # plan
-        p = Plan(scope=worker.prefix)
-    
+        p = AgenticPlan(scope=worker.prefix)
+
         # set plan
         p.define_input("TEXT", stream=input_stream)
         p.connect_input_to_agent(from_input="TEXT", to_agent="OPENAI___INTENT_CLASSIFIER_AE")
         p.connect_agent_to_agent(from_agent="OPENAI___INTENT_CLASSIFIER_AE", to_agent=self.name, to_agent_input="INTENT")
         # submit plan
         p.submit(worker)
-
 
     ## INIT ACTION BASED ON INTENT
     def init_action(self, intent, entities, input, properties=None, worker=None):
@@ -543,7 +525,7 @@ class AgenticEmployerAgent(Agent):
         logging.info(intent)
         logging.info(json.dumps(entities))
         logging.info(input)
-    
+
         if intent == "QUERY":
             self.issue_smart_query(context, entities, input, properties=properties, worker=worker)
         elif intent == "VIEW":
@@ -554,7 +536,7 @@ class AgenticEmployerAgent(Agent):
                 job_seeker_id = int(job_seeker_id)
                 self.view_job_seeker(job_seeker_id, properties=properties, worker=None)
         else:
-            self.write_to_new_stream(worker, "I don't know how to help you on that, try summarizing, querying, comparing applies...", "TEXT")  
+            self.write_to_new_stream(worker, "I don't know how to help you on that, try summarizing, querying, comparing applies...", "TEXT")
 
     #### ACTIONS FROM USER INPUT
     def context_to_nl(self, context):
@@ -585,39 +567,37 @@ class AgenticEmployerAgent(Agent):
 
         # Convert context into text
         context_text = self.context_to_nl(context)
-       
+
         # Provide additional context to user question
         expanded_question = "Answer the following question with the below context. Ignore information in context if the query overrides context:\n"
         expanded_question += "question: " + question + "\n"
         expanded_question += "context: " + "\n" + context_text + "\n"
-        
+
         logging.info("ISSUE NL QUERY:" + expanded_question)
 
         # plan
-        p = Plan(scope=worker.prefix)
+        p = AgenticPlan(scope=worker.prefix)
         # set input
         p.define_input("question", value=expanded_question)
         # set plan
         p.connect_input_to_agent(from_input="question", to_agent="NL2SQL___AE")
         p.connect_agent_to_agent(from_agent="NL2SQL___AE", to_agent="OPENAI___QUERY_EXPLAINER")
-        
+
         # submit plan
         p.submit(worker)
-       
 
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
 
-
         ##### PROCESS USER input text
         if input == "DEFAULT":
-           
+
             if message.isEOS():
                 stream = message.getStream()
 
                 # identify intent
                 self.identify_intent(stream, properties=properties, worker=None)
-                
-        ##### PROCESS RESULTS FROM INTENT CLASSIFICATION   
+
+        ##### PROCESS RESULTS FROM INTENT CLASSIFICATION
         elif input == "INTENT":
             if message.isData():
                 if worker:
@@ -645,12 +625,12 @@ class AgenticEmployerAgent(Agent):
         elif input.find("QUERY_RESULTS_") == 0:
             if message.isData():
                 stream = message.getStream()
-            
-                # get query 
-                query = input[len("QUERY_RESULTS_"):]
+
+                # get query
+                query = input[len("QUERY_RESULTS_") :]
 
                 data = message.getData()
-            
+
                 if 'result' in data:
                     query_results = data['result']
 
@@ -663,8 +643,8 @@ class AgenticEmployerAgent(Agent):
 
                         # build id by code
                         for l in self.lists:
-                            self.list_id_by_code[l["list_code"]]= l["list_id"]
-                        
+                            self.list_id_by_code[l["list_code"]] = l["list_id"]
+
                         # render ats form with lists
                         self.show_ats_form(properties=properties, worker=worker, update=True)
                     elif query == "move_job_seeker_to_list":
@@ -680,7 +660,7 @@ class AgenticEmployerAgent(Agent):
                             self.show_ats_form(properties=properties, worker=worker, update=True)
                 else:
                     logging.info("nothing found")
-    
+
         ##### PROCESS CLUSTER RESULTS
         elif input == "CLUSTER_INFO_RESULTS":
             if message.isData():
@@ -689,7 +669,7 @@ class AgenticEmployerAgent(Agent):
                     stream = message.getStream()
 
                     clusters = data
-                    self.write_to_new_stream(worker, "Analyzing all job seekers, we found " + str(len(clusters)) + " groups...", "TEXT")  
+                    self.write_to_new_stream(worker, "Analyzing all job seekers, we found " + str(len(clusters)) + " groups...", "TEXT")
 
                     cluster_actions = []
 
@@ -697,16 +677,15 @@ class AgenticEmployerAgent(Agent):
                         if 'CLUSTER' in properties['actions']:
                             cluster_actions = properties['actions']['CLUSTER']
                             cluster_actions = list(cluster_actions.values())
-                            
+
                     for cluster_label in clusters:
-                        
+
                         cluster = clusters[cluster_label]
                         cluster_size = cluster["cluster_size"]
                         cluster_description = cluster["description"]
 
                         # create a unique id
                         cluster_id = self.cluster_label_to_id(cluster_label)
-                        
 
                         cluster_info = {}
                         if cluster_id in self.clusters:
@@ -720,11 +699,9 @@ class AgenticEmployerAgent(Agent):
                         cluster_info["description"] = cluster_description
 
                         cluster_form = ui_builders.get_cluster_summary_ui(cluster_id, cluster_size, cluster_label, cluster_description, actions=cluster_actions)
-                        cluster_form['form_id']= "CLUSTER_" + cluster_id
+                        cluster_form['form_id'] = "CLUSTER_" + cluster_id
 
-                        worker.write_control(
-                            ControlCode.CREATE_FORM, cluster_form, output="CLUSTER_FORM", id=cluster_id, tags=[]
-                        )
+                        worker.write_control(ControlCode.CREATE_FORM, cluster_form, output="CLUSTER_FORM", id=cluster_id, tags=[])
 
         elif input == "CLUSTER_MAPPINGS_RESULTS":
             if message.isData():
@@ -753,14 +730,8 @@ class AgenticEmployerAgent(Agent):
                             cluster_job_seekers = cluster_info["job_seekers"]
                         else:
                             cluster_info["job_seekers"] = cluster_job_seekers
-                        
+
                         cluster_job_seekers.append(job_seeker_id)
-
-
-
-
-
-                        
 
         ##### PROCESS FORM UI EVENTS
         elif input == "EVENT":
@@ -770,10 +741,10 @@ class AgenticEmployerAgent(Agent):
                     stream = message.getStream()
                     form_id = data["form_id"]
                     action = data["action"]
-                    
+
                     # get form stream
                     form_data_stream = stream.replace("EVENT", "OUTPUT:FORM")
-                    
+
                     print(action)
                     print(form_id)
                     if form_id == "ats":
@@ -787,14 +758,15 @@ class AgenticEmployerAgent(Agent):
                             if timestamp is None or data["timestamp"] > timestamp:
 
                                 prev_value = worker.get_data(path + ".value")
-                                
-                                worker.set_data(path,
+
+                                worker.set_data(
+                                    path,
                                     {
                                         "value": value,
                                         "timestamp": data["timestamp"],
-                                    }
+                                    },
                                 )
-                                
+
                                 # new job posting selected
                                 if path == "job_posting":
                                     # new value
@@ -815,15 +787,14 @@ class AgenticEmployerAgent(Agent):
                                             # issue clusters
                                             self.identify_clusters("all", properties=properties, worker=None)
 
-
                                 # job seeker actions
                                 else:
                                     scope, action, id, category = self.extract_action(path)
-                                    
+
                                     if scope == "JOB_SEEKER" and action == "INTEREST":
-                                        
+
                                         # interested value to code
-                                        interested_enums_by_list_code = {"✓": 2, "?": 3, "𐄂":4 }
+                                        interested_enums_by_list_code = {"✓": 2, "?": 3, "𐄂": 4}
                                         from_list = list(interested_enums_by_list_code.values())
                                         to_list = interested_enums_by_list_code[value]
 
@@ -835,7 +806,7 @@ class AgenticEmployerAgent(Agent):
 
                     elif form_id.find("CLUSTER_") == 0:
                         scope, action, id, category = self.extract_action(action)
-                        
+
                         cluster_id = id
                         if cluster_id in self.clusters:
                             cluster_info = self.clusters[cluster_id]
@@ -843,7 +814,6 @@ class AgenticEmployerAgent(Agent):
                                 job_seekers = cluster_info["job_seekers"]
                                 self.handle_action_with_plan(scope, action, ",".join([str(js) for js in job_seekers]), properties=properties, worker=None)
 
-                        
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -884,15 +854,11 @@ if __name__ == "__main__":
         if args.session:
             # join an existing session
             session = Session(cid=args.session)
-            a = AgenticEmployerAgent(
-                name=args.name, session=session, properties=properties
-            )
+            a = AgenticEmployerAgent(name=args.name, session=session, properties=properties)
         else:
             # create a new session
             session = Session()
-            a = AgenticEmployerAgent(
-                name=args.name, session=session, properties=properties
-            )
+            a = AgenticEmployerAgent(name=args.name, session=session, properties=properties)
 
         # wait for session
         if session:

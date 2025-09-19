@@ -67,7 +67,7 @@ class DialogueManagerAgent(OpenAIAgent):
 
         p = AgenticPlan(scope=worker.prefix)
         # set input
-        p.define_input("DEFAULT", value=inp)
+        p.define_input(label="DEFAULT", value=inp)
         # set plan
         p.connect_input_to_agent(from_input="DEFAULT", to_agent=self.properties['intent_classifier_agent'])
         p.connect_agent_to_agent(
@@ -86,15 +86,13 @@ class DialogueManagerAgent(OpenAIAgent):
         """Given an intent class, determine next action and build the corresponding plan"""
         if intent not in self.properties['intents']:
             return "User input not compatible with any of the specified intents."
-        
+
         p = AgenticPlan(scope=worker.prefix)
         plan_diagram = self.properties['intents'][intent]['plan']
-        p.define_input(plan_diagram[0][1], value=self.user_input)
+        p.define_input(label=plan_diagram[0][1], value=self.user_input)
         p.connect_input_to_agent(from_input=plan_diagram[0][1], to_agent=plan_diagram[0][0])
         for i in range(1, len(plan_diagram)):
-             p.connect_agent_to_agent(
-                from_agent=plan_diagram[i-1][0], to_agent=plan_diagram[i][0], to_agent_input=plan_diagram[i][1]
-            )
+            p.connect_agent_to_agent(from_agent=plan_diagram[i - 1][0], to_agent=plan_diagram[i][0], to_agent_input=plan_diagram[i][1])
         p.submit(worker)
         logging.info(f"Built plan for intent: {intent}")
         return f"Executing plan for intent: {intent}."
@@ -215,7 +213,7 @@ class DialogueManagerAgent(OpenAIAgent):
         elif input == "INTENT":
             if message.isData():
                 data = message.getData()
-                intent = json.loads(data)["intent"]
+                intent = data['intent']
                 return self.build_action_plan(worker, intent)
         
         elif input == "INTENT_REWRITER":
@@ -289,15 +287,11 @@ if __name__ == "__main__":
         if args.session:
             # join an existing session
             session = Session(cid=args.session)
-            a = DialogueManagerAgent(
-                name=args.name, session=session, properties=properties
-            )
+            a = DialogueManagerAgent(name=args.name, session=session, properties=properties)
         else:
             # create a new session
             session = Session()
-            a = DialogueManagerAgent(
-                name=args.name, session=session, properties=properties
-            )
+            a = DialogueManagerAgent(name=args.name, session=session, properties=properties)
 
         # wait for session
         if session:
