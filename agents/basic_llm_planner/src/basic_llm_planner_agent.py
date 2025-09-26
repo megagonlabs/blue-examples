@@ -46,10 +46,10 @@ basic_llm_planner_properties = {
     "executor.use_tools":False,
     "executor.tool_discovery":False,
 }
+
 # to control where plan execution returns to
 # "executor.plan_return_to_agent" default: self.name)
 # "executor.plan_return_to_agent_input", default RESULT_EXECUTION)
-
 
 ############################
 ### Agent.BasicLLMPlannerAgent
@@ -69,7 +69,7 @@ class BasicLLMPlannerAgent(OpenAIAgent):
 
     ####### inputs / outputs
     def _initialize_inputs(self):
-        self.add_input("DEFAULT", description="trigger", includes=["USER"])
+        return
 
     def _initialize_outputs(self):
         return
@@ -195,6 +195,23 @@ class BasicLLMPlannerAgent(OpenAIAgent):
 
                 try:
                     plan_dag = json.loads(output)
+                    llm_plan = LLMPlan(plan_dag)
+                    plan_only_mode = properties.get('plan_only_mode', False)
+                    if plan_only_mode:
+                        # no execution; return LLM plan 
+                        p = AgenticPlan(scope=worker.prefix)
+                        p.define_input("DEFAULT", value=plan_dag)
+                        # set plan
+                        p.connect_input_to_agent(from_input="DEFAULT", to_agent=self.name)
+                        p.connect_agent_to_agent(
+                            from_agent=self.name,
+                            to_agent=self.properties["executor.plan_return_to_agent"],
+                            to_agent_input=self.properties["executor.plan_return_to_agent_input"],
+                        )
+                        # submit plan
+                        p.submit(worker)
+                        return
+
                     action_plan = self.compile_action_plan(
                         worker=worker, plan=plan_dag, task=user_input
                     )
