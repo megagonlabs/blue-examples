@@ -56,3 +56,5 @@ Once deployed create a new session and add the `OPENAI Interactive Agent with To
 You can optionally set the `tool_servers` property to `deep_wiki` if you want to target only `deep_wiki` MCP Server.
 
 In the UI, enter some text, for example asking a question about a git repo, e.g. `Who is the top contributor to the pytorch repo`
+
+You can examime the tool call in the UI to see what function was called and what the response was.
