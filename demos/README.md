@@ -10,6 +10,7 @@ Base Agents:
 * [documenter](documenter): Create a document from natural language and SQL queries
 * [summarizer](summarizer): Summarize natural language and SQL queries in natural language
 * [presenter](presenter): Show interactive forms and extact data
+* [openai](openai): Show an OpenAI agent, with tools
 
 Chaining Agents:
 * [nl2sql_explainer](nl2sql_explainer): Translate user input text to SQL and execute it and explain results 
