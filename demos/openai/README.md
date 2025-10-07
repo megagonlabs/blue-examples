@@ -43,7 +43,7 @@ Below is an overview of the process flow for the Counter agent:
 
 ```mermaid
 graph LR;
-    A[USER: Text] --> B[OPENAI___INTERAFCTIVE] --> C[OpenAI Response];
+    A[USER: Text] --> B[OPENAI___TOOL_EXAMPLE] --> C[OpenAI Response];
 ```
 
 
