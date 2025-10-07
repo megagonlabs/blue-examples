@@ -1,16 +1,16 @@
 # OpenAI Agent
 
-Counter is an agent to demonstrate basic functioning of an agent. It simply appends incoming data from the input stream into agent memory and when data from the stream is finished. It calculates the number of words and returns it. 
+OpenAI is an agent to demonstrate basic functioning of an LLM-based agent. It simply sets various properties for OpenAI api, using the prefix `openai.`. For example `openai.model: "gpt-4o"` sets the model to use. Incoming data from the input stream is substituted in the prompt and response from OpenAI API is added to the output stream. 
 
-The following animation displays a user entering some text and the counter agent responding.
+The following animation displays a user entering some text and the OpenAI agent responding.
 
-![Demo of Counter agent](/docs/images/counter.gif)
+![Demo of OpenAI agent](/docs/images/openai.png)
 
 ---
 
 ## Features
 
-- **Agent Memory:** Uses agent memory to temporarily store incoming data
+- **Tool Use:** Uses tools for some functionality
 
 ---
 
@@ -22,7 +22,7 @@ The following animation displays a user entering some text and the counter agent
 
 ### Output
 
-The agent outputs a number representing the number of words in input:
+The agent outputs a OpenAI response.
 
 ---
 
@@ -33,7 +33,7 @@ The agent outputs a number representing the number of words in input:
 
 ### Configuration (UI)
 
-None required
+See registry entry for `OPENAI`, `OPENAI___Interactive`, and `OPENAI___TOOL_EXAMPLE`.
 
 ---
 
@@ -43,32 +43,16 @@ Below is an overview of the process flow for the Counter agent:
 
 ```mermaid
 graph LR;
-    A[USER: Text] --> B[COUNTER] --> C[Count of words in Text];
+    A[USER: Text] --> B[OPENAI___INTERAFCTIVE] --> C[OpenAI Response];
 ```
 
----
-
-## Code Overview
-
-The `COUNTER` agent is defined [here](https://github.com/rit-git/blue-examples/blob/dev/agents/counter/src/counter_agent.py)
-
-- **Processing:**
-  - Each data message is added to agent memory
-  - Upon receiving EOS message, stream data is retrieved from memory and word count is computed
-  - Processor returns count and EOS, written to the output stream
-
----
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/dev/QUICK-START.md) to deploy the agent.
+To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/dev/QUICK-START.md) to deploy the agent. You will also need to have the `OPENAI` Service running. See the installation guide for starting the service. 
 
-Once deployed create a new session and add the `Counter Agent - Example` (`COUNTER`)agent to the session.
+Once deployed create a new session and add the `OPENAI Interactive Agent with Tools` (`OPENAI___TOOL_EXAMPLE`) agent to the session.
 
-In the UI, enter some text.
+You can optionally set the `tool_servers` property to `deep_wiki` if you want to target only `deep_wiki` MCP Server.
 
-| **User Input** | **Result** |
-|--------------------------------|---------|
-| what is the most frequently advertised manager role in jurong? | 10 |
-| what is the average minimum salary of project manager jobs in jurong? | 12 |
-
+In the UI, enter some text, for example asking a question about a git repo, e.g. `Who is the top contributor to the pytorch repo`
