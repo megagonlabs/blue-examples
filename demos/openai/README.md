@@ -53,7 +53,7 @@ To try out the agent, first follow the [quickstart guide](https://github.com/rit
 
 Once deployed create a new session and add the `OPENAI Interactive Agent with Tools` (`OPENAI___TOOL_EXAMPLE`) agent to the session.
 
-You can optionally set the `tool_servers` property to `deep_wiki` if you want to target only `deep_wiki` MCP Server.
+You can optionally set the `tool_servers` property to `deep_wiki` if you want to target only `deep_wiki` MCP Server. Depending on the LLM used you might want to change the tool discovery threshold `tool_discovery_similarity_threshold`, e.g. relax by increasing the default 0.5 to a higher number.
 
 In the UI, enter some text, for example asking a question about a git repo, e.g. `Who is the top contributor to the pytorch repo`
 
