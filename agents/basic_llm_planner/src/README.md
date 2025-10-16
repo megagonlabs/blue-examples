@@ -62,7 +62,7 @@ This is a basic implementation of a LLM (Large Language Model) planner. The goal
 - `executor.openai.model` defaults to `openai.model` if note provided.
 
 
-2. Deploy [BLOCKING_OPENAI_AGENT](https://github.com/rit-git/blue/tree/dev/agents/blocking_openai_agent) (with this exact name) 
+2. Deploy [BLOCKING_OPENAI](https://github.com/rit-git/blue/tree/dev/agents/blocking_openai_agent) (with this exact name) 
 ```json
 {
     "include_extra_input": true,
@@ -77,7 +77,7 @@ This is a basic implementation of a LLM (Large Language Model) planner. The goal
 5. Provide a task like "Jannet has 20 eggs. Half of them are brown and one-fourth of them are white. How many more brown eggs does Jannet have than white eggs?" You should see the decomposed task plan, each executor fulfilling a subtask and return a final result "5".
 
 ### Tool-calling execution
-To enable tool-calling capbility of the `BLOCKING_OPENAI_AGENT` executors, in the `BASIC_LLM_PLANNER` properties, set `executor.use_tools":true` and set `executor.tool_discovery` accordingly.
+To enable tool-calling capbility of the `BLOCKING_OPENAI` executors, in the `BASIC_LLM_PLANNER` properties, set `executor.use_tools":true` and set `executor.tool_discovery` accordingly.
 
 To test with the Math example, build and run the `basic calculator tool`. Update the configuration on the UI to have `add` and `sub` and any necessary functions under the basic calculator tool.
 
@@ -93,7 +93,7 @@ When you need to direct final plan execution results to another agent, set the f
 
 ### Overall workflow
 - Given a user input, decompose the task into sub-tasks by calling the OpenAI API.
-- Show the plan and execute it by assigning the sub-tasks to the `BLOCKING_OPENAI_AGENT` agent with tools.
+- Show the plan and execute it by assigning the sub-tasks to the `BLOCKING_OPENAI` agent with tools.
 - Now the planner allows one step to depend on multiple previous steps, using [the `wait_for` logic of BlockingAgent](https://github.com/rit-git/blue/blob/dev/lib/src/blue/agents/blocking_agent.py#L25).
 
 
@@ -115,7 +115,7 @@ The agent processes two logical inputs: the default trigger (`DEFAULT`) used to 
        - Defines a global input `USERTASK` with the original task.
        - For each node in the LLM plan:
          - Format an executor prompt using `EXECUTOR_PROMPT2`.
-         - Define a `BLOCKING_OPENAI_AGENT` agent (label `SUBTASK_EXECUTOR_{idx}`) with properties taken from planner properties (executor model, max tokens, use_tools, tool_discovery, and `input_template` set to the formatted prompt).
+         - Define a `BLOCKING_OPENAI` agent (label `SUBTASK_EXECUTOR_{idx}`) with properties taken from planner properties (executor model, max tokens, use_tools, tool_discovery, and `input_template` set to the formatted prompt).
          - Set `wait_for_inputs` to the incoming dependencies (or `USERTASK` for source nodes).
          - Connect inputs: global input to source nodes, and agent-to-agent connections for dependent nodes (to_agent_input uses `FROM_{src}`).
        - Connect the sink node back to the planner by linking the sink agent's output to this planner agent's input `RESULT_EXECUTION`, or as configured in the properties `executor.plan_return_to_agent` and `
@@ -131,7 +131,7 @@ The agent processes two logical inputs: the default trigger (`DEFAULT`) used to 
      - Return the final answer to the user as `Answer: {output}` followed by `Message.EOS`.
 
 Notes
-- `compile_action_plan()` relies on `LLMPlan` to interpret nodes and dependencies, and uses `BLOCKING_OPENAI_AGENT` for executing subtasks with `wait_for_inputs` so steps can depend on multiple predecessors.
+- `compile_action_plan()` relies on `LLMPlan` to interpret nodes and dependencies, and uses `BLOCKING_OPENAI` for executing subtasks with `wait_for_inputs` so steps can depend on multiple predecessors.
 - The planner sets executor agent properties from its own properties (e.g., `executor.openai.model`, `executor.openai.max_tokens`, `executor.use_tools`, `executor.tool_discovery`) to control execution behaviour.
 
 
