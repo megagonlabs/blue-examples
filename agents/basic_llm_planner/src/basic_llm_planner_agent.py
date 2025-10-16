@@ -114,7 +114,7 @@ class BasicLLMPlannerAgent(OpenAIAgent):
             # define agents
             node_label = SUBTASK_LABEL.format(idx=idx)
             action_plan.define_agent(
-                "BLOCKING_OPENAI_AGENT",
+                "BLOCKING_OPENAI",
                 label=node_label,
                 properties={
                     "openai.model": self.properties.get(
