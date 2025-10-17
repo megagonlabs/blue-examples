@@ -60,9 +60,10 @@ This is a basic implementation of a LLM (Large Language Model) planner. The goal
    - `decomposer.task_description`: A description of the task to be decomposed. This will replace `{{ task_description }}` in the default prompt (`prompts.py`).
    - `decomposer.demonstrations`: Examples of input-output pairs to guide the decomposition. This will replace the example section in the default prompt. By default, this is set to `DECOMPOSER_DEMONSTRATIONS` in `demonstrations.py`.
 - `executor.openai.model` defaults to `openai.model` if note provided.
+- Add input `DEFAULT` which includes `USER`. If using Basic LLM Planner with Dialogue Manager, remove this input.
 
 
-2. Deploy [BLOCKING_OPENAI](https://github.com/rit-git/blue/tree/dev/agents/blocking_openai_agent) (with this exact name) 
+2. Deploy [BLOCKING_OPENAI](https://github.com/megagonlabs/blue/tree/v1.0b/agents/blocking_openai)
 ```json
 {
     "include_extra_input": true,
