@@ -122,16 +122,8 @@ class DialogueManagerAgent(OpenAIAgent):
     def llm_planner(self, worker, data, id=None):
         '''invokes Basic LLM Planner'''
         p = AgenticPlan(scope=worker.prefix)
-        # set input
         p.define_input("DEFAULT", value=data)
-        # set plan
         p.connect_input_to_agent(from_input="DEFAULT", to_agent=self.properties['llm_planner'])
-        p.connect_agent_to_agent(
-            from_agent=self.properties['llm_planner'],
-            to_agent=self.name,
-            to_agent_input="FROM_PLANNER",
-        )
-        # submit plan
         p.submit(worker)
 
         logging.info("Sent off llm planning request")
