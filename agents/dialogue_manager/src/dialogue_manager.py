@@ -61,42 +61,6 @@ class DialogueManagerAgent(OpenAIAgent):
     def _initialize_outputs(self):
         return
 
-    def identify_intent(self, worker, data, id=None):
-        intents = [f"Name: {intent} | Description: {self.properties['intents'][intent]['description']}" for intent in self.properties['intents']]
-        inp = f"\nUser text: {data}.\nPossible intents: {intents}."
-
-        p = AgenticPlan(scope=worker.prefix)
-        # set input
-        p.define_input(label="DEFAULT", value=inp)
-        # set plan
-        p.connect_input_to_agent(from_input="DEFAULT", to_agent=self.properties['intent_classifier_agent'])
-        p.connect_agent_to_agent(
-            from_agent=self.properties['intent_classifier_agent'],
-            to_agent=self.name,
-            to_agent_input="INTENT",
-        )
-
-        # submit plan
-        p.submit(worker)
-
-        logging.info("Sent off intent classification request")
-        return
-
-    def build_action_plan(self, worker, intent):
-        """Given an intent class, determine next action and build the corresponding plan"""
-        if intent not in self.properties['intents']:
-            return "User input not compatible with any of the specified intents."
-
-        p = AgenticPlan(scope=worker.prefix)
-        plan_diagram = self.properties['intents'][intent]['plan']
-        p.define_input(label=plan_diagram[0][1], value=self.user_input)
-        p.connect_input_to_agent(from_input=plan_diagram[0][1], to_agent=plan_diagram[0][0])
-        for i in range(1, len(plan_diagram)):
-            p.connect_agent_to_agent(from_agent=plan_diagram[i - 1][0], to_agent=plan_diagram[i][0], to_agent_input=plan_diagram[i][1])
-        p.submit(worker)
-        logging.info(f"Built plan for intent: {intent}")
-        return f"Executing plan for intent: {intent}."
-
     def intent_rewriter(self, worker, data, id=None):
         '''
         Calls OPENAI Rewriter Agent
