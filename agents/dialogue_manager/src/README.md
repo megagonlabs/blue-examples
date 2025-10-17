@@ -120,12 +120,24 @@ The current version of the Dialogue Manager supports:
 "executor.plan_return_to_agent_input":"FROM_PLANNER"
 "plan_only_mode": true
 ```
+Also modify 
+```json
+"decomposer.task_description": "You're tasked with decomposing a user task into a plan with subtasks"
+```
 
 - Set `plan_only_mode` to `false` to also perform execution of plan
 
 - Add input `DEFAULT` which excludes `USER`
 
-4. Deploy the `COORDINATOR`, `BLOCKING_OPENAI_AGENT`, `OPENAI_AGENT`
+4. Deploy `BLOCKING_OPENAI`
+```json
+{
+    "include_extra_input": true,
+    "wait_for_inputs": ["DEFAULT"],
+    "service_url": "ws://blue_service_openai:8001"
+}
+```
+5. Deploy the `COORDINATOR`, `OPENAI_AGENT` 
 
-5. Start new session with `COORDINATOR`, `DIALOGUE_MANAGER___EXAMPLE`, `BASIC_LLM_PLANNER___DM`, `OPENAI___INTENT_REWRITER`, `OPENAI`.
+6. Start new session with `COORDINATOR`, `DIALOGUE_MANAGER___EXAMPLE`, `BASIC_LLM_PLANNER___DM`, `OPENAI___INTENT_REWRITER`, `OPENAI`.
 
