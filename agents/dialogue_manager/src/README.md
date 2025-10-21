@@ -57,9 +57,9 @@ Also modify
     "service_url": "ws://blue_service_openai:8001"
 }
 ```
-5. Deploy the `COORDINATOR`, `OPENAI_AGENT` 
+5. Deploy the `COORDINATOR`, `OPENAI AGENT` 
 
-6. Start new session with `COORDINATOR`, `DIALOGUE_MANAGER___EXAMPLE`, `BASIC_LLM_PLANNER___DM`, `OPENAI___INTENT_REWRITER`, `OPENAI`.
+6. Start new session with `COORDINATOR`, `DIALOGUE_MANAGER___EXAMPLE`, `BASIC_LLM_PLANNER___DM`, `OPENAI___INTENT_REWRITER`.
 
 7. With `plan_only_mode` as `true`, you can start with a vague task such as "I want to book a flight" and further clarify your task and ask to generate a plan.
 
