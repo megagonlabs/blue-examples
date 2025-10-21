@@ -96,7 +96,6 @@ class DialogueManagerAgent(OpenAIAgent):
     def default_processor(self, message, input="DEFAULT", properties=None, worker=None):
         conversation_memory = properties.get('conversation_memory', True)   # use conv history
         use_intent_rewrite = properties.get('use_intent_rewrite', True)     # use intent rewrite
-        round_limit = properties.get('round_limit', 3)                      # max conversation rounds before plan
         stream = message.getStream()
 
         if not worker: 
@@ -129,10 +128,7 @@ class DialogueManagerAgent(OpenAIAgent):
                 # check whether to plan based on dialogue policy
                 # or if n turns of conversation have occurred
                 is_plan = False
-                if  (
-                        assistant_response.lower() == "plan"
-                        or (conversation_memory and (len(conversation_history)+1)/2 >= round_limit)
-                ):
+                if assistant_response.lower() == "plan":
                     is_plan = True
                 worker.set_session_data("IS_PLAN", is_plan)
 

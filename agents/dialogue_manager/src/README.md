@@ -64,6 +64,11 @@ Also modify
 
 6. Start new session with `COORDINATOR`, `DIALOGUE_MANAGER___EXAMPLE`, `BASIC_LLM_PLANNER___DM`, `OPENAI___INTENT_REWRITER`, `OPENAI`.
 
-7. You may start with a vague task like "I am searching for jobs", and further clarify with the location, or type of job you are searching for. 
+7. With `plan_only_mode` as `true`, you can start with a vague task such as "I want to book a flight" and further clarify your task and ask to generate a plan.
 
+![Demo of Blue Agent](assets/blue_dm_demo1.gif)
+
+You may also set `plan_only_mode` to `true` and input a task like "I am searching for jobs", and further clarify with the location, or type of job you are searching for. 
+
+![Demo of Blue Agent](assets/blue_dm_demo2.gif)
 
