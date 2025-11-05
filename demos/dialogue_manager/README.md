@@ -1,54 +1,71 @@
-# Dialogue Manager Agent for Chat Applications
+# Dialogue Manager
 
-Dialogue Manager is an agent to help developers build chat applications. It demonstrates use of `OPENAI Intent Classifier Agent`(OPENAI___INTENT_CLASSIFIER) to identify intent and then map intents to plans to execute a series of agents to respond to user's intent. See [Plan](https://github.com/rit-git/blue/tree/dev/agents) in the development guide for more detailed description.
+The Dialogue Manager is responsible for handling interactions with the USER and coordinating different actions and responses based on the user input.
 
-This demo shows how to build a simple chat application that interacts with users by leveraging the Dialogue Manager and a set of other agents.
+The current version of the Dialogue Manager supports:
+
+1. **Conversation Memory**: Storing, managing and retrieving the conversation thread with USER in current session. 
+2. **Intent Rewriting**: Rewriting the USER-ASSISTANT conversation to a concise, well-informed summary capturing the user's intent. 
+3. Integration with the `Basic LLM Planner` to output a decomposed task plan, given the user input
+4. **Re-plan**: allow user to update or further specify intents to re-plan
+
+## Usage
+
+1. Create a `DIALOGUE_MANAGER` agent, and add a derived `DIALOGUE_MANAGER___EXAMPLE` agent with the following configuration
+ ```python
+    {
+    "intent_rewriter_agent": "OPENAI___INTENT_REWRITER",
+    "llm_planner": "BASIC_LLM_PLANNER___DM",
+    "conversation_memory": true,
+    "use_intent_rewrite": true
+}
+```
+`use_intent_rewrite`: set to True, to utilize intent rewriting
+
+`conversation_memory`: set to True, to store and manage entire conversation history with user. If to use only latest user utterance, set to False. 
+
+2. Create a derived `OPENAI___INTENT_REWRITER` and deploy.
+```json
+{
+    "input_template": "Summarize the following USER-ASSISTANT conversation into a single, concise sentence describing the user's intended task. The summary should reflect the user's goal or intent, in an instruction style. Do not introduce new information. Only include what is stated or clearly implied. Respond only with JSON in the following format, nothing else. JSON response format: {\"rewrite\": \"<your_rewrite>\"}. Input: ${input}"
+}
+```
+- Add output `DEFAULT` with tag `HIDDEN`
 
 
-The following animation displays the Dialogue Manager in action for a job search use case, assists job seekers in exploring market trends and finding job opportunities:
-
-![Demo of Dialog Manager agent](/docs/images/dialogue_manager.gif)
-
-In the above example, there are three intents: **investigate**, **job_search**, and **summarize**.
-
-1. investigate: The user is requesting job market statistics or insights that can be fulfilled by a single SQL query (e.g., "What is the average salary for data scientists in Jurong?").
-2. job_search: The user is searching for job postings that match specific criteria (e.g., "Show me remote software engineer jobs with at least 5 years of experience.").
-
-3. summarize: The user wants a summary or aggregated insights over a group of job postings (e.g., "Summarize the key skills required for product management roles.").
-
-4. OOD (Out of Domain): The user’s request does not fit into any of the above categories.
-
-
-## Flow Diagram
-
-1. The Dialogue Manager continuously listens for user input and passes it to the Intent Classifier agent.
-2. Once the intent is identified, the Dialogue Manager initiates a task plan. (Note: In this demo, plans for each intent class are predefined for simplicity. In a more practical scenario, a more intelligent planning agent would be invoked)
-3. The Task Coordinator picks up the plan and start execution.
-4. Upon completion, the execution results are returned to the Dialogue Manager, which may perform optional post-processing before presenting the response to the user.
-
-```mermaid
-graph LR;
-    A(User) -->|user utterence| B(Dialogue Manager);
-    B -->|1 Pass input| C(Intent Classifier);
-    C -->|Intent | B;
-    B -->|2 Initiate task plan| D(Blue Coordinator #10; #40;3 run plan#41;);
-    D -->|Execution results| B;
-    B -->|4 Post-process & respond| A;
+3. Create and deploy a derived [`BASIC_LLM_PLANNER___DM`](https://github.com/megagonlabs/blue-examples/tree/v1.0b/agents/basic_llm_planner/src) agent with the following additional properties:
+```json
+"executor.plan_return_to_agent": "DIALOGUE_MANAGER___EXAMPLE"
+"executor.plan_return_to_agent_input":"FROM_PLANNER"
+"plan_only_mode": true
+```
+Also modify 
+```json
+"decomposer.task_description": "You're tasked with decomposing a user task into a plan with subtasks"
 ```
 
-## Try it out
+- Set `plan_only_mode` to `false` to also perform execution of plan
 
-This demo uses the example data `postgres_example` and `OPENAI` service. Please make sure to follow the aditional steps required to get them ready in the blue-examples [documentation](https://github.com/rit-git/blue-examples/tree/dev?tab=readme-ov-file#blue-examples)
+- Add input `DEFAULT` which excludes `USER`
+- Add output `DEFAULT` with tag `HIDDEN`
 
-Additionally, to try out this demo, follow the [quickstart guide](https://github.com/rit-git/blue/blob/dev/QUICK-START.md) to deploy the `Dialogue Manager` (`DIALOGUE_MANAGER`), `OpenAI Agent` (`OPENAI`), `Query Executor Agent` (`QUERY_EXECUTOR`),  `NL-to-SQL Agent` (`NL2SQL`), and `Task Coordinator Agent` (`COORDINATOR`).
+4. Deploy `BLOCKING_OPENAI`
+```json
+{
+    "include_extra_input": true,
+    "wait_for_inputs": ["DEFAULT"],
+    "service_url": "ws://blue_service_openai:8001"
+}
+```
+5. Deploy the `COORDINATOR`, `OPENAI AGENT` 
 
-To start a session with all these agents, you can simply go to Blue home page and click `Try out the Dialogue Manager`
+6. Start new session with `COORDINATOR`, `DIALOGUE_MANAGER___EXAMPLE`, `BASIC_LLM_PLANNER___DM`, `OPENAI___INTENT_REWRITER`.
 
-### Example Utterances
+7. With `plan_only_mode` as `true`, you can start with a vague task such as "I want to book a flight" and further clarify your task and ask to generate a plan.
 
-| **Natural Language Utterance**                                                     | **Intent**  | **Action**                                                                |
-| ---------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------- |
-| I want to investigate the 10 most common skills required for project manager jobs  | investigate | NL2SQL->QUERYEXECUTOR                                                     |
-| I'm looking for a job of a project manager in jurong with a minimum salary of 4000 | job_search  | OPENAI\_\_\_EXTRACTOR-> NL2SQL -> QUERYEXECUTOR                           |
-| Please generate a report for the top 5 project manager jobs in jurong              | summarize   | OPENAI\_\_\_EXTRACTOR-> NL2SQL -> QUERYEXECUTOR -> OPENAI\_\_\_SUMMARIZER |
-| I want help improving my resume                                                    | OOD         | falls back to default ROGUEAGENT                                          |
+![Demo of Blue Agent](assets/blue_dm_demo1.gif)
+
+You may also set `plan_only_mode` to `true` and input a task like "I am searching for jobs", and further clarify with the location, or type of job you are searching for. 
+
+![Demo of Blue Agent](assets/blue_dm_demo2.gif)
+
