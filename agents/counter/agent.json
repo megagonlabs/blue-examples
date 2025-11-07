@@ -1,0 +1,52 @@
+i[{
+    "name": "COUNTER",
+    "type": "agent",
+    "scope": "/",
+    "description": "Counter agent example to demonstrate data processing",
+    "created_by": null,
+    "properties": {
+      "image": "megagonlabs/blue-agent-counter",
+      "display_name": "Counter Agent - Example",
+      "categories": [
+        "EXAMPLE"
+      ]
+    },
+    "icon": null
+  },
+  {
+    "name": "DEFAULT",
+    "type": "input",
+    "scope": "/agent/COUNTER",
+    "description": "trigger",
+    "created_by": null,
+    "properties": {
+      "type": "str",
+      "optional": false,
+      "default": null,
+      "schema": null,
+      "listens": {
+        "includes": [
+          "USER"
+        ],
+        "excludes": []
+      }
+    },
+    "icon": null
+  },
+  {
+    "name": "DEFAULT",
+    "type": "output",
+    "scope": "/agent/COUNTER",
+    "description": "count",
+    "created_by": null,
+    "properties": {
+      "type": "str",
+      "optional": false,
+      "default": null,
+      "schema": null,
+      "tags": ["COUNT"]
+    },
+    "icon": null
+  }
+]
+
