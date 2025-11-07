@@ -1,0 +1,37 @@
+[{
+    "name": "BASIC_PLANNER",
+    "type": "agent",
+    "scope": "/",
+    "description": "Planner example to demonstrate plan execution",
+    "created_by": null,
+    "properties": {
+      "image": "megagonlabs/blue-agent-basic_planner",
+      "display_name": "Planner Agent - Example",
+      "system_agent": false,
+      "categories": [
+        "EXAMPLE"
+      ]
+    },
+    "icon": null
+  },
+  {
+    "name": "DEFAULT",
+    "type": "input",
+    "scope": "/agent/BASIC_PLANNER",
+    "description": "trigger",
+    "created_by": null,
+    "properties": {
+      "type": "str",
+      "optional": false,
+      "default": null,
+      "schema": null,
+      "listens": {
+        "includes": [
+          "USER"
+        ],
+        "excludes": []
+      }
+    },
+    "icon": null
+  }
+]
