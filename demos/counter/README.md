@@ -61,7 +61,17 @@ The `COUNTER` agent is defined [here](https://github.com/rit-git/blue-examples/b
 
 ## Try it out
 
-To try out the agent, first follow the [quickstart guide](https://github.com/rit-git/blue/blob/dev/QUICK-START.md) to deploy the agent.
+
+To try out the agent, first add the agent to the agent registry and then follow the [quickstart guide](https://github.com/rit-git/blue/blob/dev/QUICK-START.md) to deploy the agent.
+
+To add agent to the registry:
+```
+cd agents/counter
+blue registry agent update agent.json
+```
+and follow this steps interactively.
+
+Then proceed to deploy the agent as described ihe quickstart guide.
 
 Once deployed create a new session and add the `Counter Agent - Example` (`COUNTER`)agent to the session.
 
