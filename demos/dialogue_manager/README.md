@@ -40,6 +40,15 @@ graph LR;
 
 This demo uses the example data `postgres_example` and `OPENAI` service. Please make sure to follow the aditional steps required to get them ready in the blue-examples [documentation](https://github.com/rit-git/blue-examples/tree/dev?tab=readme-ov-file#blue-examples)
 
+To try out the agent, first add the agent to the agent registry and then follow the [quickstart guide](https://github.com/rit-git/blue/blob/dev/QUICK-START.md) to deploy the agent.
+
+To add agent to the registry:
+```
+cd agents/dialogue_manager
+blue registry agent update agent.json
+```
+and follow this steps interactively.
+
 Additionally, to try out this demo, follow the [quickstart guide](https://github.com/rit-git/blue/blob/dev/QUICK-START.md) to deploy the `Dialogue Manager` (`DIALOGUE_MANAGER`), `OpenAI Agent` (`OPENAI`), `Query Executor Agent` (`QUERY_EXECUTOR`),  `NL-to-SQL Agent` (`NL2SQL`), and `Task Coordinator Agent` (`COORDINATOR`).
 
 To start a session with all these agents, you can simply go to Blue home page and click `Try out the Dialogue Manager`
