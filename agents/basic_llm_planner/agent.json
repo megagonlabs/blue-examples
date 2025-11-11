@@ -1,0 +1,128 @@
+[
+    {
+        "name": "BLOCKING_OPENAI",
+        "type": "agent",
+        "scope": "/",
+        "description": "Blocking OpenAI agent that waits for all input to be ready to initiate an OpenAI call",
+        "created_by": null,
+        "properties": {
+            "image": "megagonlabs/blue-agent-blocking_openai-private",
+            "display_name": "OpenAI Blocking Agent",
+            "include_extra_input": true,
+            "wait_for_inputs": [
+                "DEFAULT"
+            ],
+            "categories": [
+                "EXPERIMENTAL"
+            ],
+            "service_url": "ws://blue_service_openai:8001"
+        },
+        "icon": "aperture:#16A5A5"
+    },
+    {
+        "name": "BASIC_LLM_PLANNER",
+        "type": "agent",
+        "scope": "/",
+        "description": "",
+        "created_by": null,
+        "properties": {
+            "display_name": "Basic LLM Planner",
+            "input_json": "[{\"role\": \"user\"}]",
+            "input_context_field": "content",
+            "output_path": "$.choices[0].message.content",
+            "input_field": "messages",
+            "service_url": "ws://blue_service_openai:8001",
+            "input_context": "$[0]",
+            "output_transformations": [
+                {
+                    "transformation": "replace",
+                    "from": "```json",
+                    "to": ""
+                },
+                {
+                    "transformation": "replace",
+                    "from": "```",
+                    "to": ""
+                }
+            ],
+            "openai.api": "ChatCompletion",
+            "openai.top_p": 1,
+            "output_strip": true,
+            "openai.presence_penalty": 0,
+            "openai.frequency_penalty": 0,
+            "executor.openai.max_tokens": 1024,
+            "decomposer.task_description": "You're tasked with solving grade school-level math word problems that require multi-step reasoning. Given a natural language problem, you must interpret the text, identify the relevant quantities and operations, and break down the problem into smaller, manageable subtasks. Each subtask involves a basic arithmetic calculation to arrive at the correct final answer. Since the problems are designed to be solvable by a bright middle school student, you are supposed to apply only fundamental arithmetic operations such as addition, subtraction, multiplication, and division.",
+            "executor.openai.model": "gpt-4.1-mini-2025-04-14",
+            "decomposer.demonstrations": [
+                {
+                    "input": "Chris earned $1000 in his job, and he spent $200 on a new phone. He also bought a new laptop for $800. ...",
+                    "output": "<expected DAG>"
+                },
+                {
+                    "input": "Jannet has 20 eggs, half of them are brown and 1/4 of them are ...",
+                    "output": "<expected DAG>"
+                }
+            ],
+            "executor.use_tools": false,
+            "executor.tool_discovery": false,
+            "image": "megagonlabs/blue-agent-basic_llm_planner-private"
+        },
+        "icon": null
+    },
+    {
+        "name": "DEFAULT",
+        "type": "input",
+        "scope": "/agent/BASIC_LLM_PLANNER",
+        "description": "user input",
+        "created_by": null,
+        "properties": {
+            "listens": {
+                "includes": [
+                    "USER"
+                ]
+            },
+            "type": "str",
+            "schema": null,
+            "default": null,
+            "optional": false
+        },
+        "icon": null,
+        "contents": {}
+    },
+    {
+        "name": "basic_llm_planner",
+        "type": "agent_group",
+        "scope": "/",
+        "description": "Try out the Basic LLM Planner agent",
+        "created_by": null,
+        "properties": {},
+        "icon": null
+    },
+    {
+        "name": "BLOCKING_OPENAI",
+        "type": "agent",
+        "scope": "/agent_group/basic_llm_planner",
+        "description": "",
+        "created_by": null,
+        "properties": {},
+        "icon": null
+    },
+    {
+        "name": "COORDINATOR",
+        "type": "agent",
+        "scope": "/agent_group/basic_llm_planner",
+        "description": "",
+        "created_by": null,
+        "properties": {},
+        "icon": null
+    },
+    {
+        "name": "BASIC_LLM_PLANNER",
+        "type": "agent",
+        "scope": "/agent_group/basic_llm_planner",
+        "description": "",
+        "created_by": null,
+        "properties": {},
+        "icon": null
+    }
+]
