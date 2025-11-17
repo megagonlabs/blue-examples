@@ -84,7 +84,7 @@ blue registry agent update agent.json
 ```
 and follow this steps interactively.
 
-Then proceed to deploy the agent as described ihe quickstart guide.
+Then proceed to deploy the agent as described in the quickstart guide.
 
 
 If the `Counter Example` (`COUNTER`) agent in your agent registry is listening to `USER` streams go ahead and remove it so you can see the Task Coordinator agent invoking it directly. 
