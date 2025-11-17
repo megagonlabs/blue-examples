@@ -1,4 +1,5 @@
-i[{
+[
+  {
     "name": "COUNTER",
     "type": "agent",
     "scope": "/",
@@ -44,9 +45,10 @@ i[{
       "optional": false,
       "default": null,
       "schema": null,
-      "tags": ["COUNT"]
+      "tags": [
+        "COUNT"
+      ]
     },
     "icon": null
   }
 ]
-
