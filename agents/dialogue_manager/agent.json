@@ -2,8 +2,8 @@
               "name": "OPENAI___INTENT_REWRITER",
               "type": "agent",
               "scope": "/agent/OPENAI",
-              "description": "",
-              "created_by": "OxAEcULxaNaUE9YWo5tlXfGzlza2",
+              "description": "Rewrite conversation into user intent",
+              "created_by": null,
               "properties": {
                 "input_template": "Summarize the following USER-ASSISTANT conversation into a single, concise sentence describing the user's intended task. The summary should reflect the user's goal or intent, in an instruction style. Do not introduce new information. Only include what is stated or clearly implied. Respond only with JSON in the following format, nothing else. JSON response format: {\"rewrite\": \"<your_rewrite>\"}. Input: ${input}",
                 "display_name": "Intent Rewriter"
@@ -47,8 +47,8 @@
         "name": "DIALOGUE_MANAGER",
         "type": "agent",
         "scope": "/",
-        "description": "",
-        "created_by": "OxAEcULxaNaUE9YWo5tlXfGzlza2",
+        "description": "Manages multi-turn dialogue with users.",
+        "created_by": null,
         "properties": {
           "display_name": "Dialogue Manager",
           "image": "megagonlabs/blue-agent-dialogue_manager-private"
@@ -56,11 +56,26 @@
         "icon": null
       },
       {
+          "name": "DIALOGUE_MANAGER___EXAMPLE",
+              "type": "agent",
+              "scope": "/agent/DIALOGUE_MANAGER",
+              "description": "Example dialogue manager agent for capturing user intent and generating plans",
+              "created_by": null,
+              "properties": {
+                "intent_rewriter_agent": "OPENAI___INTENT_REWRITER",
+                "llm_planner": "BASIC_LLM_PLANNER___DM",
+                "display_name": "",
+                "use_intent_rewrite": true,
+                "conversation_memory": true
+              },
+              "icon": null
+            },
+      {
         "name": "BASIC_LLM_PLANNER",
         "type": "agent",
         "scope": "/",
-        "description": "",
-        "created_by": "OxAEcULxaNaUE9YWo5tlXfGzlza2",
+        "description": "Basic LLM Planner agent to decompose tasks into subtasks",
+        "created_by": null,
         "properties": {
           "display_name": "Basic LLM Planner",
           "input_json": "[{\"role\": \"user\"}]",
@@ -110,7 +125,7 @@
               "type": "agent",
               "scope": "/agent/BASIC_LLM_PLANNER",
               "description": "",
-              "created_by": "OxAEcULxaNaUE9YWo5tlXfGzlza2",
+              "created_by": null,
               "properties": {
                 "input_context_field": "content",
                 "input_json": "[{\"role\": \"user\"}]",
@@ -190,8 +205,8 @@
         "name": "dialogue_manager",
         "type": "agent_group",
         "scope": "/",
-        "description": "",
-        "created_by": "OxAEcULxaNaUE9YWo5tlXfGzlza2",
+        "description": "Try out the Dialogue Manager demo",
+        "created_by": null,
         "properties": {},
         "icon": null
         }
