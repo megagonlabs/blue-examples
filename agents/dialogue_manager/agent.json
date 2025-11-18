@@ -51,7 +51,7 @@
         "created_by": null,
         "properties": {
           "display_name": "Dialogue Manager",
-          "image": "megagonlabs/blue-agent-dialogue_manager-private"
+          "image": "megagonlabs/blue-agent-dialogue_manager"
         },
         "icon": null
       },
@@ -116,7 +116,7 @@
           ],
           "executor.use_tools": false,
           "executor.tool_discovery": false,
-          "image": "megagonlabs/blue-agent-basic_llm_planner-private"
+          "image": "megagonlabs/blue-agent-basic_llm_planner"
         },
         "icon": null
     },
