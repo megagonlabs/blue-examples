@@ -18,3 +18,4 @@ Chaining Agents:
 
 Experimental:
 * [dialogue_manager](dialogue_manager): Identify user intent and execute plans
+* [basic_llm_planner](basic_llm_planner): LLM-based task planner for generic OpenAI agents
