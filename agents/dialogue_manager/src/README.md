@@ -11,6 +11,31 @@ The current version of the Dialogue Manager supports:
 
 ## Usage
 
+1. To try out a demo of the `DIALOGUE_MANAGER`, you may utilize an automatic way to update the agent registry 
+```
+cd agents/dialogue_manager
+blue registry agent update agent.json
+```
+
+2. Build `DIALOGUE_MANAGER` and `BASIC_LLM_PLANNER` agents
+
+```
+cd agents/dialogue_manager
+./docker_build_agent.sh
+```
+
+```
+cd agents/basic_llm_planner
+./docker_build_agent.sh
+```
+
+3. From the UI, deploy the agents: `COORDINATOR`, `DIALOGUE_MANAGER`, `BASIC_LLM_PLANNER`, `OPENAI`, `BLOCKING_OPENAI`. 
+
+You may now start the `dialogue_manager` demo on the Applications page, kindly refer to some sample conversations outlined in the [Demo](#demo) below.
+
+Alternatively, you may define the agents manually in the UI
+ 
+
 1. Create a `DIALOGUE_MANAGER` agent, and add a derived `DIALOGUE_MANAGER___EXAMPLE` agent with the following configuration
  ```python
     {
@@ -61,7 +86,9 @@ Also modify
 
 6. Start new session with `COORDINATOR`, `DIALOGUE_MANAGER___EXAMPLE`, `BASIC_LLM_PLANNER___DM`, `OPENAI___INTENT_REWRITER`.
 
-7. With `plan_only_mode` as `true`, you can start with a vague task such as "I want to book a flight" and further clarify your task and ask to generate a plan.
+### Demo 
+
+With `plan_only_mode` as `true`, you can start with a vague task such as "I want to book a flight" and further clarify your task and ask to generate a plan.
 
 ![Demo of Blue Agent](assets/blue_dm_demo1.gif)
 
