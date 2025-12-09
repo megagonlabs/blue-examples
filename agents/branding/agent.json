@@ -1,11 +1,11 @@
-i[{
+[{
     "name": "COUNTER",
     "type": "agent",
     "scope": "/",
     "description": "Counter agent example to demonstrate data processing",
     "created_by": null,
     "properties": {
-      "image": "megagonlabs/blue-agent-counter",
+      "image": "megagonlabs/blue-agent-branding",
       "display_name": "Counter Agent - Example",
       "categories": [
         "EXAMPLE"

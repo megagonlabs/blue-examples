@@ -12,10 +12,10 @@ from blue.session import Session
 ############################
 ### Agent.CounterAgent
 #
-class CounterAgent(Agent):
+class BrandingAgent(Agent):
     def __init__(self, **kwargs):
         if 'name' not in kwargs:
-            kwargs['name'] = "COUNTER"
+            kwargs['name'] = "BRANDING"
         super().__init__(**kwargs)
 
     ####### inputs / outputs
@@ -30,12 +30,12 @@ class CounterAgent(Agent):
             # get all data received from stream
             stream_data = ""
             if worker:
-                stream_data = worker.get_data('stream')
+                stream_data = worker.get_data('stream') #stream data = user input
 
             # output to stream
             text = " ".join(stream_data)
             count = len(text.split(" "))
-
+            count = count +1
             return [count, Message.EOS]
 
         elif message.isBOS():
@@ -54,7 +54,7 @@ class CounterAgent(Agent):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--name', default="COUNTER", type=str)
+    parser.add_argument('--name', default="BRANDING", type=str)
     parser.add_argument('--session', type=str)
     parser.add_argument('--properties', type=str)
     parser.add_argument('--loglevel', default="INFO", type=str)
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     if args.serve:
         platform = args.platform
 
-        af = AgentFactory(_class=CounterAgent, _name=args.serve, _registry=args.registry, platform=platform, properties=properties)
+        af = AgentFactory(_class=BrandingAgent, _name=args.serve, _registry=args.registry, platform=platform, properties=properties)
         af.wait()
     else:
         a = None
@@ -86,11 +86,11 @@ if __name__ == "__main__":
         if args.session:
             # join an existing session
             session = Session(cid=args.session)
-            a = CounterAgent(name=args.name, session=session, properties=properties)
+            a = BrandingAgent(name=args.name, session=session, properties=properties)
         else:
             # create a new session
             session = Session()
-            a = CounterAgent(name=args.name, session=session, properties=properties)
+            a = BrandingAgent(name=args.name, session=session, properties=properties)
 
         # wait for session
         if session:

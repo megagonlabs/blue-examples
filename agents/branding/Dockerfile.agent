@@ -2,7 +2,7 @@ FROM --platform=$BUILDPLATFORM python:3.10.12
 ARG BLUE_BUILD_CACHE_ARG
 ARG BLUE_BUILD_LIB_ARG
 ARG BLUE_DEPLOY_VERSION
-ENV BLUE_DEPLOY_VERSION=${BLUE_DEPLOY_VERSION}
+ENV BLUE_DEPLOY_VERSION=1.0
 
 # Set workdir
 WORKDIR /app
@@ -14,10 +14,10 @@ RUN pip install ${BLUE_BUILD_CACHE_ARG} ${BLUE_BUILD_LIB_ARG} -r requirements.co
 ADD src/requirements.agent /app/requirements.agent
 RUN pip install ${BLUE_BUILD_CACHE_ARG} -r requirements.agent
 
-ADD src/requirements.counter /app/requirements.counter
-RUN pip install ${BLUE_BUILD_CACHE_ARG} -r requirements.counter
+ADD src/requirements.branding /app/requirements.branding
+RUN pip install ${BLUE_BUILD_CACHE_ARG} -r requirements.branding
 
 # Copy service files
 ADD /src /app/
 
-ENTRYPOINT ["python", "counter_agent.py"]
+ENTRYPOINT ["python", "branding_agent.py"]
