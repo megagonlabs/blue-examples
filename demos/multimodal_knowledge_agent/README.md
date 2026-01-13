@@ -1,6 +1,6 @@
-# Heterogeneous data knowledge builder - WIP
+# Multimodal Knowledge Agent - WIP
 
-An autonomous, agentic system capable of constructing a database knowledge base by integrating data from various, heterogeneous sources.
+A multimodal, agentic system capable of open-ended question-and-answer functionality. It uses a knowledge base to support ambiguous or exploratory tasks, accepting both multimodal input and generating multimodal output.
 
 ## Installation
 
@@ -12,36 +12,26 @@ Please follow the [demo example](demo_example.md) to try it out.
 
 ## Core problem
 
-Analyzing disparate, unstructured data presents significant challenges. It typically requires extensive manual coding, deep domain knowledge, and considerable time, often yielding low-quality results that remain unstructured. Furthermore, analysis is predicated on having clean, curated data available. Consequently, teams are forced to dedicate many hours to dataset preparation, frequently relying on complex and unstable scraping methods for data collection.
+Agentic systems currently face significant limitations, including frequent inaccuracies (hallucinations), a lack of robust multimodal interaction support, and difficulty handling complex, open-ended tasks and questions. Our core focus is addressing these challenges. A practical example demonstrating this is an agentic AI system that generates creative cooking ideas based on a user's available ingredients.
 
 ## Solution
 
-### Unified Data Integration
-Automatically builds a consolidated database by incorporating data from various sources (files, web data, and existing databases).
-- DB Builder (Web)
-  
-  ![DB Builder (Web)](/docs/images/db_builder_web.gif)
+### Reducing Hallucinations
+Achieving this by grounding the system in a vector database.
 
-- DB Builder (File)
-  
-  ![DB Builder (File)](/docs/images/db_builder_file.gif)
+### Multimodal Capabilities 
+Implementing comprehensive support for multimodal input and output.
+- multimodal input
+- multimodal output
 
-### Automated Data Exploration
-Enables teams to easily understand their data and proactively detect quality issues.
+### Improving Retrieval
+Enabling filtered retrieval based on user-defined preferences and constraints.
+- Vector databse retrieval
 
-- Data Explorer
-  
-  ![Data Explorer](/docs/images/data_explorer.gif)
- 
-### End-to-End ETL Automation
-Provides a fully automated Extract, Transform, Load (ETL) workflow, converting raw data into direct, actionable insights.
-
-### Interactive, User-Guided Refinement
-Increases data precision and quality through interactive refinement capabilities guided by the user.
-
-- Data Visualizer
-  
-  ![Data Visualizer](/docs/images/data_visualizer.gif)
+### Addressing Complexity
+Utilizing a sophisticated approach (React) to handle ambiguous, exploratory tasks, and open-ended Q&A.
+- React Agent
+- Ideation
  
 # Disclosures:
 
