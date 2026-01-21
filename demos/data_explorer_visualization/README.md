@@ -1,6 +1,6 @@
-# Heterogeneous data knowledge builder - WIP
+# Data Explorer and visualization - WIP
 
-An autonomous, agentic system capable of constructing a database knowledge base by integrating data from various, heterogeneous sources.
+An autonomous agentic system that can explore datasets, generate visualizations, and handle open-ended queries.
 
 ## Installation
 
@@ -12,19 +12,8 @@ Please follow the [demo example](demo_example.md) to try it out.
 
 ## Core problem
 
-Analyzing disparate, unstructured data presents significant challenges. It typically requires extensive manual coding, deep domain knowledge, and considerable time, often yielding low-quality results that remain unstructured. Furthermore, analysis is predicated on having clean, curated data available. Consequently, teams are forced to dedicate many hours to dataset preparation, frequently relying on complex and unstable scraping methods for data collection.
-
+TBD
 ## Solution
-
-### Unified Data Integration
-Automatically builds a consolidated database by incorporating data from various sources (files, web data, and existing databases).
-- DB Builder (Web)
-  
-  ![DB Builder (Web)](/docs/images/db_builder_web.gif)
-
-- DB Builder (File)
-  
-  ![DB Builder (File)](/docs/images/db_builder_file.gif)
 
 ### Automated Data Exploration
 Enables teams to easily understand their data and proactively detect quality issues.
@@ -33,9 +22,6 @@ Enables teams to easily understand their data and proactively detect quality iss
   
   ![Data Explorer](/docs/images/data_explorer.gif)
  
-### End-to-End ETL Automation
-Provides a fully automated Extract, Transform, Load (ETL) workflow, converting raw data into direct, actionable insights.
-
 ### Interactive, User-Guided Refinement
 Increases data precision and quality through interactive refinement capabilities guided by the user.
 
