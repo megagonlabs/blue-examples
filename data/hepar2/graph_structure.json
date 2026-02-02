@@ -1,0 +1,1530 @@
+{
+  "description": "Bayesian Network collection hepar2 describing liver disease diagnosis and related clinical/lab factors.",
+  "nodes": {
+    "alcoholism": {
+      "name": "alcoholism",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "History of chronic alcohol abuse or diagnosis of alcohol use disorder (a major risk factor for liver disease).",
+      "states_description": {
+        "present": "History of chronic alcohol abuse is present.",
+        "absent": "No history of chronic alcohol abuse."
+      }
+    },
+    "vh_amn": {
+      "name": "vh_amn",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Anamnesis (patient history) of a previous viral hepatitis infection.",
+      "states_description": {
+        "present": "Patient has a documented history of viral hepatitis.",
+        "absent": "No history of viral hepatitis."
+      }
+    },
+    "hepatotoxic": {
+      "name": "hepatotoxic",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "History of exposure to hepatotoxic drugs, chemicals, or industrial toxins.",
+      "states_description": {
+        "present": "Exposure to hepatotoxic agents is confirmed.",
+        "absent": "No known exposure to hepatotoxic agents."
+      }
+    },
+    "THepatitis": {
+      "name": "THepatitis",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Diagnosis of Toxic Hepatitis (liver inflammation caused by chemicals/drugs).",
+      "states_description": {
+        "present": "Toxic hepatitis is present.",
+        "absent": "Toxic hepatitis is absent."
+      }
+    },
+    "hospital": {
+      "name": "hospital",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Previous hospitalizations specifically related to liver or biliary tract disorders.",
+      "states_description": {
+        "present": "Patient has been hospitalized for liver/biliary issues before.",
+        "absent": "No prior relevant hospitalization."
+      }
+    },
+    "surgery": {
+      "name": "surgery",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "History of upper abdominal or hepatobiliary surgery.",
+      "states_description": {
+        "present": "History of relevant surgery.",
+        "absent": "No history of relevant surgery."
+      }
+    },
+    "gallstones": {
+      "name": "gallstones",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Presence of cholelithiasis (gallstones).",
+      "states_description": {
+        "present": "Gallstones are present.",
+        "absent": "No gallstones."
+      }
+    },
+    "choledocholithotomy": {
+      "name": "choledocholithotomy",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "History of surgical incision of the common bile duct to remove stones.",
+      "states_description": {
+        "present": "Patient has undergone choledocholithotomy.",
+        "absent": "No history of choledocholithotomy."
+      }
+    },
+    "injections": {
+      "name": "injections",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "History of frequent injections (medical or IV drug use), a transmission risk for viral hepatitis.",
+      "states_description": {
+        "present": "History of risk-associated injections.",
+        "absent": "No relevant history of injections."
+      }
+    },
+    "transfusion": {
+      "name": "transfusion",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "History of receiving blood products (a historical risk factor for Hepatitis B/C).",
+      "states_description": {
+        "present": "Patient has received a blood transfusion.",
+        "absent": "No history of blood transfusion."
+      }
+    },
+    "ChHepatitis": {
+      "name": "ChHepatitis",
+      "states": [
+        "active",
+        "persistent",
+        "absent"
+      ],
+      "description": "Diagnosis and type of Chronic Hepatitis.",
+      "states_description": {
+        "active": "Chronic Active Hepatitis (aggressive inflammation).",
+        "persistent": "Chronic Persistent Hepatitis (milder, non-progressive).",
+        "absent": "No chronic hepatitis."
+      }
+    },
+    "sex": {
+      "name": "sex",
+      "states": [
+        "female",
+        "male"
+      ],
+      "description": "Biological sex of the patient.",
+      "states_description": {
+        "female": "Female.",
+        "male": "Male."
+      }
+    },
+    "age": {
+      "name": "age",
+      "states": [
+        "age65_100",
+        "age51_65",
+        "age31_50",
+        "age0_30"
+      ],
+      "description": "Patient age group.",
+      "states_description": {
+        "age65_100": "Elderly (65-100 years).",
+        "age51_65": "Late Middle Age (51-65 years).",
+        "age31_50": "Early Middle Age (31-50 years).",
+        "age0_30": "Young (0-30 years)."
+      }
+    },
+    "PBC": {
+      "name": "PBC",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Diagnosis of Primary Biliary Cholangitis (formerly Cirrhosis).",
+      "states_description": {
+        "present": "PBC is present.",
+        "absent": "PBC is absent."
+      }
+    },
+    "fibrosis": {
+      "name": "fibrosis",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Presence of fibrous tissue formation in the liver.",
+      "states_description": {
+        "present": "Fibrosis is present.",
+        "absent": "Fibrosis is absent."
+      }
+    },
+    "diabetes": {
+      "name": "diabetes",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Comorbid diabetes mellitus.",
+      "states_description": {
+        "present": "Diabetes is present.",
+        "absent": "Diabetes is absent."
+      }
+    },
+    "obesity": {
+      "name": "obesity",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Clinical obesity.",
+      "states_description": {
+        "present": "Patient is obese.",
+        "absent": "Patient is not obese."
+      }
+    },
+    "Steatosis": {
+      "name": "Steatosis",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Fatty liver disease (accumulation of fat in liver cells).",
+      "states_description": {
+        "present": "Steatosis is present.",
+        "absent": "Steatosis is absent."
+      }
+    },
+    "Cirrhosis": {
+      "name": "Cirrhosis",
+      "states": [
+        "decompensate",
+        "compensate",
+        "absent"
+      ],
+      "description": "Stage of Liver Cirrhosis.",
+      "states_description": {
+        "decompensate": "Decompensated Cirrhosis (with ascites, encephalopathy, or bleeding).",
+        "compensate": "Compensated Cirrhosis (scarring present but liver function maintained).",
+        "absent": "No cirrhosis."
+      }
+    },
+    "Hyperbilirubinemia": {
+      "name": "Hyperbilirubinemia",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "General condition of elevated bilirubin levels.",
+      "states_description": {
+        "present": "Hyperbilirubinemia is present.",
+        "absent": "Hyperbilirubinemia is absent."
+      }
+    },
+    "triglycerides": {
+      "name": "triglycerides",
+      "states": [
+        "a17_4",
+        "a3_2",
+        "a1_0"
+      ],
+      "description": "Serum triglyceride levels (measured in mmol/L).",
+      "states_description": {
+        "a17_4": "Very High (> 4.0 mmol/L).",
+        "a3_2": "Elevated (2.0 - 3.9 mmol/L).",
+        "a1_0": "Normal (< 2.0 mmol/L)."
+      }
+    },
+    "RHepatitis": {
+      "name": "RHepatitis",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Acute or Reactive Hepatitis.",
+      "states_description": {
+        "present": "Acute/Reactive hepatitis is present.",
+        "absent": "Absent."
+      }
+    },
+    "fatigue": {
+      "name": "fatigue",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Subjective complaint of chronic fatigue.",
+      "states_description": {
+        "present": "Fatigue is present.",
+        "absent": "Fatigue is absent."
+      }
+    },
+    "bilirubin": {
+      "name": "bilirubin",
+      "states": [
+        "a88_20",
+        "a19_7",
+        "a6_2",
+        "a1_0"
+      ],
+      "description": "Total serum bilirubin levels (measured in mg/dL).",
+      "states_description": {
+        "a88_20": "Severe Jaundice (> 20 mg/dL).",
+        "a19_7": "Moderate Jaundice (7 - 19 mg/dL).",
+        "a6_2": "Mild Jaundice (2 - 6 mg/dL).",
+        "a1_0": "Normal (< 2 mg/dL)."
+      }
+    },
+    "itching": {
+      "name": "itching",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Itchy skin, a common symptom of cholestasis.",
+      "states_description": {
+        "present": "Pruritus is present.",
+        "absent": "Pruritus is absent."
+      }
+    },
+    "upper_pain": {
+      "name": "upper_pain",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Pain in the upper central abdomen.",
+      "states_description": {
+        "present": "Pain is present.",
+        "absent": "Pain is absent."
+      }
+    },
+    "fat": {
+      "name": "fat",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Dyspepsia or pain triggered by eating fatty foods.",
+      "states_description": {
+        "present": "Fat intolerance is present.",
+        "absent": "Fat intolerance is absent."
+      }
+    },
+    "pain_ruq": {
+      "name": "pain_ruq",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Pain in the Right Upper Quadrant of the abdomen.",
+      "states_description": {
+        "present": "RUQ pain is present.",
+        "absent": "No RUQ pain."
+      }
+    },
+    "pressure_ruq": {
+      "name": "pressure_ruq",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Sensation of pressure or fullness in the Right Upper Quadrant.",
+      "states_description": {
+        "present": "RUQ pressure is present.",
+        "absent": "No RUQ pressure."
+      }
+    },
+    "phosphatase": {
+      "name": "phosphatase",
+      "states": [
+        "a4000_700",
+        "a699_240",
+        "a239_0"
+      ],
+      "description": "Alkaline Phosphatase levels (measured in U/L).",
+      "states_description": {
+        "a4000_700": "Severely Elevated (> 700 U/L) - indicates cholestasis/obstruction.",
+        "a699_240": "Moderately Elevated (240 - 699 U/L).",
+        "a239_0": "Normal (0 - 239 U/L)."
+      }
+    },
+    "skin": {
+      "name": "skin",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Visible skin changes (e.g., excoriations from scratching, pigment changes).",
+      "states_description": {
+        "present": "Abnormal skin changes present.",
+        "absent": "Skin appears normal."
+      }
+    },
+    "ama": {
+      "name": "ama",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Presence of AMA, a hallmark marker for Primary Biliary Cholangitis.",
+      "states_description": {
+        "present": "AMA Positive.",
+        "absent": "AMA Negative."
+      }
+    },
+    "le_cells": {
+      "name": "le_cells",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Lupus Erythematosus cells test (indicative of autoimmune hepatitis).",
+      "states_description": {
+        "present": "LE Cells detected.",
+        "absent": "LE Cells not detected."
+      }
+    },
+    "joints": {
+      "name": "joints",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Joint pain or inflammation associated with autoimmune liver disease or viral hepatitis.",
+      "states_description": {
+        "present": "Joint symptoms present.",
+        "absent": "Joint symptoms absent."
+      }
+    },
+    "pain": {
+      "name": "pain",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Non-specific abdominal pain.",
+      "states_description": {
+        "present": "Pain is present.",
+        "absent": "Pain is absent."
+      }
+    },
+    "proteins": {
+      "name": "proteins",
+      "states": [
+        "a10_6",
+        "a5_2"
+      ],
+      "description": "Serum Total Protein levels (measured in g/dL).",
+      "states_description": {
+        "a10_6": "Normal (6 - 10 g/dL).",
+        "a5_2": "Hypoproteinemia (2 - 5 g/dL) - reduced synthetic function."
+      }
+    },
+    "edema": {
+      "name": "edema",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Swelling in legs/feet due to fluid retention.",
+      "states_description": {
+        "present": "Edema is present.",
+        "absent": "Edema is absent."
+      }
+    },
+    "platelet": {
+      "name": "platelet",
+      "states": [
+        "a597_300",
+        "a299_150",
+        "a149_100",
+        "a99_0"
+      ],
+      "description": "Platelet count (measured in 10^9/L or G/L).",
+      "states_description": {
+        "a597_300": "Normal (300 - 597 G/L).",
+        "a299_150": "Low Normal / Mild Reduction (150 - 299 G/L).",
+        "a149_100": "Thrombocytopenia (100 - 149 G/L).",
+        "a99_0": "Severe Thrombocytopenia (< 99 G/L) - suggests hypersplenism/cirrhosis."
+      }
+    },
+    "inr": {
+      "name": "inr",
+      "states": [
+        "a200_110",
+        "a109_70",
+        "a69_0"
+      ],
+      "description": "Prothrombin activity measured as a percentage (Note: Logic is inverse to INR ratio).",
+      "states_description": {
+        "a200_110": "Normal/Good Coagulation (> 110%).",
+        "a109_70": "Mildly Reduced Coagulation (70 - 109%).",
+        "a69_0": "Significant Coagulopathy (< 69%) - indicates liver failure."
+      }
+    },
+    "bleeding": {
+      "name": "bleeding",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Clinical signs of bleeding (e.g., gum bleeding, easy bruising).",
+      "states_description": {
+        "present": "Bleeding signs present.",
+        "absent": "No bleeding signs."
+      }
+    },
+    "flatulence": {
+      "name": "flatulence",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Excessive gas or bloating.",
+      "states_description": {
+        "present": "Present.",
+        "absent": "Absent."
+      }
+    },
+    "alcohol": {
+      "name": "alcohol",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Current consumption of alcohol (precipitating factor).",
+      "states_description": {
+        "present": "Patient currently consumes alcohol.",
+        "absent": "No current alcohol consumption."
+      }
+    },
+    "encephalopathy": {
+      "name": "encephalopathy",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Neuropsychiatric abnormalities due to liver dysfunction.",
+      "states_description": {
+        "present": "Encephalopathy is present.",
+        "absent": "Encephalopathy is absent."
+      }
+    },
+    "urea": {
+      "name": "urea",
+      "states": [
+        "a165_50",
+        "a49_40",
+        "a39_0"
+      ],
+      "description": "Serum Urea levels (measured in mg/dL).",
+      "states_description": {
+        "a165_50": "High (> 50 mg/dL) - renal impairment or GI bleed.",
+        "a49_40": "Borderline (40 - 49 mg/dL).",
+        "a39_0": "Normal (< 40 mg/dL)."
+      }
+    },
+    "ascites": {
+      "name": "ascites",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Fluid accumulation in the peritoneal cavity.",
+      "states_description": {
+        "present": "Ascites is present.",
+        "absent": "Ascites is absent."
+      }
+    },
+    "hepatomegaly": {
+      "name": "hepatomegaly",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Enlarged liver detected on exam.",
+      "states_description": {
+        "present": "Liver is enlarged.",
+        "absent": "Liver size is normal."
+      }
+    },
+    "hepatalgia": {
+      "name": "hepatalgia",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Pain elicited by palpation of the liver.",
+      "states_description": {
+        "present": "Liver tenderness is present.",
+        "absent": "No liver tenderness."
+      }
+    },
+    "density": {
+      "name": "density",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Abnormal liver tissue density or echogenicity on imaging.",
+      "states_description": {
+        "present": "Abnormal density (e.g., fatty, heterogeneous).",
+        "absent": "Normal density."
+      }
+    },
+    "ESR": {
+      "name": "ESR",
+      "states": [
+        "a200_50",
+        "a49_15",
+        "a14_0"
+      ],
+      "description": "Erythrocyte Sedimentation Rate (mm/hr).",
+      "states_description": {
+        "a200_50": "Markedly Elevated (> 50 mm/hr).",
+        "a49_15": "Mildly Elevated (15 - 49 mm/hr).",
+        "a14_0": "Normal (< 15 mm/hr)."
+      }
+    },
+    "alt": {
+      "name": "alt",
+      "states": [
+        "a850_200",
+        "a199_100",
+        "a99_35",
+        "a34_0"
+      ],
+      "description": "Liver enzyme indicating hepatocellular injury (U/L).",
+      "states_description": {
+        "a850_200": "Severe Elevation (> 200 U/L).",
+        "a199_100": "Moderate Elevation (100 - 199 U/L).",
+        "a99_35": "Mild Elevation (35 - 99 U/L).",
+        "a34_0": "Normal (< 35 U/L)."
+      }
+    },
+    "ast": {
+      "name": "ast",
+      "states": [
+        "a700_400",
+        "a399_150",
+        "a149_40",
+        "a39_0"
+      ],
+      "description": "Liver enzyme indicating injury (U/L).",
+      "states_description": {
+        "a700_400": "Severe Elevation (> 400 U/L).",
+        "a399_150": "Moderate Elevation (150 - 399 U/L).",
+        "a149_40": "Mild Elevation (40 - 149 U/L).",
+        "a39_0": "Normal (< 40 U/L)."
+      }
+    },
+    "amylase": {
+      "name": "amylase",
+      "states": [
+        "a1400_500",
+        "a499_300",
+        "a299_0"
+      ],
+      "description": "Serum Amylase levels (U/L).",
+      "states_description": {
+        "a1400_500": "Markedly Elevated (> 500 U/L) - typically pancreatitis.",
+        "a499_300": "Elevated (300 - 499 U/L).",
+        "a299_0": "Normal (< 300 U/L)."
+      }
+    },
+    "ggtp": {
+      "name": "ggtp",
+      "states": [
+        "a640_70",
+        "a69_30",
+        "a29_10",
+        "a9_0"
+      ],
+      "description": "Biliary enzyme, sensitive to alcohol and cholestasis (U/L).",
+      "states_description": {
+        "a640_70": "Significantly Elevated (> 70 U/L).",
+        "a69_30": "Moderately Elevated (30 - 69 U/L).",
+        "a29_10": "Mildly Elevated (10 - 29 U/L).",
+        "a9_0": "Normal (< 10 U/L)."
+      }
+    },
+    "cholesterol": {
+      "name": "cholesterol",
+      "states": [
+        "a999_350",
+        "a349_240",
+        "a239_0"
+      ],
+      "description": "Total Serum Cholesterol (mg/dL).",
+      "states_description": {
+        "a999_350": "Very High (> 350 mg/dL).",
+        "a349_240": "High (240 - 349 mg/dL).",
+        "a239_0": "Normal (< 240 mg/dL)."
+      }
+    },
+    "hbsag": {
+      "name": "hbsag",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Hepatitis B Surface Antigen (Active infection).",
+      "states_description": {
+        "present": "Positive (Infected).",
+        "absent": "Negative."
+      }
+    },
+    "hbsag_anti": {
+      "name": "hbsag_anti",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Antibody to HBsAg (Immunity).",
+      "states_description": {
+        "present": "Positive (Immune).",
+        "absent": "Negative."
+      }
+    },
+    "anorexia": {
+      "name": "anorexia",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Loss of appetite.",
+      "states_description": {
+        "present": "Loss of appetite present.",
+        "absent": "Normal appetite."
+      }
+    },
+    "nausea": {
+      "name": "nausea",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Sensation of needing to vomit.",
+      "states_description": {
+        "present": "Nausea present.",
+        "absent": "Nausea absent."
+      }
+    },
+    "spleen": {
+      "name": "spleen",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Enlarged spleen (common in portal hypertension).",
+      "states_description": {
+        "present": "Spleen is enlarged.",
+        "absent": "Spleen is normal."
+      }
+    },
+    "consciousness": {
+      "name": "consciousness",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Impaired level of consciousness (sign of severe encephalopathy).",
+      "states_description": {
+        "present": "Consciousness impaired.",
+        "absent": "Consciousness normal."
+      }
+    },
+    "spiders": {
+      "name": "spiders",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Vascular lesions commonly found on the chest/face in chronic liver disease.",
+      "states_description": {
+        "present": "Spider angiomas present.",
+        "absent": "Absent."
+      }
+    },
+    "jaundice": {
+      "name": "jaundice",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Yellow discoloration of skin/sclera visible on exam.",
+      "states_description": {
+        "present": "Jaundice is visible.",
+        "absent": "No visible jaundice."
+      }
+    },
+    "albumin": {
+      "name": "albumin",
+      "states": [
+        "a70_50",
+        "a49_30",
+        "a29_0"
+      ],
+      "description": "Serum Albumin levels (g/L).",
+      "states_description": {
+        "a70_50": "Normal (50 - 70 g/L).",
+        "a49_30": "Low (30 - 49 g/L) - impaired synthesis.",
+        "a29_0": "Very Low (< 30 g/L) - severe liver dysfunction/ascites risk."
+      }
+    },
+    "edge": {
+      "name": "edge",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Palpation characteristics of the liver edge.",
+      "states_description": {
+        "present": "Edge is sharp/firm/palpable (abnormal).",
+        "absent": "Edge is normal/smooth/not palpable."
+      }
+    },
+    "irregular_liver": {
+      "name": "irregular_liver",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Nodular surface detected on palpation or imaging (sign of cirrhosis).",
+      "states_description": {
+        "present": "Liver surface is irregular/nodular.",
+        "absent": "Liver surface is smooth."
+      }
+    },
+    "hbc_anti": {
+      "name": "hbc_anti",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Antibody to Hepatitis B Core Antigen (Previous or current infection).",
+      "states_description": {
+        "present": "Positive.",
+        "absent": "Negative."
+      }
+    },
+    "hcv_anti": {
+      "name": "hcv_anti",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Antibody to Hepatitis C Virus.",
+      "states_description": {
+        "present": "Positive (HCV infected or exposed).",
+        "absent": "Negative."
+      }
+    },
+    "palms": {
+      "name": "palms",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Reddening of the palms (liver palms).",
+      "states_description": {
+        "present": "Palmar erythema present.",
+        "absent": "Absent."
+      }
+    },
+    "hbeag": {
+      "name": "hbeag",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Hepatitis B e-Antigen (marker of high viral replication).",
+      "states_description": {
+        "present": "Positive.",
+        "absent": "Negative."
+      }
+    },
+    "carcinoma": {
+      "name": "carcinoma",
+      "states": [
+        "present",
+        "absent"
+      ],
+      "description": "Primary liver cancer.",
+      "states_description": {
+        "present": "Carcinoma present.",
+        "absent": "No carcinoma."
+      }
+    }
+  },
+  "edges": {
+    "alcoholism": [
+      "Steatosis",
+      "THepatitis"
+    ],
+    "vh_amn": [
+      "ChHepatitis",
+      "hbc_anti",
+      "hbeag",
+      "hbsag",
+      "hbsag_anti",
+      "hcv_anti"
+    ],
+    "hepatotoxic": [
+      "RHepatitis",
+      "THepatitis"
+    ],
+    "THepatitis": [
+      "alt",
+      "anorexia",
+      "ast",
+      "fatigue",
+      "ggtp",
+      "hepatomegaly",
+      "inr",
+      "nausea",
+      "phosphatase",
+      "spleen"
+    ],
+    "hospital": [
+      "injections",
+      "transfusion"
+    ],
+    "surgery": [
+      "injections",
+      "transfusion"
+    ],
+    "gallstones": [
+      "amylase",
+      "bilirubin",
+      "choledocholithotomy",
+      "fat",
+      "flatulence",
+      "pressure_ruq",
+      "upper_pain"
+    ],
+    "choledocholithotomy": [
+      "injections",
+      "transfusion"
+    ],
+    "injections": [
+      "ChHepatitis"
+    ],
+    "transfusion": [
+      "ChHepatitis"
+    ],
+    "ChHepatitis": [
+      "ESR",
+      "alt",
+      "ast",
+      "bilirubin",
+      "cholesterol",
+      "fatigue",
+      "fibrosis",
+      "ggtp",
+      "hbc_anti",
+      "hbeag",
+      "hbsag",
+      "hbsag_anti",
+      "hcv_anti",
+      "inr",
+      "phosphatase",
+      "pressure_ruq"
+    ],
+    "sex": [
+      "Hyperbilirubinemia",
+      "PBC"
+    ],
+    "age": [
+      "Hyperbilirubinemia",
+      "PBC"
+    ],
+    "PBC": [
+      "ESR",
+      "ama",
+      "bilirubin",
+      "carcinoma",
+      "cholesterol",
+      "encephalopathy",
+      "ggtp",
+      "joints",
+      "le_cells",
+      "pain",
+      "platelet",
+      "pressure_ruq"
+    ],
+    "fibrosis": [
+      "Cirrhosis"
+    ],
+    "diabetes": [
+      "obesity"
+    ],
+    "obesity": [
+      "Steatosis"
+    ],
+    "Steatosis": [
+      "Cirrhosis",
+      "ESR",
+      "alt",
+      "ast",
+      "cholesterol",
+      "ggtp",
+      "hepatomegaly",
+      "pain_ruq",
+      "triglycerides"
+    ],
+    "Cirrhosis": [
+      "albumin",
+      "alcohol",
+      "alt",
+      "ast",
+      "bilirubin",
+      "carcinoma",
+      "edema",
+      "edge",
+      "encephalopathy",
+      "inr",
+      "irregular_liver",
+      "palms",
+      "phosphatase",
+      "platelet",
+      "proteins",
+      "spiders",
+      "spleen"
+    ],
+    "Hyperbilirubinemia": [
+      "ESR",
+      "bilirubin",
+      "ggtp",
+      "hepatomegaly",
+      "inr",
+      "pain_ruq"
+    ],
+    "RHepatitis": [
+      "alt",
+      "anorexia",
+      "ast",
+      "fatigue",
+      "ggtp",
+      "hepatomegaly",
+      "nausea",
+      "phosphatase",
+      "spleen"
+    ],
+    "bilirubin": [
+      "itching",
+      "jaundice",
+      "skin"
+    ],
+    "joints": [
+      "pain"
+    ],
+    "proteins": [
+      "ascites"
+    ],
+    "platelet": [
+      "bleeding"
+    ],
+    "inr": [
+      "bleeding"
+    ],
+    "encephalopathy": [
+      "consciousness",
+      "density",
+      "urea"
+    ],
+    "hepatomegaly": [
+      "hepatalgia"
+    ],
+    "hbsag": [
+      "hbsag_anti"
+    ]
+  },
+  "markov_blanket": {
+    "choledocholithotomy": [
+      "gallstones",
+      "hospital",
+      "injections",
+      "surgery",
+      "transfusion"
+    ],
+    "RHepatitis": [
+      "ChHepatitis",
+      "Cirrhosis",
+      "Hyperbilirubinemia",
+      "PBC",
+      "Steatosis",
+      "THepatitis",
+      "alt",
+      "anorexia",
+      "ast",
+      "fatigue",
+      "ggtp",
+      "hepatomegaly",
+      "hepatotoxic",
+      "nausea",
+      "phosphatase",
+      "spleen"
+    ],
+    "upper_pain": [
+      "gallstones"
+    ],
+    "hepatotoxic": [
+      "RHepatitis",
+      "THepatitis",
+      "alcoholism"
+    ],
+    "anorexia": [
+      "RHepatitis",
+      "THepatitis"
+    ],
+    "flatulence": [
+      "gallstones"
+    ],
+    "jaundice": [
+      "bilirubin"
+    ],
+    "edema": [
+      "Cirrhosis"
+    ],
+    "alcohol": [
+      "Cirrhosis"
+    ],
+    "phosphatase": [
+      "ChHepatitis",
+      "Cirrhosis",
+      "RHepatitis",
+      "THepatitis"
+    ],
+    "albumin": [
+      "Cirrhosis"
+    ],
+    "ascites": [
+      "proteins"
+    ],
+    "proteins": [
+      "Cirrhosis",
+      "ascites"
+    ],
+    "le_cells": [
+      "PBC"
+    ],
+    "gallstones": [
+      "ChHepatitis",
+      "Cirrhosis",
+      "Hyperbilirubinemia",
+      "PBC",
+      "amylase",
+      "bilirubin",
+      "choledocholithotomy",
+      "fat",
+      "flatulence",
+      "pressure_ruq",
+      "upper_pain"
+    ],
+    "ama": [
+      "PBC"
+    ],
+    "spiders": [
+      "Cirrhosis"
+    ],
+    "hbeag": [
+      "ChHepatitis",
+      "vh_amn"
+    ],
+    "hbsag": [
+      "ChHepatitis",
+      "hbsag_anti",
+      "vh_amn"
+    ],
+    "bleeding": [
+      "inr",
+      "platelet"
+    ],
+    "vh_amn": [
+      "ChHepatitis",
+      "hbc_anti",
+      "hbeag",
+      "hbsag",
+      "hbsag_anti",
+      "hcv_anti",
+      "injections",
+      "transfusion"
+    ],
+    "Steatosis": [
+      "ChHepatitis",
+      "Cirrhosis",
+      "ESR",
+      "Hyperbilirubinemia",
+      "PBC",
+      "RHepatitis",
+      "THepatitis",
+      "alcoholism",
+      "alt",
+      "ast",
+      "cholesterol",
+      "fibrosis",
+      "ggtp",
+      "hepatomegaly",
+      "obesity",
+      "pain_ruq",
+      "triglycerides"
+    ],
+    "hbsag_anti": [
+      "ChHepatitis",
+      "hbsag",
+      "vh_amn"
+    ],
+    "Hyperbilirubinemia": [
+      "ChHepatitis",
+      "Cirrhosis",
+      "ESR",
+      "PBC",
+      "RHepatitis",
+      "Steatosis",
+      "THepatitis",
+      "age",
+      "bilirubin",
+      "gallstones",
+      "ggtp",
+      "hepatomegaly",
+      "inr",
+      "pain_ruq",
+      "sex"
+    ],
+    "alt": [
+      "ChHepatitis",
+      "Cirrhosis",
+      "RHepatitis",
+      "Steatosis",
+      "THepatitis"
+    ],
+    "itching": [
+      "bilirubin"
+    ],
+    "hepatalgia": [
+      "hepatomegaly"
+    ],
+    "ChHepatitis": [
+      "Cirrhosis",
+      "ESR",
+      "Hyperbilirubinemia",
+      "PBC",
+      "RHepatitis",
+      "Steatosis",
+      "THepatitis",
+      "alt",
+      "ast",
+      "bilirubin",
+      "cholesterol",
+      "fatigue",
+      "fibrosis",
+      "gallstones",
+      "ggtp",
+      "hbc_anti",
+      "hbeag",
+      "hbsag",
+      "hbsag_anti",
+      "hcv_anti",
+      "injections",
+      "inr",
+      "phosphatase",
+      "pressure_ruq",
+      "transfusion",
+      "vh_amn"
+    ],
+    "pressure_ruq": [
+      "ChHepatitis",
+      "PBC",
+      "gallstones"
+    ],
+    "ggtp": [
+      "ChHepatitis",
+      "Hyperbilirubinemia",
+      "PBC",
+      "RHepatitis",
+      "Steatosis",
+      "THepatitis"
+    ],
+    "spleen": [
+      "Cirrhosis",
+      "RHepatitis",
+      "THepatitis"
+    ],
+    "obesity": [
+      "Steatosis",
+      "alcoholism",
+      "diabetes"
+    ],
+    "joints": [
+      "PBC",
+      "pain"
+    ],
+    "cholesterol": [
+      "ChHepatitis",
+      "PBC",
+      "Steatosis"
+    ],
+    "sex": [
+      "Hyperbilirubinemia",
+      "PBC",
+      "age"
+    ],
+    "ast": [
+      "ChHepatitis",
+      "Cirrhosis",
+      "RHepatitis",
+      "Steatosis",
+      "THepatitis"
+    ],
+    "amylase": [
+      "gallstones"
+    ],
+    "hepatomegaly": [
+      "Hyperbilirubinemia",
+      "RHepatitis",
+      "Steatosis",
+      "THepatitis",
+      "hepatalgia"
+    ],
+    "alcoholism": [
+      "Steatosis",
+      "THepatitis",
+      "hepatotoxic",
+      "obesity"
+    ],
+    "surgery": [
+      "choledocholithotomy",
+      "hospital",
+      "injections",
+      "transfusion"
+    ],
+    "bilirubin": [
+      "ChHepatitis",
+      "Cirrhosis",
+      "Hyperbilirubinemia",
+      "PBC",
+      "gallstones",
+      "itching",
+      "jaundice",
+      "skin"
+    ],
+    "pain": [
+      "PBC",
+      "joints"
+    ],
+    "irregular_liver": [
+      "Cirrhosis"
+    ],
+    "diabetes": [
+      "obesity"
+    ],
+    "carcinoma": [
+      "Cirrhosis",
+      "PBC"
+    ],
+    "pain_ruq": [
+      "Hyperbilirubinemia",
+      "Steatosis"
+    ],
+    "urea": [
+      "encephalopathy"
+    ],
+    "nausea": [
+      "RHepatitis",
+      "THepatitis"
+    ],
+    "age": [
+      "Hyperbilirubinemia",
+      "PBC",
+      "sex"
+    ],
+    "platelet": [
+      "Cirrhosis",
+      "PBC",
+      "bleeding",
+      "inr"
+    ],
+    "hospital": [
+      "choledocholithotomy",
+      "injections",
+      "surgery",
+      "transfusion"
+    ],
+    "skin": [
+      "bilirubin"
+    ],
+    "palms": [
+      "Cirrhosis"
+    ],
+    "triglycerides": [
+      "Steatosis"
+    ],
+    "encephalopathy": [
+      "Cirrhosis",
+      "PBC",
+      "consciousness",
+      "density",
+      "urea"
+    ],
+    "edge": [
+      "Cirrhosis"
+    ],
+    "density": [
+      "encephalopathy"
+    ],
+    "THepatitis": [
+      "ChHepatitis",
+      "Cirrhosis",
+      "Hyperbilirubinemia",
+      "PBC",
+      "RHepatitis",
+      "Steatosis",
+      "alcoholism",
+      "alt",
+      "anorexia",
+      "ast",
+      "fatigue",
+      "ggtp",
+      "hepatomegaly",
+      "hepatotoxic",
+      "inr",
+      "nausea",
+      "phosphatase",
+      "spleen"
+    ],
+    "fibrosis": [
+      "ChHepatitis",
+      "Cirrhosis",
+      "Steatosis"
+    ],
+    "PBC": [
+      "ChHepatitis",
+      "Cirrhosis",
+      "ESR",
+      "Hyperbilirubinemia",
+      "RHepatitis",
+      "Steatosis",
+      "THepatitis",
+      "age",
+      "ama",
+      "bilirubin",
+      "carcinoma",
+      "cholesterol",
+      "encephalopathy",
+      "gallstones",
+      "ggtp",
+      "joints",
+      "le_cells",
+      "pain",
+      "platelet",
+      "pressure_ruq",
+      "sex"
+    ],
+    "hbc_anti": [
+      "ChHepatitis",
+      "vh_amn"
+    ],
+    "inr": [
+      "ChHepatitis",
+      "Cirrhosis",
+      "Hyperbilirubinemia",
+      "THepatitis",
+      "bleeding",
+      "platelet"
+    ],
+    "fat": [
+      "gallstones"
+    ],
+    "consciousness": [
+      "encephalopathy"
+    ],
+    "injections": [
+      "ChHepatitis",
+      "choledocholithotomy",
+      "hospital",
+      "surgery",
+      "transfusion",
+      "vh_amn"
+    ],
+    "Cirrhosis": [
+      "ChHepatitis",
+      "Hyperbilirubinemia",
+      "PBC",
+      "RHepatitis",
+      "Steatosis",
+      "THepatitis",
+      "albumin",
+      "alcohol",
+      "alt",
+      "ast",
+      "bilirubin",
+      "carcinoma",
+      "edema",
+      "edge",
+      "encephalopathy",
+      "fibrosis",
+      "gallstones",
+      "inr",
+      "irregular_liver",
+      "palms",
+      "phosphatase",
+      "platelet",
+      "proteins",
+      "spiders",
+      "spleen"
+    ],
+    "ESR": [
+      "ChHepatitis",
+      "Hyperbilirubinemia",
+      "PBC",
+      "Steatosis"
+    ],
+    "fatigue": [
+      "ChHepatitis",
+      "RHepatitis",
+      "THepatitis"
+    ],
+    "hcv_anti": [
+      "ChHepatitis",
+      "vh_amn"
+    ],
+    "transfusion": [
+      "ChHepatitis",
+      "choledocholithotomy",
+      "hospital",
+      "injections",
+      "surgery",
+      "vh_amn"
+    ]
+  }
+}

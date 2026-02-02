@@ -1,0 +1,1099 @@
+network unknown {
+}
+variable node_0 {
+    type discrete [ 3 ] { state_44, state_53, state_43 };
+}
+variable node_1 {
+    type discrete [ 3 ] { state_50, state_49, state_43 };
+}
+variable node_10 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_11 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_12 {
+    type discrete [ 4 ] { state_37, state_8, state_41, state_19 };
+}
+variable node_13 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_14 {
+    type discrete [ 3 ] { state_2, state_24, state_14 };
+}
+variable node_15 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_16 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_17 {
+    type discrete [ 4 ] { state_35, state_20, state_4, state_21 };
+}
+variable node_18 {
+    type discrete [ 4 ] { state_38, state_9, state_34, state_10 };
+}
+variable node_19 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_2 {
+    type discrete [ 3 ] { state_12, state_25, state_5 };
+}
+variable node_20 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_21 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_22 {
+    type discrete [ 3 ] { state_39, state_18, state_13 };
+}
+variable node_23 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_24 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_25 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_26 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_27 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_28 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_29 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_3 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_30 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_31 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_32 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_33 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_34 {
+    type discrete [ 4 ] { state_30, state_33, state_17, state_42 };
+}
+variable node_35 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_36 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_37 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_38 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_39 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_4 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_40 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_41 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_42 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_43 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_44 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_45 {
+    type discrete [ 3 ] { state_11, state_0, state_32 };
+}
+variable node_46 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_47 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_48 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_49 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_5 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_50 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_51 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_52 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_53 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_54 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_55 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_56 {
+    type discrete [ 3 ] { state_23, state_31, state_13 };
+}
+variable node_57 {
+    type discrete [ 4 ] { state_28, state_15, state_3, state_40 };
+}
+variable node_58 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_59 {
+    type discrete [ 2 ] { state_1, state_29 };
+}
+variable node_6 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_60 {
+    type discrete [ 2 ] { state_51, state_52 };
+}
+variable node_61 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_62 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_63 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_64 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_65 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_66 {
+    type discrete [ 3 ] { state_7, state_22, state_10 };
+}
+variable node_67 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_68 {
+    type discrete [ 3 ] { state_6, state_27, state_21 };
+}
+variable node_69 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_7 {
+    type discrete [ 2 ] { state_54, state_43 };
+}
+variable node_8 {
+    type discrete [ 4 ] { state_48, state_47, state_46, state_45 };
+}
+variable node_9 {
+    type discrete [ 3 ] { state_36, state_26, state_16 };
+}
+probability ( node_0 | node_65, node_69, node_44 ) {
+    ( state_54, state_54, state_54 ) 0.2094241, 0.0052356, 0.7853403;
+    ( state_54, state_54, state_43 ) 0.4615385, 0.3076923, 0.2307692;
+    ( state_54, state_43, state_54 ) 0.06, 0.06, 0.88;
+    ( state_54, state_43, state_43 ) 0.13043478, 0.04347826, 0.82608696;
+    ( state_43, state_54, state_54 ) 0.15384615, 0.05128205, 0.7948718;
+    ( state_43, state_54, state_43 ) 0.24, 0.14, 0.62;
+    ( state_43, state_43, state_54 ) 0.07692308, 0.00591716, 0.91715976;
+    ( state_43, state_43, state_43 ) 0.13095238, 0.05357143, 0.81547619;
+
+}
+probability ( node_1 | node_31, node_6 ) {
+    ( state_54, state_54 ) 0.56, 0.24, 0.2;
+    ( state_54, state_43 ) 0.49, 0.21, 0.3;
+    ( state_43, state_54 ) 0.35, 0.15, 0.5;
+    ( state_43, state_43 ) 0.001, 0.001, 0.998;
+
+}
+probability ( node_10 | node_1 ) {
+    ( state_50 ) 0.2068966, 0.7931034;
+    ( state_49 ) 0.2258064, 0.7741936;
+    ( state_43 ) 0.1114754, 0.8885246;
+
+}
+probability ( node_11 ) {
+    table 0.1359084, 0.8640916 ;
+}
+probability ( node_12 | node_0, node_5, node_7, node_6, node_1 ) {
+    ( state_44, state_54, state_54, state_54, state_50 ) 0.05882353, 0.15686275, 0.41176471, 0.37254902;
+    ( state_44, state_54, state_54, state_54, state_49 ) 0.05454545, 0.16363636, 0.41818182, 0.36363636;
+    ( state_44, state_54, state_54, state_54, state_43 ) 0.04761905, 0.15873016, 0.41269841, 0.38095238;
+    ( state_44, state_54, state_54, state_43, state_50 ) 0.06451613, 0.17741935, 0.41935484, 0.33870968;
+    ( state_44, state_54, state_54, state_43, state_49 ) 0.07017544, 0.19298246, 0.42105263, 0.31578947;
+    ( state_44, state_54, state_54, state_43, state_43 ) 0.07936508, 0.19047619, 0.41269841, 0.31746032;
+    ( state_44, state_54, state_43, state_54, state_50 ) 0.06849315, 0.16438356, 0.42465753, 0.34246575;
+    ( state_44, state_54, state_43, state_54, state_49 ) 0.05882353, 0.17647059, 0.42647059, 0.33823529;
+    ( state_44, state_54, state_43, state_54, state_43 ) 0.0625, 0.175, 0.4125, 0.35;
+    ( state_44, state_54, state_43, state_43, state_50 ) 0.075, 0.1875, 0.425, 0.3125;
+    ( state_44, state_54, state_43, state_43, state_49 ) 0.08333333, 0.20833333, 0.43055556, 0.27777778;
+    ( state_44, state_54, state_43, state_43, state_43 ) 0.08988764, 0.2247191, 0.41573034, 0.26966292;
+    ( state_44, state_43, state_54, state_54, state_50 ) 0.0617284, 0.1728395, 0.4197531, 0.345679;
+    ( state_44, state_43, state_54, state_54, state_49 ) 0.05479452, 0.16438356, 0.42465753, 0.35616438;
+    ( state_44, state_43, state_54, state_54, state_43 ) 0.05882353, 0.15294118, 0.41176471, 0.37647059;
+    ( state_44, state_43, state_54, state_43, state_50 ) 0.06976744, 0.1627907, 0.41860465, 0.34883721;
+    ( state_44, state_43, state_54, state_43, state_49 ) 0.07792208, 0.18181818, 0.41558442, 0.32467532;
+    ( state_44, state_43, state_54, state_43, state_43 ) 0.08333333, 0.1875, 0.40625, 0.32291667;
+    ( state_44, state_43, state_43, state_54, state_50 ) 0.06862745, 0.16666667, 0.42156863, 0.34313725;
+    ( state_44, state_43, state_43, state_54, state_49 ) 0.0625, 0.1666667, 0.4270833, 0.34375;
+    ( state_44, state_43, state_43, state_54, state_43 ) 0.064, 0.168, 0.416, 0.352;
+    ( state_44, state_43, state_43, state_43, state_50 ) 0.08148148, 0.17777778, 0.42222222, 0.31851852;
+    ( state_44, state_43, state_43, state_43, state_49 ) 0.08661417, 0.19685039, 0.42519685, 0.29133858;
+    ( state_44, state_43, state_43, state_43, state_43 ) 0.1208791, 0.2307692, 0.3956044, 0.2527472;
+    ( state_53, state_54, state_54, state_54, state_50 ) 0.05172414, 0.15517241, 0.39655172, 0.39655172;
+    ( state_53, state_54, state_54, state_54, state_49 ) 0.02173913, 0.13043478, 0.41304348, 0.43478261;
+    ( state_53, state_54, state_54, state_54, state_43 ) 0.0021692, 0.1084599, 0.3904555, 0.4989154;
+    ( state_53, state_54, state_54, state_43, state_50 ) 0.02272727, 0.11363636, 0.40909091, 0.45454545;
+    ( state_53, state_54, state_54, state_43, state_49 ) 0.00269542, 0.13477089, 0.40431267, 0.45822102;
+    ( state_53, state_54, state_54, state_43, state_43 ) 0.00262467, 0.1312336, 0.36745407, 0.49868766;
+    ( state_53, state_54, state_43, state_54, state_50 ) 0.01923077, 0.11538462, 0.40384615, 0.46153846;
+    ( state_53, state_54, state_43, state_54, state_49 ) 0.002079, 0.1247401, 0.4158004, 0.4573805;
+    ( state_53, state_54, state_43, state_54, state_43 ) 0.00181488, 0.12704174, 0.39927405, 0.47186933;
+    ( state_53, state_54, state_43, state_43, state_50 ) 0.01886792, 0.13207547, 0.41509434, 0.43396226;
+    ( state_53, state_54, state_43, state_43, state_49 ) 0.02272727, 0.15909091, 0.40909091, 0.40909091;
+    ( state_53, state_54, state_43, state_43, state_43 ) 0.02083333, 0.16666667, 0.375, 0.4375;
+    ( state_53, state_43, state_54, state_54, state_50 ) 0.01724138, 0.12068966, 0.39655172, 0.46551724;
+    ( state_53, state_43, state_54, state_54, state_49 ) 0.00191939, 0.11516315, 0.40307102, 0.47984645;
+    ( state_53, state_43, state_54, state_54, state_43 ) 0.00166389, 0.09983361, 0.38269551, 0.51580699;
+    ( state_53, state_43, state_54, state_43, state_50 ) 0.01724138, 0.10344828, 0.39655172, 0.48275862;
+    ( state_53, state_43, state_54, state_43, state_49 ) 0.02040816, 0.12244898, 0.3877551, 0.46938776;
+    ( state_53, state_43, state_54, state_43, state_43 ) 0.01818182, 0.10909091, 0.34545455, 0.52727272;
+    ( state_53, state_43, state_43, state_54, state_50 ) 0.02777778, 0.11111111, 0.38888889, 0.47222222;
+    ( state_53, state_43, state_43, state_54, state_49 ) 0.01492537, 0.11940299, 0.40298507, 0.46268657;
+    ( state_53, state_43, state_43, state_54, state_43 ) 0.01190476, 0.10714286, 0.38095238, 0.5;
+    ( state_53, state_43, state_43, state_43, state_50 ) 0.03409091, 0.11363636, 0.38636364, 0.46590909;
+    ( state_53, state_43, state_43, state_43, state_49 ) 0.02631579, 0.13157895, 0.39473684, 0.44736842;
+    ( state_53, state_43, state_43, state_43, state_43 ) 0.02777778, 0.13888889, 0.27777778, 0.55555555;
+    ( state_43, state_54, state_54, state_54, state_50 ) 0.02, 0.12, 0.4, 0.46;
+    ( state_43, state_54, state_54, state_54, state_49 ) 0.00212314, 0.12738854, 0.42462845, 0.44585987;
+    ( state_43, state_54, state_54, state_54, state_43 ) 0.00191939, 0.11516315, 0.42226488, 0.46065259;
+    ( state_43, state_54, state_54, state_43, state_50 ) 0.02, 0.12, 0.44, 0.42;
+    ( state_43, state_54, state_54, state_43, state_49 ) 0.00249377, 0.14962594, 0.44887781, 0.39900249;
+    ( state_43, state_54, state_54, state_43, state_43 ) 0.0023753, 0.1425178, 0.4275534, 0.4275534;
+    ( state_43, state_54, state_43, state_54, state_50 ) 0.01666667, 0.11666667, 0.45, 0.41666667;
+    ( state_43, state_54, state_43, state_54, state_49 ) 0.00178253, 0.12477718, 0.46345811, 0.40998217;
+    ( state_43, state_54, state_43, state_54, state_43 ) 0.00144718, 0.11577424, 0.44862518, 0.4341534;
+    ( state_43, state_54, state_43, state_43, state_50 ) 0.02816901, 0.12676056, 0.46478873, 0.38028169;
+    ( state_43, state_54, state_43, state_43, state_49 ) 0.01724138, 0.15517241, 0.48275862, 0.34482759;
+    ( state_43, state_54, state_43, state_43, state_43 ) 0.00584795, 0.23391813, 0.46783626, 0.29239766;
+    ( state_43, state_43, state_54, state_54, state_50 ) 0.01818182, 0.10909091, 0.43636364, 0.43636364;
+    ( state_43, state_43, state_54, state_54, state_49 ) 0.00172117, 0.10327022, 0.4475043, 0.4475043;
+    ( state_43, state_43, state_54, state_54, state_43 ) 0.00131406, 0.09198423, 0.42049934, 0.48620237;
+    ( state_43, state_43, state_54, state_43, state_50 ) 0.025, 0.1, 0.425, 0.45;
+    ( state_43, state_43, state_54, state_43, state_49 ) 0.01470588, 0.11764706, 0.44117647, 0.42647059;
+    ( state_43, state_43, state_54, state_43, state_43 ) 0.00369004, 0.07380074, 0.36900369, 0.55350553;
+    ( state_43, state_43, state_43, state_54, state_50 ) 0.02666667, 0.09333333, 0.42666667, 0.45333333;
+    ( state_43, state_43, state_43, state_54, state_49 ) 0.01176471, 0.10588235, 0.44705882, 0.43529412;
+    ( state_43, state_43, state_43, state_54, state_43 ) 0.00149031, 0.08941878, 0.41728763, 0.49180328;
+    ( state_43, state_43, state_43, state_43, state_50 ) 0.06896552, 0.12068966, 0.46551724, 0.34482759;
+    ( state_43, state_43, state_43, state_43, state_49 ) 0.03225806, 0.19354839, 0.51612903, 0.25806452;
+    ( state_43, state_43, state_43, state_43, state_43 ) 0.04569892, 0.17473118, 0.42741935, 0.35215054;
+
+}
+probability ( node_13 | node_4 ) {
+    ( state_54 ) 0.5678571, 0.4321429;
+    ( state_43 ) 0.01193317, 0.98806683;
+
+}
+probability ( node_14 | node_33 ) {
+    ( state_54 ) 0.01869159, 0.04672897, 0.93457944;
+    ( state_43 ) 0.01013514, 0.01689189, 0.97297297;
+
+}
+probability ( node_15 | node_5, node_7 ) {
+    ( state_54, state_54 ) 0.1818182, 0.8181818;
+    ( state_54, state_43 ) 0.1176471, 0.8823529;
+    ( state_43, state_54 ) 0.2222222, 0.7777778;
+    ( state_43, state_43 ) 0.280916, 0.719084;
+
+}
+probability ( node_16 | node_59 ) {
+    ( state_1 ) 0.1280932, 0.8719068;
+    ( state_29 ) 0.5833333, 0.4166667;
+
+}
+probability ( node_17 | node_0, node_5, node_7, node_6, node_1 ) {
+    ( state_44, state_54, state_54, state_54, state_50 ) 0.01960784, 0.1372549, 0.47058824, 0.37254902;
+    ( state_44, state_54, state_54, state_54, state_49 ) 0.01818182, 0.12727273, 0.49090909, 0.36363636;
+    ( state_44, state_54, state_54, state_54, state_43 ) 0.01612903, 0.14516129, 0.46774194, 0.37096774;
+    ( state_44, state_54, state_54, state_43, state_50 ) 0.01612903, 0.16129032, 0.48387097, 0.33870968;
+    ( state_44, state_54, state_54, state_43, state_49 ) 0.01818182, 0.16363636, 0.50909091, 0.30909091;
+    ( state_44, state_54, state_54, state_43, state_43 ) 0.03225806, 0.17741935, 0.48387097, 0.30645161;
+    ( state_44, state_54, state_43, state_54, state_50 ) 0.02777778, 0.15277778, 0.48611111, 0.33333333;
+    ( state_44, state_54, state_43, state_54, state_49 ) 0.02941176, 0.14705882, 0.50000001, 0.32352941;
+    ( state_44, state_54, state_43, state_54, state_43 ) 0.02531646, 0.15189873, 0.48101266, 0.34177215;
+    ( state_44, state_54, state_43, state_43, state_50 ) 0.025, 0.175, 0.5, 0.3;
+    ( state_44, state_54, state_43, state_43, state_49 ) 0.02777778, 0.18055556, 0.52777777, 0.26388889;
+    ( state_44, state_54, state_43, state_43, state_43 ) 0.03370787, 0.20224719, 0.50561797, 0.25842697;
+    ( state_44, state_43, state_54, state_54, state_50 ) 0.02469136, 0.16049383, 0.4691358, 0.34567901;
+    ( state_44, state_43, state_54, state_54, state_49 ) 0.02739726, 0.1369863, 0.47945205, 0.35616438;
+    ( state_44, state_43, state_54, state_54, state_43 ) 0.02380952, 0.14285714, 0.45238095, 0.38095238;
+    ( state_44, state_43, state_54, state_43, state_50 ) 0.02352941, 0.16470588, 0.45882353, 0.35294118;
+    ( state_44, state_43, state_54, state_43, state_49 ) 0.02597403, 0.16883117, 0.48051948, 0.32467532;
+    ( state_44, state_43, state_54, state_43, state_43 ) 0.03125, 0.1875, 0.4583333, 0.3229167;
+    ( state_44, state_43, state_43, state_54, state_50 ) 0.02912621, 0.16504854, 0.46601942, 0.33980583;
+    ( state_44, state_43, state_43, state_54, state_49 ) 0.03125, 0.15625, 0.4791667, 0.3333333;
+    ( state_44, state_43, state_43, state_54, state_43 ) 0.03174603, 0.15873016, 0.46031746, 0.34920635;
+    ( state_44, state_43, state_43, state_43, state_50 ) 0.03676471, 0.17647059, 0.47058824, 0.31617647;
+    ( state_44, state_43, state_43, state_43, state_49 ) 0.03937008, 0.18110236, 0.49606299, 0.28346457;
+    ( state_44, state_43, state_43, state_43, state_43 ) 0.05494505, 0.23076923, 0.46153846, 0.25274725;
+    ( state_53, state_54, state_54, state_54, state_50 ) 0.01754386, 0.14035088, 0.45614035, 0.38596491;
+    ( state_53, state_54, state_54, state_54, state_49 ) 0.00221729, 0.0886918, 0.48780488, 0.42128603;
+    ( state_53, state_54, state_54, state_54, state_43 ) 0.00212314, 0.08492569, 0.44585987, 0.4670913;
+    ( state_53, state_54, state_54, state_43, state_50 ) 0.00221729, 0.11086475, 0.46563193, 0.42128603;
+    ( state_53, state_54, state_54, state_43, state_49 ) 0.00269542, 0.08086253, 0.51212938, 0.40431267;
+    ( state_53, state_54, state_54, state_43, state_43 ) 0.00269542, 0.08086253, 0.45822102, 0.45822102;
+    ( state_53, state_54, state_43, state_54, state_50 ) 0.00191939, 0.09596929, 0.46065259, 0.44145873;
+    ( state_53, state_54, state_43, state_54, state_49 ) 0.00203666, 0.0814664, 0.48879837, 0.42769857;
+    ( state_53, state_54, state_43, state_54, state_43 ) 0.00181488, 0.0907441, 0.45372051, 0.45372051;
+    ( state_53, state_54, state_43, state_43, state_50 ) 0.00184843, 0.11090573, 0.4805915, 0.40665434;
+    ( state_53, state_54, state_43, state_43, state_49 ) 0.00226757, 0.09070295, 0.52154195, 0.38548753;
+    ( state_53, state_54, state_43, state_43, state_43 ) 0.00212314, 0.10615711, 0.48832272, 0.40339703;
+    ( state_53, state_43, state_54, state_54, state_50 ) 0.00172117, 0.10327022, 0.4475043, 0.4475043;
+    ( state_53, state_43, state_54, state_54, state_49 ) 0.00191939, 0.07677543, 0.46065259, 0.46065259;
+    ( state_53, state_43, state_54, state_54, state_43 ) 0.00166389, 0.08319468, 0.41597338, 0.49916805;
+    ( state_53, state_43, state_54, state_43, state_50 ) 0.00172117, 0.10327022, 0.4302926, 0.46471601;
+    ( state_53, state_43, state_54, state_43, state_49 ) 0.00203666, 0.0814664, 0.46843177, 0.44806517;
+    ( state_53, state_43, state_54, state_43, state_43 ) 0.00181488, 0.0907441, 0.41742287, 0.49001815;
+    ( state_53, state_43, state_43, state_54, state_50 ) 0.00142653, 0.09985735, 0.44222539, 0.45649073;
+    ( state_53, state_43, state_43, state_54, state_49 ) 0.00149031, 0.08941878, 0.46199702, 0.44709389;
+    ( state_53, state_43, state_43, state_54, state_43 ) 0.00120337, 0.08423586, 0.433213, 0.48134777;
+    ( state_53, state_43, state_43, state_43, state_50 ) 0.01136364, 0.10227273, 0.44318182, 0.44318182;
+    ( state_53, state_43, state_43, state_43, state_49 ) 0.01315789, 0.09210526, 0.47368421, 0.42105263;
+    ( state_53, state_43, state_43, state_43, state_43 ) 0.02777778, 0.11111111, 0.36111111, 0.5;
+    ( state_43, state_54, state_54, state_54, state_50 ) 0.00199601, 0.0998004, 0.45908184, 0.43912176;
+    ( state_43, state_54, state_54, state_54, state_49 ) 0.00212314, 0.08492569, 0.48832272, 0.42462845;
+    ( state_43, state_54, state_54, state_54, state_43 ) 0.00191939, 0.07677543, 0.46065259, 0.46065259;
+    ( state_43, state_54, state_54, state_43, state_50 ) 0.00199601, 0.0998004, 0.47904192, 0.41916168;
+    ( state_43, state_54, state_54, state_43, state_49 ) 0.00249377, 0.07481297, 0.54862842, 0.37406484;
+    ( state_43, state_54, state_54, state_43, state_43 ) 0.00243309, 0.0729927, 0.51094891, 0.4136253;
+    ( state_43, state_54, state_43, state_54, state_50 ) 0.00166389, 0.09983361, 0.49916805, 0.39933444;
+    ( state_43, state_54, state_43, state_54, state_49 ) 0.00175131, 0.08756567, 0.52539405, 0.38528897;
+    ( state_43, state_54, state_43, state_54, state_43 ) 0.00142653, 0.08559201, 0.49928673, 0.41369472;
+    ( state_43, state_54, state_43, state_43, state_50 ) 0.00140647, 0.11251758, 0.52039381, 0.36568214;
+    ( state_43, state_54, state_43, state_43, state_49 ) 0.00172117, 0.10327022, 0.58519794, 0.30981067;
+    ( state_43, state_54, state_43, state_43, state_43 ) 0.00584795, 0.11695906, 0.64327486, 0.23391813;
+    ( state_43, state_43, state_54, state_54, state_50 ) 0.00181488, 0.0907441, 0.47186933, 0.43557169;
+    ( state_43, state_43, state_54, state_54, state_49 ) 0.00172117, 0.06884682, 0.48192771, 0.4475043;
+    ( state_43, state_43, state_54, state_54, state_43 ) 0.00133156, 0.0665779, 0.43941411, 0.49267643;
+    ( state_43, state_43, state_54, state_43, state_50 ) 0.00126422, 0.08849558, 0.4551201, 0.4551201;
+    ( state_43, state_43, state_54, state_43, state_49 ) 0.00149031, 0.07451565, 0.49180328, 0.43219076;
+    ( state_43, state_43, state_54, state_43, state_43 ) 0.00369004, 0.07380074, 0.36900369, 0.55350553;
+    ( state_43, state_43, state_43, state_54, state_50 ) 0.00133156, 0.09320905, 0.45272969, 0.45272969;
+    ( state_43, state_43, state_43, state_54, state_49 ) 0.00116144, 0.08130081, 0.48780488, 0.42973287;
+    ( state_43, state_43, state_43, state_54, state_43 ) 0.00149031, 0.07451565, 0.43219076, 0.49180328;
+    ( state_43, state_43, state_43, state_43, state_50 ) 0.01724138, 0.13793103, 0.5, 0.34482759;
+    ( state_43, state_43, state_43, state_43, state_49 ) 0.03225806, 0.06451613, 0.67741936, 0.22580645;
+    ( state_43, state_43, state_43, state_43, state_43 ) 0.01075269, 0.22580645, 0.46774194, 0.29569892;
+
+}
+probability ( node_18 | node_3, node_4, node_1, node_33, node_0 ) {
+    ( state_54, state_54, state_50, state_54, state_44 ) 0.04347826, 0.2173913, 0.34782609, 0.39130435;
+    ( state_54, state_54, state_50, state_54, state_53 ) 0.07407407, 0.22222222, 0.33333333, 0.37037037;
+    ( state_54, state_54, state_50, state_54, state_43 ) 0.07894737, 0.23684211, 0.34210526, 0.34210526;
+    ( state_54, state_54, state_50, state_43, state_44 ) 0.01923077, 0.11538462, 0.36538462, 0.5;
+    ( state_54, state_54, state_50, state_43, state_53 ) 0.01818182, 0.11818182, 0.38181818, 0.48181818;
+    ( state_54, state_54, state_50, state_43, state_43 ) 0.02189781, 0.12408759, 0.41605839, 0.4379562;
+    ( state_54, state_54, state_49, state_54, state_44 ) 0.03571429, 0.16071429, 0.39285714, 0.41071429;
+    ( state_54, state_54, state_49, state_54, state_53 ) 0.05882353, 0.20588235, 0.38235294, 0.35294118;
+    ( state_54, state_54, state_49, state_54, state_43 ) 0.07692308, 0.23076923, 0.35897436, 0.33333333;
+    ( state_54, state_54, state_49, state_43, state_44 ) 0.02020202, 0.11111111, 0.34343434, 0.52525253;
+    ( state_54, state_54, state_49, state_43, state_53 ) 0.01941748, 0.10679612, 0.34951456, 0.52427184;
+    ( state_54, state_54, state_49, state_43, state_43 ) 0.02362205, 0.11811024, 0.37795276, 0.48031496;
+    ( state_54, state_54, state_43, state_54, state_44 ) 0.04225352, 0.15492958, 0.36619718, 0.43661972;
+    ( state_54, state_54, state_43, state_54, state_53 ) 0.06, 0.2, 0.36, 0.38;
+    ( state_54, state_54, state_43, state_54, state_43 ) 0.07575758, 0.22727273, 0.36363636, 0.33333333;
+    ( state_54, state_54, state_43, state_43, state_44 ) 0.03030303, 0.12121212, 0.35606061, 0.49242424;
+    ( state_54, state_54, state_43, state_43, state_53 ) 0.02158273, 0.11510791, 0.37410072, 0.48920863;
+    ( state_54, state_54, state_43, state_43, state_43 ) 0.02061856, 0.12371134, 0.40721649, 0.44845361;
+    ( state_54, state_43, state_50, state_54, state_44 ) 0.01449275, 0.11594203, 0.39130435, 0.47826087;
+    ( state_54, state_43, state_50, state_54, state_53 ) 0.00398406, 0.11952191, 0.35856574, 0.51792829;
+    ( state_54, state_43, state_50, state_54, state_43 ) 0.00662252, 0.13245033, 0.26490066, 0.59602649;
+    ( state_54, state_43, state_50, state_43, state_44 ) 0.00151286, 0.04538578, 0.34795764, 0.60514372;
+    ( state_54, state_43, state_50, state_43, state_53 ) 0.00144718, 0.04341534, 0.37626628, 0.5788712;
+    ( state_54, state_43, state_50, state_43, state_43 ) 0.00114811, 0.05740528, 0.44776119, 0.49368542;
+    ( state_54, state_43, state_49, state_54, state_44 ) 0.00311526, 0.03115265, 0.43613707, 0.52959502;
+    ( state_54, state_43, state_49, state_54, state_53 ) 0.00892857, 0.00892857, 0.44642857, 0.53571429;
+    ( state_54, state_43, state_49, state_54, state_43 ) 0.01388889, 0.01388889, 0.41666667, 0.55555555;
+    ( state_54, state_43, state_49, state_43, state_44 ) 0.00178253, 0.01782531, 0.28520499, 0.69518717;
+    ( state_54, state_43, state_49, state_43, state_53 ) 0.00174825, 0.00174825, 0.2972028, 0.6993007;
+    ( state_54, state_43, state_49, state_43, state_43 ) 0.00144509, 0.00144509, 0.36127168, 0.63583814;
+    ( state_54, state_43, state_43, state_54, state_44 ) 0.00255102, 0.00255102, 0.33163265, 0.66326531;
+    ( state_54, state_43, state_43, state_54, state_53 ) 0.0049505, 0.0049505, 0.2970297, 0.6930693;
+    ( state_54, state_43, state_43, state_54, state_43 ) 0.07692308, 0.07692308, 0.07692308, 0.76923076;
+    ( state_54, state_43, state_43, state_43, state_44 ) 0.00146843, 0.01468429, 0.30837004, 0.67547724;
+    ( state_54, state_43, state_43, state_43, state_53 ) 0.00127877, 0.00127877, 0.33248082, 0.66496164;
+    ( state_54, state_43, state_43, state_43, state_43 ) 0.00181159, 0.00181159, 0.54347827, 0.45289855;
+    ( state_43, state_54, state_50, state_54, state_44 ) 0.04081633, 0.14285714, 0.40816327, 0.40816327;
+    ( state_43, state_54, state_50, state_54, state_53 ) 0.06818182, 0.20454545, 0.36363636, 0.36363636;
+    ( state_43, state_54, state_50, state_54, state_43 ) 0.07692308, 0.23076923, 0.35384615, 0.33846154;
+    ( state_43, state_54, state_50, state_43, state_44 ) 0.03030303, 0.14393939, 0.34090909, 0.48484848;
+    ( state_43, state_54, state_50, state_43, state_53 ) 0.02173913, 0.13768116, 0.35507246, 0.48550725;
+    ( state_43, state_54, state_50, state_43, state_43 ) 0.02590674, 0.15025907, 0.38341969, 0.44041451;
+    ( state_43, state_54, state_49, state_54, state_44 ) 0.04255319, 0.17021277, 0.37234043, 0.41489362;
+    ( state_43, state_54, state_49, state_54, state_53 ) 0.05084746, 0.20338983, 0.37288136, 0.37288136;
+    ( state_43, state_54, state_49, state_54, state_43 ) 0.07042254, 0.22535211, 0.36619718, 0.33802817;
+    ( state_43, state_54, state_49, state_43, state_44 ) 0.032, 0.136, 0.312, 0.52;
+    ( state_43, state_54, state_49, state_43, state_53 ) 0.0234375, 0.1328125, 0.3125, 0.53125;
+    ( state_43, state_54, state_49, state_43, state_43 ) 0.02824859, 0.14124294, 0.33898305, 0.49152542;
+    ( state_43, state_54, state_43, state_54, state_44 ) 0.04477612, 0.1641791, 0.34328358, 0.44776119;
+    ( state_43, state_54, state_43, state_54, state_53 ) 0.05555556, 0.19444444, 0.35185185, 0.39814815;
+    ( state_43, state_54, state_43, state_54, state_43 ) 0.08536585, 0.24390244, 0.36585366, 0.30487805;
+    ( state_43, state_54, state_43, state_43, state_44 ) 0.03910615, 0.15083799, 0.32960894, 0.48044693;
+    ( state_43, state_54, state_43, state_43, state_53 ) 0.02926829, 0.14634146, 0.33658537, 0.48780488;
+    ( state_43, state_54, state_43, state_43, state_43 ) 0.03030303, 0.16666667, 0.38888889, 0.41414141;
+    ( state_43, state_43, state_50, state_54, state_44 ) 0.02830189, 0.16037736, 0.36792453, 0.44339623;
+    ( state_43, state_43, state_50, state_54, state_53 ) 0.01818182, 0.16363636, 0.34545455, 0.47272727;
+    ( state_43, state_43, state_50, state_54, state_43 ) 0.01923077, 0.19230769, 0.01923077, 0.76923077;
+    ( state_43, state_43, state_50, state_43, state_44 ) 0.01449275, 0.07246377, 0.24637681, 0.66666667;
+    ( state_43, state_43, state_50, state_43, state_53 ) 0.01282051, 0.07692308, 0.26923077, 0.64102564;
+    ( state_43, state_43, state_50, state_43, state_43 ) 0.01886792, 0.13207547, 0.43396226, 0.41509434;
+    ( state_43, state_43, state_49, state_54, state_44 ) 0.00321543, 0.09646302, 0.41800643, 0.48231511;
+    ( state_43, state_43, state_49, state_54, state_53 ) 0.00621118, 0.0621118, 0.43478261, 0.49689441;
+    ( state_43, state_43, state_49, state_54, state_43 ) 0.04545455, 0.04545455, 0.45454545, 0.45454545;
+    ( state_43, state_43, state_49, state_43, state_44 ) 0.01818182, 0.01818182, 0.14545455, 0.81818181;
+    ( state_43, state_43, state_49, state_43, state_53 ) 0.01694915, 0.01694915, 0.10169492, 0.86440678;
+    ( state_43, state_43, state_49, state_43, state_43 ) 0.03448276, 0.03448276, 0.10344828, 0.8275862;
+    ( state_43, state_43, state_43, state_54, state_44 ) 0.00980392, 0.00980392, 0.19607843, 0.78431373;
+    ( state_43, state_43, state_43, state_54, state_53 ) 0.07692308, 0.07692308, 0.07692308, 0.76923076;
+    ( state_43, state_43, state_43, state_54, state_43 ) 0.01587302, 0.01587302, 0.01587302, 0.95238094;
+    ( state_43, state_43, state_43, state_43, state_44 ) 0.01234568, 0.02469136, 0.14814815, 0.81481481;
+    ( state_43, state_43, state_43, state_43, state_53 ) 0.00284091, 0.00284091, 0.05681818, 0.9375;
+    ( state_43, state_43, state_43, state_43, state_43 ) 0.00070872, 0.02126152, 0.13465627, 0.84337349;
+
+}
+probability ( node_19 | node_57, node_45 ) {
+    ( state_28, state_11 ) 0.1428571, 0.8571429;
+    ( state_28, state_0 ) 0.106383, 0.893617;
+    ( state_28, state_32 ) 0.09090909, 0.90909091;
+    ( state_15, state_11 ) 0.1304348, 0.8695652;
+    ( state_15, state_0 ) 0.1373494, 0.8626506;
+    ( state_15, state_32 ) 0.425, 0.575;
+    ( state_3, state_11 ) 0.2, 0.8;
+    ( state_3, state_0 ) 0.1333333, 0.8666667;
+    ( state_3, state_32 ) 0.25, 0.75;
+    ( state_40, state_11 ) 0.5, 0.5;
+    ( state_40, state_0 ) 0.255814, 0.744186;
+    ( state_40, state_32 ) 0.6666667, 0.3333333;
+
+}
+probability ( node_2 | node_4, node_0, node_6, node_3 ) {
+    ( state_54, state_44, state_54, state_54 ) 0.2704918, 0.1721312, 0.557377;
+    ( state_54, state_44, state_54, state_43 ) 0.2972973, 0.1837838, 0.5189189;
+    ( state_54, state_44, state_43, state_54 ) 0.2941177, 0.1911765, 0.5147058;
+    ( state_54, state_44, state_43, state_43 ) 0.3205575, 0.2055749, 0.4738676;
+    ( state_54, state_53, state_54, state_54 ) 0.3093923, 0.1767956, 0.5138121;
+    ( state_54, state_53, state_54, state_43 ) 0.3315508, 0.171123, 0.4973262;
+    ( state_54, state_53, state_43, state_54 ) 0.3333333, 0.172043, 0.4946237;
+    ( state_54, state_53, state_43, state_43 ) 0.368, 0.184, 0.448;
+    ( state_54, state_43, state_54, state_54 ) 0.3425926, 0.1712963, 0.4861111;
+    ( state_54, state_43, state_54, state_43 ) 0.3629893, 0.1779359, 0.4590747;
+    ( state_54, state_43, state_43, state_54 ) 0.3636364, 0.1818182, 0.4545455;
+    ( state_54, state_43, state_43, state_43 ) 0.4321429, 0.2107143, 0.3571429;
+    ( state_43, state_44, state_54, state_54 ) 0.2682927, 0.1768293, 0.554878;
+    ( state_43, state_44, state_54, state_43 ) 0.175, 0.1625, 0.6625;
+    ( state_43, state_44, state_43, state_54 ) 0.1045752, 0.1633987, 0.7320261;
+    ( state_43, state_44, state_43, state_43 ) 0.03296703, 0.21978022, 0.74725275;
+    ( state_43, state_53, state_54, state_54 ) 0.06024096, 0.12048193, 0.81927711;
+    ( state_43, state_53, state_54, state_43 ) 0.08602151, 0.08602151, 0.82795698;
+    ( state_43, state_53, state_43, state_54 ) 0.05434783, 0.07608696, 0.86956521;
+    ( state_43, state_53, state_43, state_43 ) 0.05555556, 0.05555556, 0.88888888;
+    ( state_43, state_43, state_54, state_54 ) 0.07594937, 0.06329114, 0.86075949;
+    ( state_43, state_43, state_54, state_43 ) 0.13432836, 0.05970149, 0.80597015;
+    ( state_43, state_43, state_43, state_54 ) 0.01785714, 0.07142857, 0.91071429;
+    ( state_43, state_43, state_43, state_43 ) 0.04733728, 0.05325444, 0.89940828;
+
+}
+probability ( node_20 | node_1, node_4 ) {
+    ( state_50, state_54 ) 0.3636364, 0.6363636;
+    ( state_50, state_43 ) 0.3, 0.7;
+    ( state_49, state_54 ) 0.2727273, 0.7272727;
+    ( state_49, state_43 ) 0.2, 0.8;
+    ( state_43, state_54 ) 0.1, 0.9;
+    ( state_43, state_43 ) 0.01, 0.99;
+
+}
+probability ( node_21 | node_33 ) {
+    ( state_54 ) 0.7102804, 0.2897196;
+    ( state_43 ) 0.03716216, 0.96283784;
+
+}
+probability ( node_22 | node_4, node_6, node_0 ) {
+    ( state_54, state_54, state_44 ) 0.08965517, 0.28275862, 0.62758621;
+    ( state_54, state_54, state_53 ) 0.09659091, 0.30113636, 0.60227273;
+    ( state_54, state_54, state_43 ) 0.1034483, 0.3256705, 0.5708812;
+    ( state_54, state_43, state_44 ) 0.1015873, 0.3047619, 0.5936508;
+    ( state_54, state_43, state_53 ) 0.1050955, 0.3152866, 0.5796179;
+    ( state_54, state_43, state_43 ) 0.125, 0.3642857, 0.5107143;
+    ( state_43, state_54, state_44 ) 0.09174312, 0.27981651, 0.62844037;
+    ( state_43, state_54, state_53 ) 0.06918239, 0.23899371, 0.6918239;
+    ( state_43, state_54, state_43 ) 0.04477612, 0.2238806, 0.73134328;
+    ( state_43, state_43, state_44 ) 0.03296703, 0.06593407, 0.9010989;
+    ( state_43, state_43, state_53 ) 0.00277008, 0.02770083, 0.96952909;
+    ( state_43, state_43, state_43 ) 0.00044425, 0.09773434, 0.90182141;
+
+}
+probability ( node_23 | node_28 ) {
+    ( state_54 ) 0.3043478, 0.6956522;
+    ( state_43 ) 0.01627219, 0.98372781;
+
+}
+probability ( node_24 | node_28 ) {
+    ( state_54 ) 0.7391304, 0.2608696;
+    ( state_43 ) 0.3772189, 0.6227811;
+
+}
+probability ( node_25 ) {
+    table 0.03576538, 0.96423462 ;
+}
+probability ( node_26 | node_1 ) {
+    ( state_50 ) 0.3448276, 0.6551724;
+    ( state_49 ) 0.06451613, 0.93548387;
+    ( state_43 ) 0.1311475, 0.8688525;
+
+}
+probability ( node_27 | node_1 ) {
+    ( state_50 ) 0.7586207, 0.2413793;
+    ( state_49 ) 0.4516129, 0.5483871;
+    ( state_43 ) 0.2344262, 0.7655738;
+
+}
+probability ( node_28 | node_1, node_4 ) {
+    ( state_50, state_54 ) 0.05325444, 0.94674556;
+    ( state_50, state_43 ) 0.05172414, 0.94827586;
+    ( state_49, state_54 ) 0.04891304, 0.95108696;
+    ( state_49, state_43 ) 0.00321543, 0.99678457;
+    ( state_43, state_54 ) 0.05357143, 0.94642857;
+    ( state_43, state_43 ) 0.01515152, 0.98484848;
+
+}
+probability ( node_29 | node_33 ) {
+    ( state_54 ) 0.1775701, 0.8224299;
+    ( state_43 ) 0.2804054, 0.7195946;
+
+}
+probability ( node_3 | node_8, node_60 ) {
+    ( state_48, state_51 ) 0.002849, 0.997151;
+    ( state_48, state_52 ) 0.0052356, 0.9947644;
+    ( state_47, state_51 ) 0.01129944, 0.98870056;
+    ( state_47, state_52 ) 0.0212766, 0.9787234;
+    ( state_46, state_51 ) 0.04597701, 0.95402299;
+    ( state_46, state_52 ) 0.07692308, 0.92307692;
+    ( state_45, state_51 ) 0.21875, 0.78125;
+    ( state_45, state_52 ) 0.453125, 0.546875;
+
+}
+probability ( node_30 | node_0, node_7, node_5 ) {
+    ( state_44, state_54, state_54 ) 0.6363636, 0.3636364;
+    ( state_44, state_54, state_43 ) 0.625, 0.375;
+    ( state_44, state_43, state_54 ) 0.6236559, 0.3763441;
+    ( state_44, state_43, state_43 ) 0.6043956, 0.3956044;
+    ( state_53, state_54, state_54 ) 0.6071429, 0.3928571;
+    ( state_53, state_54, state_43 ) 0.5932203, 0.4067797;
+    ( state_53, state_43, state_54 ) 0.5892857, 0.4107143;
+    ( state_53, state_43, state_43 ) 0.5277778, 0.4722222;
+    ( state_43, state_54, state_54 ) 0.6153846, 0.3846154;
+    ( state_43, state_54, state_43 ) 0.6666667, 0.3333333;
+    ( state_43, state_43, state_54 ) 0.7058823, 0.2941177;
+    ( state_43, state_43, state_43 ) 0.5359849, 0.4640151;
+
+}
+probability ( node_31 | node_0 ) {
+    ( state_44 ) 0.3, 0.7;
+    ( state_53 ) 0.05, 0.95;
+    ( state_43 ) 0.001, 0.999;
+
+}
+probability ( node_32 | node_33 ) {
+    ( state_54 ) 0.3925234, 0.6074766;
+    ( state_43 ) 0.4307432, 0.5692568;
+
+}
+probability ( node_33 ) {
+    table 0.1530758, 0.8469242 ;
+}
+probability ( node_34 | node_4, node_7, node_5, node_6, node_0, node_3 ) {
+    ( state_54, state_54, state_54, state_54, state_44, state_54 ) 0.1590909, 0.1477273, 0.1136364, 0.5795454;
+    ( state_54, state_54, state_54, state_54, state_44, state_43 ) 0.1696429, 0.1607143, 0.125, 0.5446428;
+    ( state_54, state_54, state_54, state_54, state_53, state_54 ) 0.1546392, 0.1443299, 0.1134021, 0.5876288;
+    ( state_54, state_54, state_54, state_54, state_53, state_43 ) 0.1730769, 0.1538462, 0.125, 0.5480769;
+    ( state_54, state_54, state_54, state_54, state_43, state_54 ) 0.1666667, 0.1481482, 0.1111111, 0.574074;
+    ( state_54, state_54, state_54, state_54, state_43, state_43 ) 0.1854839, 0.1612903, 0.1209677, 0.5322581;
+    ( state_54, state_54, state_54, state_43, state_44, state_54 ) 0.1694915, 0.1610169, 0.1186441, 0.5508475;
+    ( state_54, state_54, state_54, state_43, state_44, state_43 ) 0.1832061, 0.1755725, 0.129771, 0.5114504;
+    ( state_54, state_54, state_54, state_43, state_53, state_54 ) 0.1759259, 0.1574074, 0.1111111, 0.5555556;
+    ( state_54, state_54, state_54, state_43, state_53, state_43 ) 0.1913044, 0.173913, 0.1217391, 0.5130435;
+    ( state_54, state_54, state_54, state_43, state_43, state_54 ) 0.1885246, 0.1639344, 0.1065574, 0.5409836;
+    ( state_54, state_54, state_54, state_43, state_43, state_43 ) 0.2108843, 0.1836735, 0.1156463, 0.4897959;
+    ( state_54, state_54, state_43, state_54, state_44, state_54 ) 0.1666667, 0.1590909, 0.1212121, 0.5530303;
+    ( state_54, state_54, state_43, state_54, state_44, state_43 ) 0.1768707, 0.1632653, 0.1292517, 0.5306123;
+    ( state_54, state_54, state_43, state_54, state_53, state_54 ) 0.1652893, 0.1487603, 0.1157025, 0.5702479;
+    ( state_54, state_54, state_43, state_54, state_53, state_43 ) 0.1742424, 0.1590909, 0.1287879, 0.5378788;
+    ( state_54, state_54, state_43, state_54, state_43, state_54 ) 0.1726619, 0.1510791, 0.1151079, 0.5611511;
+    ( state_54, state_54, state_43, state_54, state_43, state_43 ) 0.1893491, 0.1656805, 0.1242604, 0.52071;
+    ( state_54, state_54, state_43, state_43, state_44, state_54 ) 0.1741935, 0.1677419, 0.1225806, 0.535484;
+    ( state_54, state_54, state_43, state_43, state_44, state_43 ) 0.1857923, 0.1857923, 0.1311475, 0.4972678;
+    ( state_54, state_54, state_43, state_43, state_53, state_54 ) 0.1748252, 0.1678322, 0.1188811, 0.5384615;
+    ( state_54, state_54, state_43, state_43, state_53, state_43 ) 0.19375, 0.18125, 0.125, 0.5;
+    ( state_54, state_54, state_43, state_43, state_43, state_54 ) 0.1918605, 0.1744186, 0.1104651, 0.5232558;
+    ( state_54, state_54, state_43, state_43, state_43, state_43 ) 0.2142857, 0.1932773, 0.1176471, 0.4747899;
+    ( state_54, state_43, state_54, state_54, state_44, state_54 ) 0.1756757, 0.1621622, 0.1216216, 0.5405405;
+    ( state_54, state_43, state_54, state_54, state_44, state_43 ) 0.18, 0.1666667, 0.1333333, 0.52;
+    ( state_54, state_43, state_54, state_54, state_53, state_54 ) 0.1666667, 0.15, 0.125, 0.5583333;
+    ( state_54, state_43, state_54, state_54, state_53, state_43 ) 0.1782946, 0.1627907, 0.131783, 0.5271317;
+    ( state_54, state_43, state_54, state_54, state_43, state_54 ) 0.1764706, 0.1544118, 0.1176471, 0.5514705;
+    ( state_54, state_43, state_54, state_54, state_43, state_43 ) 0.1939394, 0.169697, 0.1272727, 0.5090909;
+    ( state_54, state_43, state_54, state_43, state_44, state_54 ) 0.1776316, 0.1710526, 0.125, 0.5263158;
+    ( state_54, state_43, state_54, state_43, state_44, state_43 ) 0.1899441, 0.1899441, 0.1340782, 0.4860335;
+    ( state_54, state_43, state_54, state_43, state_53, state_54 ) 0.1785714, 0.1714286, 0.1214286, 0.5285714;
+    ( state_54, state_43, state_54, state_43, state_53, state_43 ) 0.1987179, 0.1858974, 0.1282051, 0.4871795;
+    ( state_54, state_43, state_54, state_43, state_43, state_54 ) 0.1964286, 0.1785714, 0.1130952, 0.5119048;
+    ( state_54, state_43, state_54, state_43, state_43, state_43 ) 0.2207792, 0.1991342, 0.1212121, 0.4588745;
+    ( state_54, state_43, state_43, state_54, state_44, state_54 ) 0.178771, 0.1731844, 0.122905, 0.5251396;
+    ( state_54, state_43, state_43, state_54, state_44, state_43 ) 0.1804878, 0.1756098, 0.1365854, 0.507317;
+    ( state_54, state_43, state_43, state_54, state_53, state_54 ) 0.1698113, 0.1572327, 0.1257862, 0.5471698;
+    ( state_54, state_43, state_43, state_54, state_53, state_43 ) 0.1843575, 0.1675978, 0.1340782, 0.5139665;
+    ( state_54, state_43, state_43, state_54, state_43, state_54 ) 0.1822917, 0.1614583, 0.1197917, 0.5364583;
+    ( state_54, state_43, state_43, state_54, state_43, state_43 ) 0.1977612, 0.1791045, 0.1268657, 0.4962687;
+    ( state_54, state_43, state_43, state_43, state_44, state_54 ) 0.1826087, 0.1782609, 0.126087, 0.5130434;
+    ( state_54, state_43, state_43, state_43, state_44, state_43 ) 0.1939799, 0.1939799, 0.1371237, 0.4749164;
+    ( state_54, state_43, state_43, state_43, state_53, state_54 ) 0.1846847, 0.1846847, 0.1261261, 0.5045045;
+    ( state_54, state_43, state_43, state_43, state_53, state_43 ) 0.2007435, 0.197026, 0.133829, 0.4684015;
+    ( state_54, state_43, state_43, state_43, state_43, state_54 ) 0.1986755, 0.192053, 0.1225166, 0.486755;
+    ( state_54, state_43, state_43, state_43, state_43, state_43 ) 0.2392857, 0.225, 0.1321429, 0.4035714;
+    ( state_43, state_54, state_54, state_54, state_44, state_54 ) 0.1509434, 0.1415094, 0.1226415, 0.5849057;
+    ( state_43, state_54, state_54, state_54, state_44, state_43 ) 0.10526316, 0.09210526, 0.13157895, 0.67105263;
+    ( state_43, state_54, state_54, state_54, state_53, state_54 ) 0.05555556, 0.03703704, 0.09259259, 0.81481481;
+    ( state_43, state_54, state_54, state_54, state_53, state_43 ) 0.06122449, 0.02040816, 0.10204082, 0.81632653;
+    ( state_43, state_54, state_54, state_54, state_43, state_54 ) 0.05649718, 0.00188324, 0.07532957, 0.86629001;
+    ( state_43, state_54, state_54, state_54, state_43, state_43 ) 0.07393715, 0.00184843, 0.09242144, 0.83179298;
+    ( state_43, state_54, state_54, state_43, state_44, state_54 ) 0.06557377, 0.04918033, 0.09836066, 0.78688524;
+    ( state_43, state_54, state_54, state_43, state_44, state_43 ) 0.078125, 0.078125, 0.125, 0.71875;
+    ( state_43, state_54, state_54, state_43, state_53, state_54 ) 0.04166667, 0.02083333, 0.08333333, 0.85416667;
+    ( state_43, state_54, state_54, state_43, state_53, state_43 ) 0.04761905, 0.02380952, 0.0952381, 0.83333333;
+    ( state_43, state_54, state_54, state_43, state_43, state_54 ) 0.04338395, 0.0021692, 0.04338395, 0.9110629;
+    ( state_43, state_54, state_54, state_43, state_43, state_43 ) 0.06651885, 0.00221729, 0.0443459, 0.88691796;
+    ( state_43, state_54, state_43, state_54, state_44, state_54 ) 0.05714286, 0.04285714, 0.1, 0.8;
+    ( state_43, state_54, state_43, state_54, state_44, state_43 ) 0.07142857, 0.07142857, 0.13095238, 0.72619048;
+    ( state_43, state_54, state_43, state_54, state_53, state_54 ) 0.04545455, 0.03030303, 0.10606061, 0.81818181;
+    ( state_43, state_54, state_43, state_54, state_53, state_43 ) 0.04615385, 0.03076923, 0.12307692, 0.8;
+    ( state_43, state_54, state_43, state_54, state_43, state_54 ) 0.04285714, 0.01428571, 0.08571429, 0.85714286;
+    ( state_43, state_54, state_43, state_54, state_43, state_43 ) 0.0617284, 0.01234568, 0.09876543, 0.82716049;
+    ( state_43, state_54, state_43, state_43, state_44, state_54 ) 0.06024096, 0.04819277, 0.09638554, 0.79518073;
+    ( state_43, state_54, state_43, state_43, state_44, state_43 ) 0.07070707, 0.08080808, 0.12121212, 0.72727273;
+    ( state_43, state_54, state_43, state_43, state_53, state_54 ) 0.04166667, 0.04166667, 0.09722222, 0.81944444;
+    ( state_43, state_54, state_43, state_43, state_53, state_43 ) 0.03030303, 0.03030303, 0.10606061, 0.83333333;
+    ( state_43, state_54, state_43, state_43, state_43, state_54 ) 0.02702703, 0.01351351, 0.05405405, 0.90540541;
+    ( state_43, state_54, state_43, state_43, state_43, state_43 ) 0.07380074, 0.00369004, 0.03690037, 0.88560885;
+    ( state_43, state_43, state_54, state_54, state_44, state_54 ) 0.06349206, 0.04761905, 0.11111111, 0.77777778;
+    ( state_43, state_43, state_54, state_54, state_44, state_43 ) 0.07594937, 0.07594937, 0.13924051, 0.70886075;
+    ( state_43, state_43, state_54, state_54, state_53, state_54 ) 0.0483871, 0.03225806, 0.11290323, 0.80645161;
+    ( state_43, state_43, state_54, state_54, state_53, state_43 ) 0.05, 0.03333333, 0.13333333, 0.78333334;
+    ( state_43, state_43, state_54, state_54, state_43, state_54 ) 0.04615385, 0.01538462, 0.09230769, 0.84615384;
+    ( state_43, state_43, state_54, state_54, state_43, state_43 ) 0.06756757, 0.01351351, 0.10810811, 0.81081081;
+    ( state_43, state_43, state_54, state_43, state_44, state_54 ) 0.06410256, 0.05128205, 0.1025641, 0.78205129;
+    ( state_43, state_43, state_54, state_43, state_44, state_43 ) 0.07692308, 0.08791209, 0.13186813, 0.7032967;
+    ( state_43, state_43, state_54, state_43, state_53, state_54 ) 0.04545455, 0.04545455, 0.10606061, 0.80303029;
+    ( state_43, state_43, state_54, state_43, state_53, state_43 ) 0.03448276, 0.03448276, 0.12068966, 0.81034482;
+    ( state_43, state_43, state_54, state_43, state_43, state_54 ) 0.03076923, 0.01538462, 0.06153846, 0.89230769;
+    ( state_43, state_43, state_54, state_43, state_43, state_43 ) 0.11695906, 0.00584795, 0.05847953, 0.81871346;
+    ( state_43, state_43, state_43, state_54, state_44, state_54 ) 0.06493506, 0.06493506, 0.11688312, 0.75324676;
+    ( state_43, state_43, state_43, state_54, state_44, state_43 ) 0.07692308, 0.08547009, 0.14529915, 0.69230768;
+    ( state_43, state_43, state_43, state_54, state_53, state_54 ) 0.04444444, 0.04444444, 0.12222222, 0.7888889;
+    ( state_43, state_43, state_43, state_54, state_53, state_43 ) 0.04210526, 0.04210526, 0.13684211, 0.77894737;
+    ( state_43, state_43, state_43, state_54, state_43, state_54 ) 0.03703704, 0.02777778, 0.10185185, 0.83333333;
+    ( state_43, state_43, state_43, state_54, state_43, state_43 ) 0.07462687, 0.02985075, 0.13432836, 0.76119402;
+    ( state_43, state_43, state_43, state_43, state_44, state_54 ) 0.05660377, 0.06603774, 0.12264151, 0.75471698;
+    ( state_43, state_43, state_43, state_43, state_44, state_43 ) 0.08791209, 0.14285714, 0.17582418, 0.59340659;
+    ( state_43, state_43, state_43, state_43, state_53, state_54 ) 0.04395604, 0.07692308, 0.13186813, 0.74725275;
+    ( state_43, state_43, state_43, state_43, state_53, state_43 ) 0.00277008, 0.05540166, 0.19390582, 0.74792244;
+    ( state_43, state_43, state_43, state_43, state_43, state_54 ) 0.00177936, 0.00177936, 0.01779359, 0.97864769;
+    ( state_43, state_43, state_43, state_43, state_43, state_43 ) 0.08, 0.096, 0.144, 0.68;
+
+}
+probability ( node_35 | node_69, node_0 ) {
+    ( state_54, state_44 ) 0.00355872, 0.99644128;
+    ( state_54, state_53 ) 0.00763359, 0.99236641;
+    ( state_54, state_43 ) 0.0875, 0.9125;
+    ( state_43, state_44 ) 0.07936508, 0.92063492;
+    ( state_43, state_53 ) 0.1304348, 0.8695652;
+    ( state_43, state_43 ) 0.101626, 0.898374;
+
+}
+probability ( node_36 | node_69, node_0 ) {
+    ( state_54, state_44 ) 0.00355872, 0.99644128;
+    ( state_54, state_53 ) 0.00763359, 0.99236641;
+    ( state_54, state_43 ) 0.00124844, 0.99875156;
+    ( state_43, state_44 ) 0.00158479, 0.99841521;
+    ( state_43, state_53 ) 0.04347826, 0.95652174;
+    ( state_43, state_43 ) 0.00203252, 0.99796748;
+
+}
+probability ( node_37 | node_69, node_0 ) {
+    ( state_54, state_44 ) 0.5, 0.5;
+    ( state_54, state_53 ) 0.4615385, 0.5384615;
+    ( state_54, state_43 ) 0.1125, 0.8875;
+    ( state_43, state_44 ) 0.1904762, 0.8095238;
+    ( state_43, state_53 ) 0.04347826, 0.95652174;
+    ( state_43, state_43 ) 0.04674797, 0.95325203;
+
+}
+probability ( node_38 | node_69, node_0, node_37 ) {
+    ( state_54, state_44, state_54 ) 0.0070922, 0.9929078;
+    ( state_54, state_44, state_43 ) 0.07142857, 0.92857143;
+    ( state_54, state_53, state_54 ) 0.01639344, 0.98360656;
+    ( state_54, state_53, state_43 ) 0.01408451, 0.98591549;
+    ( state_54, state_43, state_54 ) 0.01098901, 0.98901099;
+    ( state_54, state_43, state_43 ) 0.04225352, 0.95774648;
+    ( state_43, state_44, state_54 ) 0.08333333, 0.91666667;
+    ( state_43, state_44, state_43 ) 0.00195695, 0.99804305;
+    ( state_43, state_53, state_54 ) 0.09090909, 0.90909091;
+    ( state_43, state_53, state_43 ) 0.00452489, 0.99547511;
+    ( state_43, state_43, state_54 ) 0.004329, 0.995671;
+    ( state_43, state_43, state_43 ) 0.01492537, 0.98507463;
+
+}
+probability ( node_39 | node_69, node_0 ) {
+    ( state_54, state_44 ) 0.00355872, 0.99644128;
+    ( state_54, state_53 ) 0.00763359, 0.99236641;
+    ( state_54, state_43 ) 0.00124844, 0.99875156;
+    ( state_43, state_44 ) 0.00158479, 0.99841521;
+    ( state_43, state_53 ) 0.004329, 0.995671;
+    ( state_43, state_43 ) 0.00203252, 0.99796748;
+
+}
+probability ( node_4 | node_60, node_8 ) {
+    ( state_51, state_48 ) 0.6571429, 0.3428571;
+    ( state_51, state_47 ) 0.700565, 0.299435;
+    ( state_51, state_46 ) 0.6149425, 0.3850575;
+    ( state_51, state_45 ) 0.125, 0.875;
+    ( state_52, state_48 ) 0.3684211, 0.6315789;
+    ( state_52, state_47 ) 0.08510638, 0.91489362;
+    ( state_52, state_46 ) 0.06730769, 0.93269231;
+    ( state_52, state_45 ) 0.00156006, 0.99843994;
+
+}
+probability ( node_40 | node_41 ) {
+    ( state_54 ) 0.3142251, 0.6857749;
+    ( state_43 ) 0.03070175, 0.96929825;
+
+}
+probability ( node_41 | node_5, node_7, node_6, node_3 ) {
+    ( state_54, state_54, state_54, state_54 ) 0.6097561, 0.3902439;
+    ( state_54, state_54, state_54, state_43 ) 0.68, 0.32;
+    ( state_54, state_54, state_43, state_54 ) 0.5918367, 0.4081633;
+    ( state_54, state_54, state_43, state_43 ) 0.673913, 0.326087;
+    ( state_54, state_43, state_54, state_54 ) 0.5901639, 0.4098361;
+    ( state_54, state_43, state_54, state_43 ) 0.6527778, 0.3472222;
+    ( state_54, state_43, state_43, state_54 ) 0.5555556, 0.4444444;
+    ( state_54, state_43, state_43, state_43 ) 0.7058823, 0.2941177;
+    ( state_43, state_54, state_54, state_54 ) 0.6, 0.4;
+    ( state_43, state_54, state_54, state_43 ) 0.6756757, 0.3243243;
+    ( state_43, state_54, state_43, state_54 ) 0.5897436, 0.4102564;
+    ( state_43, state_54, state_43, state_43 ) 0.7777778, 0.2222222;
+    ( state_43, state_43, state_54, state_54 ) 0.5866667, 0.4133333;
+    ( state_43, state_43, state_54, state_43 ) 0.6865672, 0.3134328;
+    ( state_43, state_43, state_43, state_54 ) 0.375, 0.625;
+    ( state_43, state_43, state_43, state_43 ) 0.6973684, 0.3026316;
+
+}
+probability ( node_42 ) {
+    table 0.08154506, 0.91845494 ;
+}
+probability ( node_43 ) {
+    table 0.5350501, 0.4649499 ;
+}
+probability ( node_44 | node_43, node_64, node_21 ) {
+    ( state_54, state_54, state_54 ) 0.8, 0.2;
+    ( state_54, state_54, state_43 ) 0.715847, 0.284153;
+    ( state_54, state_43, state_54 ) 0.8333333, 0.1666667;
+    ( state_54, state_43, state_43 ) 0.4818182, 0.5181818;
+    ( state_43, state_54, state_54 ) 0.375, 0.625;
+    ( state_43, state_54, state_43 ) 0.2333333, 0.7666667;
+    ( state_43, state_43, state_54 ) 0.01098901, 0.98901099;
+    ( state_43, state_43, state_43 ) 0.0647482, 0.9352518;
+
+}
+probability ( node_45 | node_0, node_1, node_7, node_3 ) {
+    ( state_44, state_50, state_54, state_54 ) 0.01754386, 0.84210526, 0.14035088;
+    ( state_44, state_50, state_54, state_43 ) 0.01298701, 0.81818182, 0.16883117;
+    ( state_44, state_50, state_43, state_54 ) 0.02150538, 0.8172043, 0.16129032;
+    ( state_44, state_50, state_43, state_43 ) 0.01666667, 0.8, 0.18333333;
+    ( state_44, state_49, state_54, state_54 ) 0.025, 0.85, 0.125;
+    ( state_44, state_49, state_54, state_43 ) 0.01333333, 0.86666667, 0.12;
+    ( state_44, state_49, state_43, state_54 ) 0.02409639, 0.86746988, 0.10843373;
+    ( state_44, state_49, state_43, state_43 ) 0.01960784, 0.85294118, 0.12745098;
+    ( state_44, state_43, state_54, state_54 ) 0.02197802, 0.89010989, 0.08791209;
+    ( state_44, state_43, state_54, state_43 ) 0.01923077, 0.90384615, 0.07692308;
+    ( state_44, state_43, state_43, state_54 ) 0.024, 0.904, 0.072;
+    ( state_44, state_43, state_43, state_43 ) 0.02197802, 0.9010989, 0.07692308;
+    ( state_53, state_50, state_54, state_54 ) 0.03030303, 0.84848485, 0.12121212;
+    ( state_53, state_50, state_54, state_43 ) 0.03225806, 0.79032259, 0.17741935;
+    ( state_53, state_50, state_43, state_54 ) 0.02898551, 0.79710145, 0.17391304;
+    ( state_53, state_50, state_43, state_43 ) 0.02469136, 0.75308642, 0.22222222;
+    ( state_53, state_49, state_54, state_54 ) 0.03508772, 0.8245614, 0.14035088;
+    ( state_53, state_49, state_54, state_43 ) 0.04081633, 0.83673469, 0.12244898;
+    ( state_53, state_49, state_43, state_54 ) 0.03571429, 0.85714285, 0.10714286;
+    ( state_53, state_49, state_43, state_43 ) 0.03333333, 0.83333334, 0.13333333;
+    ( state_53, state_43, state_54, state_54 ) 0.05084746, 0.88135593, 0.06779661;
+    ( state_53, state_43, state_54, state_43 ) 0.05, 0.9, 0.05;
+    ( state_53, state_43, state_43, state_54 ) 0.05333333, 0.90666667, 0.04;
+    ( state_53, state_43, state_43, state_43 ) 0.08333333, 0.88888889, 0.02777778;
+    ( state_43, state_50, state_54, state_54 ) 0.03448276, 0.81034483, 0.15517241;
+    ( state_43, state_50, state_54, state_43 ) 0.01428571, 0.75714286, 0.22857143;
+    ( state_43, state_50, state_43, state_54 ) 0.02173913, 0.75, 0.22826087;
+    ( state_43, state_50, state_43, state_43 ) 0.00172117, 0.60240964, 0.39586919;
+    ( state_43, state_49, state_54, state_54 ) 0.01785714, 0.76785715, 0.21428571;
+    ( state_43, state_49, state_54, state_43 ) 0.01785714, 0.78571429, 0.19642857;
+    ( state_43, state_49, state_43, state_54 ) 0.02816901, 0.80281691, 0.16901408;
+    ( state_43, state_49, state_43, state_43 ) 0.00321543, 0.67524116, 0.32154341;
+    ( state_43, state_43, state_54, state_54 ) 0.03508772, 0.84210526, 0.12280702;
+    ( state_43, state_43, state_54, state_43 ) 0.03703704, 0.92592592, 0.03703704;
+    ( state_43, state_43, state_43, state_54 ) 0.05357143, 0.89285714, 0.05357143;
+    ( state_43, state_43, state_43, state_43 ) 0.065, 0.875, 0.06;
+
+}
+probability ( node_46 | node_1 ) {
+    ( state_50 ) 0.6034483, 0.3965517;
+    ( state_49 ) 0.3548387, 0.6451613;
+    ( state_43 ) 0.1065574, 0.8934426;
+
+}
+probability ( node_47 | node_18 ) {
+    ( state_38 ) 0.875, 0.125;
+    ( state_9 ) 0.6865672, 0.3134328;
+    ( state_34 ) 0.5477387, 0.4522613;
+    ( state_10 ) 0.3333333, 0.6666667;
+
+}
+probability ( node_48 | node_18 ) {
+    ( state_38 ) 0.75, 0.25;
+    ( state_9 ) 0.5671642, 0.4328358;
+    ( state_34 ) 0.3467337, 0.6532663;
+    ( state_10 ) 0.1942446, 0.8057554;
+
+}
+probability ( node_49 | node_4 ) {
+    ( state_54 ) 0.1285714, 0.8714286;
+    ( state_43 ) 0.1002387, 0.8997613;
+
+}
+probability ( node_5 | node_42 ) {
+    ( state_54 ) 0.01754386, 0.98245614;
+    ( state_43 ) 0.02492212, 0.97507788;
+
+}
+probability ( node_50 | node_4 ) {
+    ( state_54 ) 0.1214286, 0.8785714;
+    ( state_43 ) 0.04057279, 0.95942721;
+
+}
+probability ( node_51 | node_5, node_7 ) {
+    ( state_54, state_54 ) 0.3636364, 0.6363636;
+    ( state_54, state_43 ) 0.3529412, 0.6470588;
+    ( state_43, state_54 ) 0.3703704, 0.6296296;
+    ( state_43, state_43 ) 0.2854962, 0.7145038;
+
+}
+probability ( node_52 | node_25 ) {
+    ( state_54 ) 0.24, 0.76;
+    ( state_43 ) 0.06231454, 0.93768546;
+
+}
+probability ( node_53 | node_4, node_49 ) {
+    ( state_54, state_54 ) 0.3888889, 0.6111111;
+    ( state_54, state_43 ) 0.147541, 0.852459;
+    ( state_43, state_54 ) 0.8095238, 0.1904762;
+    ( state_43, state_43 ) 0.1830239, 0.8169761;
+
+}
+probability ( node_54 | node_6, node_3 ) {
+    ( state_54, state_54 ) 0.3934426, 0.6065574;
+    ( state_54, state_43 ) 0.4776119, 0.5223881;
+    ( state_43, state_54 ) 0.2857143, 0.7142857;
+    ( state_43, state_43 ) 0.421875, 0.578125;
+
+}
+probability ( node_55 | node_1 ) {
+    ( state_50 ) 0.5, 0.5;
+    ( state_49 ) 0.2903226, 0.7096774;
+    ( state_43 ) 0.1409836, 0.8590164;
+
+}
+probability ( node_56 | node_5, node_7, node_1, node_0 ) {
+    ( state_54, state_54, state_50, state_44 ) 0.04166667, 0.29166667, 0.66666666;
+    ( state_54, state_54, state_50, state_53 ) 0.04347826, 0.30434783, 0.65217391;
+    ( state_54, state_54, state_50, state_43 ) 0.04166667, 0.33333333, 0.625;
+    ( state_54, state_54, state_49, state_44 ) 0.03773585, 0.26415094, 0.69811321;
+    ( state_54, state_54, state_49, state_53 ) 0.025, 0.25, 0.725;
+    ( state_54, state_54, state_49, state_43 ) 0.02702703, 0.27027027, 0.7027027;
+    ( state_54, state_54, state_43, state_44 ) 0.03571429, 0.21428571, 0.75;
+    ( state_54, state_54, state_43, state_53 ) 0.02272727, 0.20454545, 0.77272728;
+    ( state_54, state_54, state_43, state_43 ) 0.02325581, 0.18604651, 0.79069768;
+    ( state_54, state_43, state_50, state_44 ) 0.02898551, 0.28985507, 0.68115942;
+    ( state_54, state_43, state_50, state_53 ) 0.03389831, 0.3220339, 0.64406779;
+    ( state_54, state_43, state_50, state_43 ) 0.04545455, 0.37878788, 0.57575757;
+    ( state_54, state_43, state_49, state_44 ) 0.02985075, 0.29850746, 0.67164179;
+    ( state_54, state_43, state_49, state_53 ) 0.02040816, 0.28571429, 0.69387755;
+    ( state_54, state_43, state_49, state_43 ) 0.02083333, 0.3125, 0.66666667;
+    ( state_54, state_43, state_43, state_44 ) 0.02597403, 0.24675325, 0.72727272;
+    ( state_54, state_43, state_43, state_53 ) 0.015625, 0.234375, 0.75;
+    ( state_54, state_43, state_43, state_43 ) 0.00584795, 0.23391813, 0.76023392;
+    ( state_43, state_54, state_50, state_44 ) 0.04761905, 0.28571429, 0.66666666;
+    ( state_43, state_54, state_50, state_53 ) 0.04918033, 0.31147541, 0.63934426;
+    ( state_43, state_54, state_50, state_43 ) 0.05555556, 0.34722222, 0.59722222;
+    ( state_43, state_54, state_49, state_44 ) 0.04166667, 0.27777778, 0.68055555;
+    ( state_43, state_54, state_49, state_53 ) 0.03703704, 0.25925926, 0.7037037;
+    ( state_43, state_54, state_49, state_43 ) 0.05357143, 0.26785714, 0.67857143;
+    ( state_43, state_54, state_43, state_44 ) 0.04651163, 0.22093023, 0.73255814;
+    ( state_43, state_54, state_43, state_53 ) 0.04054054, 0.2027027, 0.75675676;
+    ( state_43, state_54, state_43, state_43 ) 0.07407407, 0.14814815, 0.77777778;
+    ( state_43, state_43, state_50, state_44 ) 0.04597701, 0.29885057, 0.65517242;
+    ( state_43, state_43, state_50, state_53 ) 0.04494382, 0.33707865, 0.61797753;
+    ( state_43, state_43, state_50, state_43 ) 0.06896552, 0.48275862, 0.44827586;
+    ( state_43, state_43, state_49, state_44 ) 0.04494382, 0.33707865, 0.61797753;
+    ( state_43, state_43, state_49, state_53 ) 0.03896104, 0.31168831, 0.64935065;
+    ( state_43, state_43, state_49, state_43 ) 0.06451613, 0.38709677, 0.5483871;
+    ( state_43, state_43, state_43, state_44 ) 0.03296703, 0.21978022, 0.74725275;
+    ( state_43, state_43, state_43, state_53 ) 0.02777778, 0.19444444, 0.77777778;
+    ( state_43, state_43, state_43, state_43 ) 0.2118451, 0.3394077, 0.4487472;
+
+}
+probability ( node_57 | node_1, node_4 ) {
+    ( state_50, state_54 ) 0.06547619, 0.63690476, 0.17857143, 0.11904762;
+    ( state_50, state_43 ) 0.06896552, 0.46551724, 0.27586207, 0.18965517;
+    ( state_49, state_54 ) 0.06557377, 0.63934426, 0.17486339, 0.12021858;
+    ( state_49, state_43 ) 0.06451613, 0.64516129, 0.16129032, 0.12903226;
+    ( state_43, state_54 ) 0.06428571, 0.67142857, 0.15714286, 0.10714286;
+    ( state_43, state_43 ) 0.09393939, 0.73636364, 0.13939394, 0.03030303;
+
+}
+probability ( node_58 | node_33, node_4, node_0 ) {
+    ( state_54, state_54, state_44 ) 0.3333333, 0.6666667;
+    ( state_54, state_54, state_53 ) 0.328125, 0.671875;
+    ( state_54, state_54, state_43 ) 0.3292683, 0.6707317;
+    ( state_54, state_43, state_44 ) 0.4, 0.6;
+    ( state_54, state_43, state_53 ) 0.09090909, 0.90909091;
+    ( state_54, state_43, state_43 ) 0.2857143, 0.7142857;
+    ( state_43, state_54, state_44 ) 0.3424658, 0.6575342;
+    ( state_43, state_54, state_53 ) 0.3227513, 0.6772487;
+    ( state_43, state_54, state_43 ) 0.2929293, 0.7070707;
+    ( state_43, state_43, state_44 ) 0.4691358, 0.5308642;
+    ( state_43, state_43, state_53 ) 0.4285714, 0.5714286;
+    ( state_43, state_43, state_43 ) 0.4532374, 0.5467626;
+
+}
+probability ( node_59 | node_1 ) {
+    ( state_50 ) 0.99827883, 0.00172117;
+    ( state_49 ) 0.99678457, 0.00321543;
+    ( state_43 ) 0.98032787, 0.01967213;
+
+}
+probability ( node_6 | node_52, node_11 ) {
+    ( state_54, state_54 ) 0.3636364, 0.6363636;
+    ( state_54, state_43 ) 0.1891892, 0.8108108;
+    ( state_43, state_54 ) 0.2380952, 0.7619048;
+    ( state_43, state_43 ) 0.06349206, 0.93650794;
+
+}
+probability ( node_60 ) {
+    table 0.5979971, 0.4020029 ;
+}
+probability ( node_61 | node_18 ) {
+    ( state_38 ) 0.99378882, 0.00621118;
+    ( state_9 ) 0.8955224, 0.1044776;
+    ( state_34 ) 0.7035176, 0.2964824;
+    ( state_10 ) 0.1822542, 0.8177458;
+
+}
+probability ( node_62 | node_1 ) {
+    ( state_50 ) 0.6034483, 0.3965517;
+    ( state_49 ) 0.483871, 0.516129;
+    ( state_43 ) 0.1836066, 0.8163934;
+
+}
+probability ( node_63 | node_1, node_5, node_7 ) {
+    ( state_50, state_54, state_54 ) 0.3235294, 0.6764706;
+    ( state_50, state_54, state_43 ) 0.3703704, 0.6296296;
+    ( state_50, state_43, state_54 ) 0.3623188, 0.6376812;
+    ( state_50, state_43, state_43 ) 0.4827586, 0.5172414;
+    ( state_49, state_54, state_54 ) 0.3023256, 0.6976744;
+    ( state_49, state_54, state_43 ) 0.2444444, 0.7555556;
+    ( state_49, state_43, state_54 ) 0.2156863, 0.7843137;
+    ( state_49, state_43, state_43 ) 0.2580645, 0.7419355;
+    ( state_43, state_54, state_54 ) 0.1621622, 0.8378378;
+    ( state_43, state_54, state_43 ) 0.1176471, 0.8823529;
+    ( state_43, state_43, state_54 ) 0.1111111, 0.8888889;
+    ( state_43, state_43, state_43 ) 0.1007067, 0.8992933;
+
+}
+probability ( node_64 ) {
+    table 0.4234621, 0.5765379 ;
+}
+probability ( node_65 | node_43, node_64, node_21 ) {
+    ( state_54, state_54, state_54 ) 0.3333333, 0.6666667;
+    ( state_54, state_54, state_43 ) 0.2896175, 0.7103825;
+    ( state_54, state_43, state_54 ) 0.1666667, 0.8333333;
+    ( state_54, state_43, state_43 ) 0.1181818, 0.8818182;
+    ( state_43, state_54, state_54 ) 0.125, 0.875;
+    ( state_43, state_54, state_43 ) 0.3, 0.7;
+    ( state_43, state_43, state_54 ) 0.01098901, 0.98901099;
+    ( state_43, state_43, state_43 ) 0.01079137, 0.98920863;
+
+}
+probability ( node_66 | node_6 ) {
+    ( state_54 ) 0.1791045, 0.1641791, 0.6567164;
+    ( state_43 ) 0.02373418, 0.03164557, 0.94462025;
+
+}
+probability ( node_67 | node_33 ) {
+    ( state_54 ) 0.411215, 0.588785;
+    ( state_43 ) 0.3868243, 0.6131757;
+
+}
+probability ( node_68 | node_28 ) {
+    ( state_54 ) 0.2173913, 0.1304348, 0.6521739;
+    ( state_43 ) 0.03550296, 0.06508876, 0.89940828;
+
+}
+probability ( node_69 ) {
+    table 0.1731044, 0.8268956 ;
+}
+probability ( node_7 | node_42, node_11 ) {
+    ( state_54, state_54 ) 0.2, 0.8;
+    ( state_54, state_43 ) 0.00191939, 0.99808061;
+    ( state_43, state_54 ) 0.08888889, 0.91111111;
+    ( state_43, state_43 ) 0.0326087, 0.9673913;
+
+}
+probability ( node_8 ) {
+    table 0.07725322, 0.38769671, 0.39771102, 0.13733906 ;
+}
+probability ( node_9 | node_1 ) {
+    ( state_50 ) 0.91222031, 0.08605852, 0.00172117;
+    ( state_49 ) 0.96463023, 0.00321543, 0.03215434;
+    ( state_43 ) 0.7393443, 0.1426229, 0.1180328;
+
+}
