@@ -61,6 +61,10 @@ class DataExplorationAgent(OpenAIAgent):
     def _initialize_outputs(self):
         self.add_output("DEFAULT", description="data summary", tags=["DATA"])
 
+    def _start(self):
+        super()._start()
+        self._init_registry()
+
     def _init_registry(self):
         """Initialize the data registry."""
         # create instance of data registry

@@ -56,7 +56,22 @@ Visualization: charts or plots that could help better understand key patterns
 
 Use tables where helpful for clarity, and keep the summary concise and readable for a chat format.
 Do not include any conversational filler, questions, or calls to action.
+IMPORTANT: Never use inline JSON objects like {"attr": <val>} directly in paragraphs or table cells. If you need to reference objects, wrap them in backticks like `{"attr": <val>}` or describe them in plain text instead.
 
 Results:
 ${input}
 """
+
+if __name__ == "__main__":
+    import json
+
+    json_data = json.dumps(
+        {
+            "select_scope_prompt": SELECT_SCOPE_PROMPT,
+            "classify_columns_prompt": CLASSIFY_COLUMNS_PROMPT,
+            "write_response_prompt": WRITE_RESPONSE_PROMPT,
+        },
+        indent=2,
+    )
+
+    print(json_data)

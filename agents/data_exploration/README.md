@@ -27,9 +27,23 @@ blue registry agent update agent.json
 
 **Option B: Manual (via UI)**
 - Create a `DATA_EXPLORATION_AGENT` agent with the following properties:
- ```json
- {
- }
+```json
+{
+  "image": "megagonlabs/blue-agent-data_exploration",
+  "service_url": "ws://blue_service_openai:8001",
+  "input_context_field": "content",
+  "input_context": "$[0]",
+  "input_field": "messages",
+  "input_json": "[{\"role\":\"user\"}]",
+  "openai.api": "ChatCompletion",
+  "openai.model": "gpt-4.1-mini-2025-04-14",
+  "openai.max_tokens": 1024,
+  "openai.temperature": 0,
+  "openai.top_p": 1,
+  "select_scope_prompt": "You are an EDA-Agent responsible for selecting the correct data scope before performing any analysis.\nGiven any user request, choose the most appropriate source \u2192 database \u2192 collection \u2192 table(s) from the provided list of available data locations.\nUse only the sources, databases, collections, and tables listed; do not hallucinate new resources.\n- If the user explicitly mentions a source, database, collection, or table, prioritize it when filtering.\n- If the user does not specify tables, include the most relevant table from the filtered source/database/collection.\n- The response must include: source, database, collection (or null), table, and a short reasoning explaining why it was chosen.\nAlways return a JSON array of objects, with length 1. The selected table must correspond to a valid entry in the Available data locations list. Reasoning should note fallback choices or ambiguities if applicable.\nExample: {\"selected\": [{ \"source\": ..., \"database\": ..., \"collection\": ..., \"table\": ..., \"reasoning\": \"short justification\" }]}\n\nUser Message:\n${input}\n\nAvailable data locations:\n${scopes}\n",
+  "classify_columns_prompt": "You are an EDA-Agent responsible for classifying columns before data profiling. \nGiven a list of table columns with metadata, your task is to classify each column into one of these profiling categories:\n1. \"numerical\" \u2192 numeric types suitable for statistics and histograms\n2. \"categorical\" \u2192 enums, booleans, or low-cardinality text/date columns\n3. \"id-like\" \u2192 identifiers, keys (integer, bigint, or uuid)\n4. \"text/json\" \u2192 free text, varchar, text, or json/jsonb\n5. \"date\" \u2192 date/time\nOutput only JSON as a list of objects with \"name\" and \"profile_type\" keys. \nExample output: {\"columns\": [{\"name\":\"account_id\",\"profile_type\":\"id-like\"}, {\"name\":\"amount\",\"profile_type\":\"numerical\"}, ...]}\n\nData source:\n${scope}\n\nTable Columns:\n${input}\n",
+  "write_response_prompt": "Here is what the EDA agent found about a database table. \nRewrite these results into a clean, readable, chat-friendly summary with the following structure:\n\n1. Overall Table Info:\nSelected table location\nTotal rows and columns\nNotable overall data quality issues (e.g., many missing values, duplicates)\n\n2. Column-Wise Info:\nFor each column: type, missing values, unique values, basic statistics\nHighlight anomalies or potential issues per column\n\n3. Insights:\nPatterns, trends, correlations, or surprising observations in the data\n\n4. Suggestions (Optional, any of the following as relevant):\nData Improvement: e.g., handle missing values, fix inconsistency, remove duplicates, collect more data\nData Analysis: e.g., explore correlations, segmentation, predictive modeling, trend analysis\nVisualization: charts or plots that could help better understand key patterns\n\nUse tables where helpful for clarity, and keep the summary concise and readable for a chat format.\nDo not include any conversational filler, questions, or calls to action.\nIMPORTANT: Never use inline JSON objects like {\"attr\": <val>} directly in paragraphs or table cells. If you need to reference objects, wrap them in backticks like `{\"attr\": <val>}` or describe them in plain text instead.\n\nResults:\n${input}\n"
+}
 ```
 - Add input `DEFAULT` and configure it with:
   - listens: **excludes** `USER`
