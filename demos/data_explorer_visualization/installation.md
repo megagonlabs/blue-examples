@@ -27,6 +27,8 @@ export OPENAI_API_KEY="your-api-key-here"
 
 ### 2. Set Up Example Data
 
+#### postgres_example
+
 This demo uses the `postgres_example` dataset which is shipped with Blue. To enable agents to discover this data:
 
 1. Open the Blue web application and log in
@@ -36,6 +38,48 @@ This demo uses the `postgres_example` dataset which is shipped with Blue. To ena
 5. Reload the page - you should now see the `postgres` database listed under **Databases**
 
 You can explore the database schema by clicking on `postgres` → `public` to verify the data is loaded correctly.
+
+#### postgres_workspace
+
+This demo also uses the `postgres_workspace` dataset which contains prebuilt data for the data explorer and visualization.
+
+1. From this directory, run:
+
+```bash
+docker run -d --name postgres_workspace \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=workspace \
+  -p 5449:5432 \
+  -v "$(pwd)/postgres_workspace.sql:/docker-entrypoint-initdb.d/init.sql:ro" \
+  postgres
+```
+
+This mounts the SQL dump into `/docker-entrypoint-initdb.d/`, which PostgreSQL automatically executes on first startup.
+
+2. Verify the data is loaded correctly:
+
+```bash
+docker exec -it postgres_workspace psql -U postgres -d workspace -c "\dt"
+```
+
+3. Create a Data Registry Entry
+
+To register this database in the Blue platform data registry, use:
+
+```json
+{
+    "connection": {
+        "host": "10.0.175.210",  // Replace with your actual host IP
+        "port": 5449,
+        "protocol": "postgres",
+        "user": "postgres",
+        "password": "postgres"
+    },
+    "metadata": {}
+}
+```
+
 
 ### 3. Build and Deploy the Four Agents
 
