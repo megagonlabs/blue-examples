@@ -6,7 +6,7 @@
     "description": "",
     "created_by": null,
     "properties": {
-      "image": "megagonlabs/blue-agent-data_visualization",
+      "image": "megagonlabs/blue-agent-data_visualization-private",
       "service_url": "ws://blue_service_openai:8001",
       "input_json": null,
       "input_template": null,

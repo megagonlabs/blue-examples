@@ -34,7 +34,7 @@ This demo uses the `postgres_example` dataset which is shipped with Blue. To ena
 1. Open the Blue web application and log in
 2. Navigate to **Data** under registries
 3. Click on `postgres_example` dataset in the registry
-4. Select **Actions** → **Sync**
+4. Select **Actions** → **Synchronize**
 5. Reload the page - you should now see the `postgres` database listed under **Databases**
 
 You can explore the database schema by clicking on `postgres` → `public` to verify the data is loaded correctly.
@@ -79,7 +79,7 @@ To register this database in the Blue platform data registry, use:
     "metadata": {}
 }
 ```
-
+4. Select **Actions** → **Synchronize**
 
 ### 3. Build and Deploy the Four Agents
 
