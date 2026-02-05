@@ -1,0 +1,33 @@
+FROM --platform=$BUILDPLATFORM python:3.10.12
+ARG BLUE_BUILD_CACHE_ARG
+ARG BLUE_BUILD_LIB_ARG
+ARG BLUE_DEPLOY_VERSION
+ENV BLUE_DEPLOY_VERSION=${BLUE_DEPLOY_VERSION}
+
+# Set workdir
+WORKDIR /app
+
+# Build requirements first
+ADD src/requirements.core /app/requirements.core
+RUN pip install ${BLUE_BUILD_CACHE_ARG} ${BLUE_BUILD_LIB_ARG} -r requirements.core
+
+ADD src/requirements.agent /app/requirements.agent
+RUN pip install ${BLUE_BUILD_CACHE_ARG} -r requirements.agent
+
+ADD src/requirements.data /app/requirements.data
+RUN pip install ${BLUE_BUILD_CACHE_ARG} -r requirements.data
+
+ADD src/requirements.registry /app/requirements.registry
+RUN pip install --no-cache-dir --no-cache --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.registry
+
+ADD src/requirements.query_executor /app/requirements.query_executor
+RUN pip install ${BLUE_BUILD_CACHE_ARG} -r requirements.query_executor
+
+
+# Copy service files
+ADD /src /app/
+
+# Copy a data file
+COPY --from=data recipes/processed/recipe_categories.json /app/data/recipe_categories.json
+
+ENTRYPOINT ["python", "recipe_query_executor.py"]

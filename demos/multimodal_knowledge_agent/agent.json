@@ -1,0 +1,1190 @@
+[
+    {
+        "name": "PRESENTER",
+        "type": "agent",
+        "scope": "/",
+        "description": "Presents a form associated with data of specific schema. Form is displayed when triggered and collects data from the user, by rendering a user interface. When form is submitted the data collected from the form is output as JSON data.",
+        "created_by": null,
+        "properties": {
+            "form": {},
+            "schema": {},
+            "image": "megagonlabs/blue-agent-presenter-private",
+            "display_name": "Presenter Agent",
+            "system_agent": false,
+            "categories": [
+                "BASE"
+            ]
+        },
+        "icon": "calendar-lines:#1C2127",
+        "contents": {
+            "output": {
+                "DEFAULT": {
+                    "name": "DEFAULT",
+                    "type": "output",
+                    "scope": "/agent/PRESENTER",
+                    "description": "Form data in structured format (JSON)",
+                    "created_by": null,
+                    "properties": {
+                        "type": "json",
+                        "optional": false,
+                        "default": null,
+                        "schema": null,
+                        "tags": [
+                            "JSON"
+                        ]
+                    },
+                    "icon": null,
+                    "contents": {}
+                }
+            },
+            "agent": {
+                "PRESENTER___BLUE_PLATE": {
+                    "name": "PRESENTER___BLUE_PLATE",
+                    "type": "agent",
+                    "scope": "/agent/PRESENTER",
+                    "description": "Presents a form associated with recipe data and collects preference data from the user. When form is submitted, the data collected from the form is output as JSON data.",
+                    "created_by": null,
+                    "properties": {
+                        "data": {
+                            "breakfast": true,
+                            "brunch": false,
+                            "main_dish": true,
+                            "side_dishes": false,
+                            "appetizers": false,
+                            "desserts": false,
+                            "lunch": true,
+                            "savory": true,
+                            "sweet": false,
+                            "spicy": false,
+                            "comfort_food": false,
+                            "romantic": false,
+                            "cook_time": "",
+                            "calories": "",
+                            "steps": "",
+                            "ingredients": "",
+                            "rating": ""
+                        },
+                        "form": {
+                            "type": "VerticalLayout",
+                            "elements": [
+                                {
+                                    "type": "Label",
+                                    "label": "Course",
+                                    "props": {
+                                        "style": {
+                                            "font-weight": "bold",
+                                            "padding-bottom": "8px"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "VerticalLayout",
+                                    "elements": [
+                                        {
+                                            "type": "Control",
+                                            "label": "Breakfast",
+                                            "scope": "#/properties/breakfast"
+                                        },
+                                        {
+                                            "type": "Control",
+                                            "label": "Brunch",
+                                            "scope": "#/properties/brunch"
+                                        },
+                                        {
+                                            "type": "Control",
+                                            "label": "Main Dish",
+                                            "scope": "#/properties/main_dish"
+                                        },
+                                        {
+                                            "type": "Control",
+                                            "label": "Side Dishes",
+                                            "scope": "#/properties/side_dishes"
+                                        },
+                                        {
+                                            "type": "Control",
+                                            "label": "Appetizers",
+                                            "scope": "#/properties/appetizers"
+                                        },
+                                        {
+                                            "type": "Control",
+                                            "label": "Desserts",
+                                            "scope": "#/properties/desserts"
+                                        },
+                                        {
+                                            "type": "Control",
+                                            "label": "Lunch",
+                                            "scope": "#/properties/lunch"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Label",
+                                    "label": "Flavor & Mood",
+                                    "props": {
+                                        "style": {
+                                            "font-weight": "bold",
+                                            "padding-bottom": "8px",
+                                            "padding-top": "12px"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "VerticalLayout",
+                                    "elements": [
+                                        {
+                                            "type": "Control",
+                                            "label": "Savory",
+                                            "scope": "#/properties/savory"
+                                        },
+                                        {
+                                            "type": "Control",
+                                            "label": "Sweet",
+                                            "scope": "#/properties/sweet"
+                                        },
+                                        {
+                                            "type": "Control",
+                                            "label": "Spicy",
+                                            "scope": "#/properties/spicy"
+                                        },
+                                        {
+                                            "type": "Control",
+                                            "label": "Comfort Food",
+                                            "scope": "#/properties/comfort_food"
+                                        },
+                                        {
+                                            "type": "Control",
+                                            "label": "Romantic",
+                                            "scope": "#/properties/romantic"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "VerticalLayout",
+                                    "elements": [
+                                        {
+                                            "type": "Control",
+                                            "label": "Cooking Time (minutes)",
+                                            "scope": "#/properties/cook_time"
+                                        },
+                                        {
+                                            "type": "Control",
+                                            "label": "Max. Calories",
+                                            "scope": "#/properties/calories"
+                                        },
+                                        {
+                                            "type": "Control",
+                                            "label": "No. of Steps",
+                                            "scope": "#/properties/steps"
+                                        },
+                                        {
+                                            "type": "Control",
+                                            "label": "No. of Ingredients",
+                                            "scope": "#/properties/ingredients"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "breakfast": {
+                                    "type": "boolean"
+                                },
+                                "brunch": {
+                                    "type": "boolean"
+                                },
+                                "main_dish": {
+                                    "type": "boolean"
+                                },
+                                "side_dishes": {
+                                    "type": "boolean"
+                                },
+                                "appetizers": {
+                                    "type": "boolean"
+                                },
+                                "desserts": {
+                                    "type": "boolean"
+                                },
+                                "lunch": {
+                                    "type": "boolean"
+                                },
+                                "savory": {
+                                    "type": "boolean"
+                                },
+                                "sweet": {
+                                    "type": "boolean"
+                                },
+                                "spicy": {
+                                    "type": "boolean"
+                                },
+                                "comfort_food": {
+                                    "type": "boolean"
+                                },
+                                "romantic": {
+                                    "type": "boolean"
+                                },
+                                "cook_time": {
+                                    "type": "string"
+                                },
+                                "calories": {
+                                    "type": "string"
+                                },
+                                "steps": {
+                                    "type": "string"
+                                },
+                                "ingredients": {
+                                    "type": "string"
+                                },
+                                "rating": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": []
+                        },
+                        "display_name": "Blue Plate Recipe Filtering Agent",
+                        "categories": [
+                            "BLUE_PLATE"
+                        ]
+                    },
+                    "icon": null,
+                    "contents": {}
+                }
+            }
+        }
+    },
+    {
+        "name": "INGREDIENT_EXTRACTOR",
+        "type": "agent",
+        "scope": "/",
+        "description": "",
+        "created_by": null,
+        "properties": {
+            "display_name": "Ingredient Extractor Agent",
+            "image": "megagonlabs/blue-agent-ingredient_extractor-private",
+            "openai.api": "ChatCompletion",
+            "openai.model": "gpt-4.1-mini",
+            "input_field": "messages",
+            "input_json": "[{\"role\": \"user\"}]",
+            "input_context_field": "content",
+            "openai.max_tokens": 1024,
+            "output_path": "$.choices[0].message.content",
+            "input_context": "$[0]",
+            "service_url": "ws://blue_service_openai:8001",
+            "output_transformations": [
+                {
+                    "transformation": "replace",
+                    "from": "```json",
+                    "to": ""
+                },
+                {
+                    "transformation": "replace",
+                    "from": "```",
+                    "to": ""
+                }
+            ],
+            "openai.frequency_penalty": 0,
+            "input_template": null,
+            "openai.presence_penalty": 0,
+            "openai.top_p": 1,
+            "output_strip": true,
+            "prompt": "Do your best to identify all of the visible ingredients in the provided image(s). Respond only with the list of ingredients. The response should be formatted as a Python list of strings.",
+            "openai.response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "ingredient_extraction",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "ingredients": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "A list of ingredients extracted from the image"
+                            }
+                        },
+                        "required": [
+                            "ingredients"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "strict": true
+                }
+            },
+            "categories": [
+                "EXAMPLE_BLUE_PLATE"
+            ]
+        },
+        "icon": null,
+        "contents": {
+            "input": {
+                "DEFAULT": {
+                    "name": "DEFAULT",
+                    "type": "input",
+                    "scope": "/agent/INGREDIENT_EXTRACTOR",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {
+                        "listens": {}
+                    },
+                    "icon": null,
+                    "contents": {}
+                }
+            },
+            "agent": {
+                "INGREDIENT_EXTRACTOR___INTERACTIVE": {
+                    "name": "INGREDIENT_EXTRACTOR___INTERACTIVE",
+                    "type": "agent",
+                    "scope": "/agent/INGREDIENT_EXTRACTOR",
+                    "description": "Extends Ingredient Extractor agent for interactive use, by listening to the USER agent directly.",
+                    "created_by": null,
+                    "properties": {
+                        "display_name": "Interactive Ingredient Extractor Agent"
+                    },
+                    "icon": null,
+                    "contents": {
+                        "input": {
+                            "DEFAULT": {
+                                "name": "DEFAULT",
+                                "type": "input",
+                                "scope": "/agent/INGREDIENT_EXTRACTOR/agent/INGREDIENT_EXTRACTOR___INTERACTIVE",
+                                "description": "",
+                                "created_by": null,
+                                "properties": {
+                                    "listens": {
+                                        "includes": [
+                                            "USER"
+                                        ]
+                                    }
+                                },
+                                "icon": null,
+                                "contents": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "name": "DISH_IDEATION",
+        "type": "agent",
+        "scope": "/",
+        "description": "",
+        "created_by": null,
+        "properties": {
+            "image": "megagonlabs/blue-agent-dish_ideation-private",
+            "display_name": "Dish Ideation Agent",
+            "n_candidates_per_persona": 10,
+            "max_n_candidates": 16,
+            "openai.model": "gpt-4.1-mini",
+            "openai.max_tokens": 5000,
+            "service_url": "ws://blue_service_openai:8001",
+            "input_template": "${input}",
+            "system_context": "$[0]",
+            "input_json": [
+                {
+                    "role": "system"
+                },
+                {
+                    "role": "user"
+                }
+            ],
+            "input_context": "$[1]",
+            "ideation_user_prompt_template": "You have the following ingredients available: ${input}",
+            "ideation_personas": [
+                "You're a Japanese home cook who prioritizes umami-rich, mild flavors.",
+                "You're a Mexican street-food lover who favors bold but approachable flavors.",
+                "You're an Indian vegetarian who prefers mild-to-medium spice and pantry-friendly staples.",
+                "You're a busy parent with three kids and only 20 minutes to cook on weeknights.",
+                "You're a college student on a tight budget cooking with just a stovetop and microwave.",
+                "You're a health-conscious athlete seeking high-protein, low-carb meals.",
+                "You're a beginner cook who wants one-pan, five-ingredient recipes with minimal prep."
+            ],
+            "max_concurrent_requests": 10,
+            "ideation_system_prompt_template": "${persona}\n\nTask:\nGiven the available ingredients, brainstorm diverse, appealing dish names that a home cook could plausibly make primarily using the provided ingredients. It's acceptable to omit some listed ingredients and to assume a small number of widely available pantry items (e.g., salt, pepper, oil). It's also acceptable to introduce a small number of easy-to-purchase grocery items (e.g., pasta, tortillas, canned tomatoes, cheese, stock) when reasonable; avoid niche or hard-to-find ingredients.\n\nRequirements:\n- Generate exactly ${n_candidates_per_persona} unique dish names.\n- Emphasize diversity across techniques, and meal types (e.g., stir-fry, soup, salad, bowl, bake, sandwich, pasta, rice dish), and across which subset of ingredients is used.\n- Do not attempt to use all listed ingredients in each dish; vary the subset used, including some ideas that focus on only a few key ingredients.\n- Names should be concise (2\u20137 words), specific, and enticing.\n- Avoid duplicates or near-duplicates; avoid vague names (\"Tasty Dinner\") and brand names.\n- Do not include explanations or additional text.\n\nOutput format:\nReturn a JSON array of exactly ${n_candidates_per_persona} strings (dish names only), with no trailing commentary or extra keys.",
+            "ideation_response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "dish_name_list",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "dish_names": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "A list of dish names generated based on the provided ingredients."
+                            }
+                        },
+                        "required": [
+                            "dish_names"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "strict": true
+                }
+            },
+            "deduplication_system_prompt_template": "Goal:\nFrom multiple persona-generated lists of dish names, produce a single, normalized, diverse, and deduplicated set with short descriptions.\n\nInput:\n- A JSON array of dish name strings (potentially with duplicates or near-duplicates).\n\nRules:\n- Deduplicate aggressively by both name similarity and concept similarity (e.g., \"Garlic Chicken Fried Rice\" vs. \"Garlicky Chicken and Rice Stir-Fry\" \u2192 keep one).\n- Prefer the name that is clearer, more specific, and broadly appealing; avoid overly niche or verbose variants.\n- Normalize names:\n  - Title Case.\n  - 2\u20137 words.\n  - Use \"and\" instead of \"&\".\n  - No emojis, brand names, or parenthetical qualifiers.\n- Encourage variety:\n  - Balance across cuisines and techniques (e.g., stir-fry, soup, salad, bowl, bake, sandwich, pasta, rice dish).\n- For each retained name, generate a concise short_description (1\u20132 sentences) that conveys the dish's core idea and typical flavor/technique. Do not include brand names or health claims.\n\nOutput format:\n- Return a JSON array of up to ${max_n_candidates} objects.\n- Each object: {\"name\": \"<dish name>\", \"short_description\": \"<1\u20132 sentences>\"}\n- No extra keys, comments, or trailing text.",
+            "deduplication_response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "dish_name_list",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "dish_ideas": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "short_description": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "name",
+                                        "short_description"
+                                    ],
+                                    "additionalProperties": false
+                                },
+                                "description": "A list of deduplicated and normalized dish names with short descriptions."
+                            }
+                        },
+                        "required": [
+                            "dish_ideas"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "strict": true
+                }
+            },
+            "deduplication_user_prompt_template": "Here is the list of dish names: ${input}",
+            "categories": [
+                "EXAMPLE_BLUE_PLATE"
+            ]
+        },
+        "icon": null,
+        "contents": {
+            "input": {
+                "DEFAULT": {
+                    "name": "DEFAULT",
+                    "type": "input",
+                    "scope": "/agent/DISH_IDEATION",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {
+                        "display_name": "DEFAULT",
+                        "listens": {},
+                        "max_n_candidates": 1,
+                        "personas": [
+                            "You're a college student on a tight budget cooking with just a stovetop and microwave.",
+                            "You're a busy parent with three kids and only 20 minutes to cook on weeknights."
+                        ],
+                        "n_candidates_per_persona": 5
+                    },
+                    "icon": null,
+                    "contents": {}
+                }
+            },
+            "agent": {
+                "DISH_IDEATION___INTERACTIVE": {
+                    "name": "DISH_IDEATION___INTERACTIVE",
+                    "type": "agent",
+                    "scope": "/agent/DISH_IDEATION",
+                    "description": "Extends the Dish Ideation agent for interactive use, by listening to the USER agent directly.",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {
+                        "input": {
+                            "DEFAULT": {
+                                "name": "DEFAULT",
+                                "type": "input",
+                                "scope": "/agent/DISH_IDEATION/agent/DISH_IDEATION___INTERACTIVE",
+                                "description": "",
+                                "created_by": null,
+                                "properties": {
+                                    "display_name": "DEFAULT",
+                                    "listens": {
+                                        "includes": [
+                                            "USER"
+                                        ]
+                                    }
+                                },
+                                "icon": null,
+                                "contents": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "name": "BLUE_PLATE",
+        "type": "agent",
+        "scope": "/",
+        "description": "",
+        "created_by": null,
+        "properties": {
+            "display_name": "Blue Plate Agent",
+            "image": "megagonlabs/blue-agent-blue_plate-private",
+            "openai.api": "ChatCompletion",
+            "openai.model": "gpt-4o",
+            "input_json": "[{\"role\": \"user\"}]",
+            "input_context": "$[0]",
+            "input_context_field": "content",
+            "input_field": "messages",
+            "openai.max_tokens": 300,
+            "output_path": "$.choices[0].message.content",
+            "service_url": "ws://blue_service_openai:8001",
+            "output_transformations": [
+                {
+                    "transformation": "replace",
+                    "from": "```json",
+                    "to": ""
+                },
+                {
+                    "transformation": "replace",
+                    "from": "```",
+                    "to": ""
+                }
+            ],
+            "openai.frequency_penalty": 0,
+            "openai.top_p": 1,
+            "input_template": "${input}",
+            "openai.presence_penalty": 0,
+            "image_paths": [
+                "/blue_data/data/inside_of_fridge_1.jpg"
+            ],
+            "categories": [
+                "EXAMPLE_BLUE_PLATE"
+            ],
+            "output_strip": true,
+            "user_message_while_processing": "Still thinking, I'll be with you shortly!",
+            "system_prompt_base": "You are an expert chef, helping a user decide on a recipe.",
+            "system_prompt_recipes": "You then identified the following candidate recipes: ",
+            "system_prompt_preferences": "The user provided the following answers when filling out a form for their preferences: ",
+            "system_prompt_end": "The user has only seen the following recipe(s). Use all of the information as your disposal to help the user with their task. The system has decided on the following recipe(s) based on the user's preferences: ",
+            "system_prompt_ingredients": "They uploaded an image of their refrigerator, and you have identified the following ingredients in it: ",
+            "user_message_no_match": "No recipes found that match those preferences.",
+            "user_message_match_found": "What do you think about these recipes? Feel free to ask me any questions."
+        },
+        "icon": null,
+        "contents": {
+            "input": {
+                "DEFAULT": {
+                    "name": "DEFAULT",
+                    "type": "input",
+                    "scope": "/agent/BLUE_PLATE",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {
+                        "display_name": "DEFAULT",
+                        "listens": {
+                            "includes": [
+                                "USER"
+                            ]
+                        }
+                    },
+                    "icon": null,
+                    "contents": {}
+                }
+            }
+        }
+    },
+    {
+        "name": "RECIPE_VISUALIZER",
+        "type": "agent",
+        "scope": "/",
+        "description": "",
+        "created_by": null,
+        "properties": {
+            "display_name": "Recipe Visualizer Agent",
+            "image": "megagonlabs/blue-agent-image-test-private",
+            "chromadb_url": "http://host.docker.internal:8000",
+            "openai.api": "ChatCompletion",
+            "source": null,
+            "top_k": 1,
+            "service_url": "ws://blue_service_openai:8001",
+            "timeout": 30,
+            "openai.model": "gpt-4.1-mini",
+            "openai.max_tokens": 500,
+            "openai.temperature": 0,
+            "input_field": "messages",
+            "input_context_field": "content",
+            "input_json": "[{\"role\": \"user\"}]",
+            "openai.image_model": "dall-e-3",
+            "output_path": "$.choices[0].message.content",
+            "openai.image_size": "1024x1024",
+            "output_strip": true,
+            "image.style_description": "Anime art style, bright vibrant colors, clean white marble countertop background, soft anime shading, warm color tones, high-quality anime illustration, top-down 45-degree angle view, Studio Ghibli food style",
+            "openai.image_n": 1,
+            "openai.image_quality": "standard",
+            "parse_recipe.prompt_template": "Convert the following recipe text into a JSON object with this exact structure:\n\n{\n\"dishName\": \"name of the dish\",\n\"description\": \"brief description\",\n\"ingredients\": [\"ingredient1\", \"ingredient2\", ...],\n\"instructions\": [\"step1\", \"step2\", ...]\n}\n\nRecipe text:\n```\n{recipe_input}\n```\n\nReturn ONLY the parsed recipe text, no explanation or markdown code blocks.",
+            "image.prompt_template": "Recipe: {dish_name}. Full cooking process: {all_steps_str}. GENERATE IMAGE FOR STEP {step_num}: {current_instruction}. Show ONLY these ingredients that have been used so far: {ingredients_in_image}. Do NOT show ingredients not yet used. Do NOT include any items, utensils, tools, or elements that are not explicitly mentioned in the current step instruction. Focus ONLY on what is directly described in step {step_num}. Exclude unnecessary background items, kitchen tools, or decorative elements unless specifically required by the instruction. Style: {style_description}. No text, no watermarks. The image must be anime art style.",
+            "extract_ingredients.prompt_template": "You are analyzing a cooking instruction to determine which ingredients are being used.\n\nAvailable ingredients:\n{ingredients_str}\n\nInstruction step: \"{instruction}\"\n\nTask: Return ONLY a JSON array of ingredient names (exactly as listed above) that are actively being used, handled, or should be visible in this cooking step.\n\nRules:\n- Only include ingredients that are explicitly mentioned or clearly implied in this step\n- Use the exact ingredient names from the list above\n- If no ingredients from the list are used in this step, return an empty array []\n- Return ONLY the JSON array, no explanation\n\nExample output: [\"Cherry tomatoes, halved\", \"Fresh basil leaves\"]",
+            "recipe_data_path": "../vector_db/example_data",
+            "categories": [
+                "EXAMPLE_BLUE_PLATE"
+            ]
+        },
+        "icon": null,
+        "contents": {
+            "input": {
+                "DEFAULT": {
+                    "name": "DEFAULT",
+                    "type": "input",
+                    "scope": "/agent/RECIPE_VISUALIZER",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {
+                        "display_name": "DEFAULT",
+                        "listens": {
+                            "includes": [
+                                "USER"
+                            ]
+                        }
+                    },
+                    "icon": null,
+                    "contents": {}
+                }
+            }
+        }
+    },
+    {
+        "name": "REACTIVE_BLUE_PLATE",
+        "type": "agent",
+        "scope": "/",
+        "description": "",
+        "created_by": null,
+        "properties": {
+            "display_name": "Reactive Blue Plate Agent",
+            "image": "megagonlabs/blue-agent-reactive_blue_plate-private",
+            "debug_mode": true,
+            "categories": [
+                "EXAMPLE_BLUE_PLATE"
+            ],
+            "agent_definitions": [
+                {
+                    "name": "RECIPE_RETRIEVAL",
+                    "description": "Retrieves a recipe based on available ingredients and check if there are missing ingredients against the recipe requirements.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "ingredients": {
+                                "type": "array",
+                                "description": "Optional list of available ingredients to check against the recipe requirements.",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "required": [
+                            "ingredients"
+                        ],
+                        "additionalProperties": false
+                    }
+                },
+                {
+                    "name": "TALK_TO_USER",
+                    "description": "Present results to the user (Markdown supported) and pause to await input or confirmation.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "description": "Message to display to the user (Markdown supported)."
+                            }
+                        },
+                        "required": [
+                            "message"
+                        ],
+                        "additionalProperties": false
+                    }
+                },
+                {
+                    "name": "FILTER_RECIPE",
+                    "description": "Present a form to the user to filter retrieved recipes based on criteria such as cooking time, cuisine type, and difficulty level and return the filtered list.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "recipe_ref": {
+                                "type": "string",
+                                "description": "Memory index reference to the retrieved recipes to filter.",
+                                "pattern": "^\\$\\d+$"
+                            }
+                        },
+                        "required": [
+                            "recipe_ref"
+                        ],
+                        "additionalProperties": false
+                    }
+                },
+                {
+                    "name": "PRESENT_RECIPES",
+                    "description": "Format and present the retrieved recipes to the user in a readable format. The input must be a memory index reference to the output of FILTER_RECIPE agent.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "recipe_ref": {
+                                "type": "string",
+                                "description": "Memory index reference to the output of FILTER_RECIPE agent.",
+                                "pattern": "^\\$\\d+$"
+                            }
+                        },
+                        "required": [
+                            "recipe_ref"
+                        ],
+                        "additionalProperties": false
+                    }
+                },
+                {
+                    "name": "COOKING_IMAGE_GENERATOR",
+                    "description": "Given a recipe text, generate step-by-step cooking images for the recipe.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "dishName": {
+                                "type": "string",
+                                "description": "Name of the dish to generate cooking images for."
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "Text description of the recipe steps."
+                            },
+                            "ingredients": {
+                                "type": "array",
+                                "description": "List of ingredients for the recipe.",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "instructions": {
+                                "type": "array",
+                                "description": "List of cooking instructions for the recipe.",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "required": [
+                            "dishName",
+                            "description",
+                            "ingredients",
+                            "instructions"
+                        ],
+                        "additionalProperties": false
+                    }
+                }
+            ],
+            "response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "ReActResponse",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "thought": {
+                                "type": "string",
+                                "description": "A short sentence describing the agent's thought process."
+                            },
+                            "action": {
+                                "type": "object",
+                                "description": "The action to be taken by the agent.",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "The name of the agent to call."
+                                    },
+                                    "arguments": {
+                                        "type": "object",
+                                        "description": "A dictionary of arguments for the agent."
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "arguments"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "thought",
+                            "action"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "strict": true
+                }
+            },
+            "tool_context_in_response_format": "$.json_schema.schema.properties",
+            "system_prompt_template": "You are a helpful cooking assistant that helps users create recipes based on ingredients they have.\n\nYou operate using the ReAct (Reasoning + Acting) framework: for each step, you generate a thought explaining your reasoning, then specify an action to execute.\n\n# Response Format\nYou MUST respond with a JSON object containing:\n- \"thought\": A concise sentence describing your reasoning for the next step\n- \"action\": An object with \"name\" (the agent to call) and \"arguments\" (parameters as a dictionary)\n\nExample response (JSON):\n```\n- thought: \"I need to extract ingredients from the user's image before suggesting recipes.\",\n- action:\n    - name: \"INGREDIENT_EXTRACTOR\"\n    - arguments:\n        - input: \"USER_IMAGE_DATA\"\n```\n\n# Available Agents\n\n```\n${agent_definitions}\n```\n\n# Workflow Guidelines (First complete this sequence without asking for additional user input)\n1. When you receive an image, use INGREDIENT_EXTRACTOR to identify ingredients.\n2. After extraction, use TALK_TO_USER to confirm the identified ingredients.\n3. Use RECIPE_RETRIEVAL to fetch relevant recipes based on the ingredients.\n4. Use FILTER_RECIPE to let the user filter results.\n5. Use PRESENT_RECIPES to display the final recipes.\n6. Use TALK_TO_USER to await user feedback.\n\n# Important Rules\n- Always explain your reasoning in the \"thought\" field before taking action\n- Call only ONE agent per response\n- Wait for observation feedback before proceeding to the next step\n- Be conversational and friendly while maintaining the structured JSON format\n- Do not use TALK_TO_USER to merely acknowledge receipt or announce the next step (e.g. \"Okay, I will retrieve recipes now\"). Instead, directly call the next agent (e.g. RECIPE_RETRIEVAL).\n- Don't repeat actions that have already been taken unless absolutely necessary\n",
+            "openai.max_tokens": 10000,
+            "tool_context_field_in_response_format": "action",
+            "openai.model": "gpt-4.1-2025-04-14",
+            "service_url": "ws://blue_service_openai:8001"
+        },
+        "icon": null,
+        "contents": {
+            "input": {
+                "DEFAULT": {
+                    "name": "DEFAULT",
+                    "type": "input",
+                    "scope": "/agent/REACTIVE_BLUE_PLATE",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {
+                        "display_name": "DEFAULT",
+                        "listens": {
+                            "includes": [
+                                "USER"
+                            ],
+                            "excludes": [
+                                "REACTIVE_BLUE_PLATE"
+                            ]
+                        }
+                    },
+                    "icon": null,
+                    "contents": {}
+                }
+            }
+        }
+    },
+    {
+        "name": "RECIPE_QUERY_EXECUTOR",
+        "type": "agent",
+        "scope": "/",
+        "description": "Return recipe data that matches specified filtering criteria",
+        "created_by": null,
+        "properties": {
+            "image": "megagonlabs/blue-agent-recipe_query_executor-private",
+            "output_filters": [
+                "result"
+            ],
+            "output_max_results": null,
+            "tracker.output": "log.INFO",
+            "tracker.autostart": false,
+            "source": "/Recipes/recipes/public",
+            "display_name": "Recipe Query Executor Agent",
+            "categories": [
+                "EXAMPLE_BLUE_PLATE"
+            ]
+        },
+        "icon": null,
+        "contents": {
+            "input": {
+                "RECIPES": {
+                    "name": "RECIPES",
+                    "type": "input",
+                    "scope": "/agent/RECIPE_QUERY_EXECUTOR",
+                    "description": "Receives recipe IDs from Recipe Retrieval Agent (JSON)",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "FILTERS": {
+                    "name": "FILTERS",
+                    "type": "input",
+                    "scope": "/agent/RECIPE_QUERY_EXECUTOR",
+                    "description": "Receives user preference criteria from Presenter Agent (JSON)",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                }
+            }
+        }
+    },
+    {
+        "name": "RECIPE_RETRIEVAL",
+        "type": "agent",
+        "scope": "/",
+        "description": "",
+        "created_by": null,
+        "properties": {
+            "image": "megagonlabs/blue-agent-recipe_retrieval-private",
+            "display_name": "Recipe Retrieval Agent",
+            "chromadb_url": "http://host.docker.internal:8000",
+            "top_k": 3,
+            "timeout": 30,
+            "source": null,
+            "openai.temperature": 0,
+            "service_url": "ws://blue_service_openai:8001",
+            "openai.model": "gpt-4.1-mini",
+            "openai.max_tokens": 500,
+            "missing_ingredient_detection_prompt_template": "Compare the provided ingredients with the recipe's required ingredients and identify which recipe ingredients are NOT available (missing).\n\nProvided ingredients: ${input}\nRecipe requires: ${recipe_ingredients}\n\nInstructions:\n- Identify ALL ingredients from the recipe that are NOT in the provided list\n- Consider common substitutions and variations (e.g., \"egg\" matches \"eggs\", \"red bell pepper\" matches \"bell peppers\")\n- Include ALL missing ingredients, even common pantry items like salt, pepper, oil, butter\n- Return ONLY a JSON array of missing ingredient names\n- If nothing is missing, return empty array []\n\nOutput format: [\"ingredient1\", \"ingredient2\", ...]",
+            "missing_ingredient_detection_response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "missing_ingredient_detection",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "missing_ingredients": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "A list of missing ingredients"
+                            }
+                        },
+                        "required": [
+                            "missing_ingredients"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "strict": true
+                }
+            },
+            "recipe_data_path": "../vector_db/example_data",
+            "categories": [
+                "EXAMPLE_BLUE_PLATE"
+            ]
+        },
+        "icon": null,
+        "contents": {
+            "input": {
+                "DEFAULT": {
+                    "name": "DEFAULT",
+                    "type": "input",
+                    "scope": "/agent/RECIPE_RETRIEVAL",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {
+                        "display_name": "DEFAULT",
+                        "listens": {}
+                    },
+                    "icon": null,
+                    "contents": {}
+                }
+            },
+            "agent": {
+                "RECIPE_RETRIEVAL___INTERACTIVE": {
+                    "name": "RECIPE_RETRIEVAL___INTERACTIVE",
+                    "type": "agent",
+                    "scope": "/agent/RECIPE_RETRIEVAL",
+                    "description": "Extends the Recipe Retrieval agent for interactive use, by listening to the USER agent directly.",
+                    "created_by": null,
+                    "properties": {
+                        "display_name": "Interactive Recipe Retrieval Agent"
+                    },
+                    "icon": null,
+                    "contents": {
+                        "input": {
+                            "DEFAULT": {
+                                "name": "DEFAULT",
+                                "type": "input",
+                                "scope": "/agent/RECIPE_RETRIEVAL/agent/RECIPE_RETRIEVAL___INTERACTIVE",
+                                "description": "",
+                                "created_by": null,
+                                "properties": {
+                                    "listens": {
+                                        "includes": [
+                                            "USER"
+                                        ]
+                                    }
+                                },
+                                "icon": null,
+                                "contents": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "name": "blue_plate_multimodal_knowledge_agent",
+        "type": "agent_group",
+        "scope": "/",
+        "description": "Try out Blue Plate - A Multimodal Knowledge Agent demo",
+        "created_by": null,
+        "properties": {},
+        "icon": null,
+        "contents": {
+            "agent": {
+                "COORDINATOR": {
+                    "name": "COORDINATOR",
+                    "type": "agent",
+                    "scope": "/agent_group/blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "RECIPE_QUERY_EXECUTOR": {
+                    "name": "RECIPE_QUERY_EXECUTOR",
+                    "type": "agent",
+                    "scope": "/agent_group/blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "BLUE_PLATE": {
+                    "name": "BLUE_PLATE",
+                    "type": "agent",
+                    "scope": "/agent_group/blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "RECIPE_RETRIEVAL": {
+                    "name": "RECIPE_RETRIEVAL",
+                    "type": "agent",
+                    "scope": "/agent_group/blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "RECIPE_VISUALIZER": {
+                    "name": "RECIPE_VISUALIZER",
+                    "type": "agent",
+                    "scope": "/agent_group/blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "DISH_IDEATION": {
+                    "name": "DISH_IDEATION",
+                    "type": "agent",
+                    "scope": "/agent_group/blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "INGREDIENT_EXTRACTOR": {
+                    "name": "INGREDIENT_EXTRACTOR",
+                    "type": "agent",
+                    "scope": "/agent_group/blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "PRESENTER___BLUE_PLATE": {
+                    "name": "PRESENTER___BLUE_PLATE",
+                    "type": "agent",
+                    "scope": "/agent_group/blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                }
+            }
+        }
+    },
+    {
+        "name": "reactive_blue_plate_multimodal_knowledge_agent",
+        "type": "agent_group",
+        "scope": "/",
+        "description": "Try out Reactive Blue Plate - A Multimodal Knowledge Agent demo",
+        "created_by": null,
+        "properties": {},
+        "icon": null,
+        "contents": {
+            "agent": {
+                "PRESENTER___BLUE_PLATE": {
+                    "name": "PRESENTER___BLUE_PLATE",
+                    "type": "agent",
+                    "scope": "/agent_group/reactive_blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "COORDINATOR": {
+                    "name": "COORDINATOR",
+                    "type": "agent",
+                    "scope": "/agent_group/reactive_blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "RECIPE_RETRIEVAL": {
+                    "name": "RECIPE_RETRIEVAL",
+                    "type": "agent",
+                    "scope": "/agent_group/reactive_blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "RECIPE_QUERY_EXECUTOR": {
+                    "name": "RECIPE_QUERY_EXECUTOR",
+                    "type": "agent",
+                    "scope": "/agent_group/reactive_blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "REACTIVE_BLUE_PLATE": {
+                    "name": "REACTIVE_BLUE_PLATE",
+                    "type": "agent",
+                    "scope": "/agent_group/reactive_blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "RECIPE_VISUALIZER": {
+                    "name": "RECIPE_VISUALIZER",
+                    "type": "agent",
+                    "scope": "/agent_group/reactive_blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "DISH_IDEATION": {
+                    "name": "DISH_IDEATION",
+                    "type": "agent",
+                    "scope": "/agent_group/reactive_blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                },
+                "INGREDIENT_EXTRACTOR": {
+                    "name": "INGREDIENT_EXTRACTOR",
+                    "type": "agent",
+                    "scope": "/agent_group/reactive_blue_plate_multimodal_knowledge_agent",
+                    "description": "",
+                    "created_by": null,
+                    "properties": {},
+                    "icon": null,
+                    "contents": {}
+                }
+            }
+        }
+    }
+]
