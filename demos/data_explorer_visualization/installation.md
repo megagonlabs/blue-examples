@@ -10,11 +10,12 @@ This guide covers the additional setup needed for the Data Explorer and Visualiz
 
 ## What This Demo Adds
 
-This demo requires four agents working together:
-1. **NL2SQL Agent** (shipped with Blue) - Converts natural language questions to SQL
+This demo requires five agents working together:
+1. **Interaction Controller Agent** - Orchestrates the workflow - [README](../../agents/interaction_controller/README.md)
 2. **Data Exploration Agent** - Performs automated EDA - [README](../../agents/data_exploration/README.md)
 3. **Data Visualization Agent** - Creates Vega-Lite visualizations - [README](../../agents/data_visualization/README.md)
-4. **Interaction Controller Agent** - Orchestrates the workflow - [README](../../agents/interaction_controller/README.md)
+4. **NL2SQL Agent** (shipped with Blue) - Converts natural language questions to SQL
+5. **Task Coordinator Agent** (shipped with Blue) - Coordinates task execution across agents (required for Interaction Controller)
 
 ## Installation Steps
 
@@ -81,13 +82,13 @@ To register this database in the Blue platform data registry, use:
 ```
 4. Select **Actions** → **Synchronize**
 
-### 3. Build and Deploy the Four Agents
+### 3. Build and Deploy the Five Agents
 
 Build and register each agent (refer to individual agent READMEs for details):
 
 ```bash
-# 1. NL2SQL Agent (shipped with Blue)
-cd blue/agents/nl2sql
+# 1. Interaction Controller Agent
+cd blue-examples/agents/interaction_controller
 ./docker_build_agent.sh
 blue registry agent update agent.json
 
@@ -101,8 +102,15 @@ cd blue-examples/agents/data_visualization
 ./docker_build_agent.sh
 blue registry agent update agent.json
 
-# 4. Interaction Controller Agent
-cd blue-examples/agents/interaction_controller
+# 4. NL2SQL Agent (shipped with Blue)
+# Check if already built during Blue default agent building before running
+cd blue/agents/nl2sql
+./docker_build_agent.sh
+blue registry agent update agent.json
+
+# 5. Task Coordinator Agent (shipped with Blue)
+# Check if already built during Blue default agent building before running
+cd blue/agents/task_coordinator
 ./docker_build_agent.sh
 blue registry agent update agent.json
 ```
@@ -112,29 +120,30 @@ blue registry agent update agent.json
 In the Blue UI (`http://localhost:3000`):
 
 1. Navigate to **Agents**
-2. Deploy each of the four agents:
-   - `NL2SQL`
+2. Deploy each of the five agents:
+   - `INTERACTION_CONTROLLER`
    - `DATA_EXPLORATION_AGENT`
    - `DATA_VISUALIZATION_AGENT`
-   - `INTERACTION_CONTROLLER`
+   - `NL2SQL`
+   - `TASK_COORDINATOR`
 3. Verify all agents show as "Running"
 
 **Note**: Each agent's README contains detailed configuration options and properties.
 
 ## Verification
 
-Verify all four agents are running:
+Verify all five agents are running:
 ```bash
 docker ps | grep blue-agent
 ```
 
-You should see containers for all four agents.
+You should see containers for all five agents.
 
 
 ## Troubleshooting
 
 - Verify OpenAI API key is set: `echo $OPENAI_API_KEY`
-- Ensure all four agents are deployed and running
+- Ensure all five agents are deployed and running
   - Check blue platform logs: `docker logs <platform-api-container-name> `
   - Check agent logs: `docker logs <agent-container-name>`
 - Check that data registry has synced database schemas

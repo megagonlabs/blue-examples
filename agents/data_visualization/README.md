@@ -24,7 +24,7 @@ blue registry agent update agent.json
 - Create a `DATA_VISUALIZATION_AGENT` agent with the following properties:
 ```json
 {
-  "image": "megagonlabs/blue-agent-data_visualization",
+  "image": "megagonlabs/blue-agent-data_visualization-private",
   "service_url": "ws://blue_service_openai:8001",
   "input_json": null,
   "input_template": null,
@@ -43,7 +43,5 @@ blue registry agent update agent.json
   "vis_desc_prompt": "Analyze the following Vega-Lite visualization specification and provide a clear, concise explanation of what the visualization shows.\n\nVega-Lite Specification:\n${input}\n\nPlease describe:\n1. The type of chart/visualization\n2. What data is being visualized (axes, encodings)\n3. Any key insights or patterns the visualization is designed to reveal\n4. How to interpret the visualization\n\nProvide the explanation in 2-3 sentences suitable for a general audience.\n"
 }
 ```
-- Add input `DEFAULT` and configure it with:
-  - listens: **excludes** `USER`
 
 3. Deploy `DATA_VISUALIZATION_AGENT` agent on UI.

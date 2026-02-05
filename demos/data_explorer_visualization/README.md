@@ -1,6 +1,11 @@
-# Data Explorer and visualization - WIP
+# Data Explorer and Visualization
 
 An autonomous agentic system that can explore datasets, generate visualizations, and handle open-ended queries.
+
+- **Automated Data Profiling:** Column classification, statistics, and insight generation
+- **Dynamic Visualization:** Interactive Vega-Lite charts and dashboards
+- **Natural Language to SQL:** Convert questions into executable queries
+- **Data-Aware Planning:** Intelligent orchestration based on data registry metadata
 
 ## Installation
 
@@ -8,27 +13,50 @@ To install please follow the [installation instructions](installation.md)
 
 ## Try it out
 
-Please follow the [demo example](demo_example.md) to try it out.  
+Please follow the [demo example](demo_example.md) to try it out.
 
-## Core problem
+TODO: add gifs here
 
-TBD
+## Core Problem
+
+Working with data often involves:
+- **Time-consuming manual EDA:** Understanding new datasets requires repetitive profiling work
+- **Disconnected workflows:** Separate tools for querying, analysis, and visualization
+- **Context switching:** Users must translate between natural language intent and technical queries
+
 ## Solution
 
-### Automated Data Exploration
-Enables teams to easily understand their data and proactively detect quality issues.
+### Automated Data Exploration and Visualization
+Enables users to understand their data using automated column classification, statistical profiling, and insight generation, and to represent insights clearly through automatically generated visualizations.
 
-- Data Explorer
-  
-  ![Data Explorer](/docs/images/data_explorer.gif)
+### Unified Natural Language Interface
+Allows users to express exploration and visualization needs in plain language, with the system automatically routing requests to appropriate agents
  
-### Interactive, User-Guided Refinement
-Increases data precision and quality through interactive refinement capabilities guided by the user.
 
-- Data Visualizer
-  
-  ![Data Visualizer](/docs/images/data_visualizer.gif)
- 
+## Architecture
+
+This demo orchestrates five agents working together:
+
+| Agent | Description |
+|-------|-------------|
+| **Interaction Controller** | Routes user requests, manages conversation memory, and generates execution plans |
+| **Data Exploration Agent** | Performs automated EDA: column classification, statistics, and insights |
+| **Data Visualization Agent** | Generates interactive Vega-Lite v5 visualizations using a ReAct approach |
+| **NL2SQL Agent** | Converts natural language questions to SQL queries (shipped with Blue) |
+| **Task Coordinator Agent** | Coordinates task execution across agents (shipped with Blue) |
+
+### Workflow
+
+```mermaid
+graph TD
+    A[User Input] --> B[Interaction Controller]
+    B --> C[Coordinator]
+    C --> D[NL2SQL]
+    C --> E[Data Exploration]
+    C --> F[Data Visualization]
+```
+
+
 # Disclosures:
 
 This software may include, incorporate, or access open source software (OSS) components,

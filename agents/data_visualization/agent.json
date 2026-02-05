@@ -34,7 +34,7 @@
     "created_by": null,
     "properties": {
       "listens": {
-        "excludes": ["USER"]
+        "excludes": []
       }
     },
     "icon": null
