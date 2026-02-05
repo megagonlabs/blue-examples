@@ -1,0 +1,64 @@
+CREATE TABLE ingredients (
+    ingredient_id INT PRIMARY KEY,
+    ingredient_name VARCHAR(255) NOT NULL
+);
+
+
+CREATE TABLE recipes (
+    recipe_id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    cook_time_min INT,
+    ingredient_count INT,
+    n_steps INT,
+    review_count INT,
+    average_rating FLOAT, 
+    instructions TEXT
+);
+
+CREATE TABLE recipe_ingredients (
+    recipe_id INT,
+    ingredient_id INT,
+    FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id),
+    FOREIGN KEY (ingredient_id) REFERENCES ingredients(ingredient_id)
+); 
+
+
+CREATE TABLE nutrition (
+    recipe_id INT PRIMARY KEY,
+    calories FLOAT,
+    total_fat_pdv FLOAT,
+    sugar_pdv FLOAT,
+    sodium_pdv FLOAT,
+    protein_pdv FLOAT,
+    saturated_fat_pdv FLOAT,
+    FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id)
+);
+
+CREATE TABLE tags (
+    tag_id INT PRIMARY KEY,
+    tag_name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE recipe_tags (
+    recipe_id INT,
+    tag_id INT,
+    PRIMARY KEY (recipe_id, tag_id),
+    FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id),
+    FOREIGN KEY (tag_id) REFERENCES tags(tag_id)
+);
+
+
+create index ingredient_name on ingredients (ingredient_name);
+create index calories on nutrition (calories);
+create index total_fat on nutrition (total_fat_pdv);
+create index sugar_pdv on nutrition (sugar_pdv);
+create index sodium_pdv on nutrition (sodium_pdv);
+create index protein_pdv on nutrition (protein_pdv);
+create index saturated_fat_pdv on nutrition (saturated_fat_pdv);
+create index tag_name on tags (tag_name); 
+create index recipe_name on recipes ("name"); 
+create index cook_time on recipes (cook_time_min); 
+create index n_ingredients on recipes (ingredient_count); 
+create index n_steps on recipes (n_steps); 
+create index average_rating on recipes (average_rating); 
