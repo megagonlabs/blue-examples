@@ -481,9 +481,8 @@ AND table_schema = '{collection}';
                 )
                 worker.write_data(
                     f"Loop completed after {iteration} iterations without producing a valid Vega-Lite spec",
-                    output="TEXT",
                 )
-                worker.write_eos(output="TEXT")
+                worker.write_eos()
                 st.append_status("done", 1.0)
                 return
 
@@ -495,10 +494,8 @@ AND table_schema = '{collection}';
 
             num_charts = count_charts(vis_json)
             vis_desc = self.explain_vis(vis_json)
-            worker.write_data(
-                f"Rendered {num_charts} visualization(s).\n\n{vis_desc}", output="TEXT"
-            )
-            worker.write_eos(output="TEXT")
+            worker.write_data(f"Rendered {num_charts} visualization(s).\n\n{vis_desc}")
+            worker.write_eos()
             st.append_status("done", 1.0)
             return
         elif message.isBOS():

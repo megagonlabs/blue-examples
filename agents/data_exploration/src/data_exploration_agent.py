@@ -59,7 +59,7 @@ class DataExplorationAgent(OpenAIAgent):
         self.add_input("DEFAULT", description="input text query")
 
     def _initialize_outputs(self):
-        self.add_output("DEFAULT", description="data summary", tags=["DATA"])
+        self.add_output("DEFAULT", description="data summary")
 
     def _start(self):
         super()._start()
@@ -187,8 +187,8 @@ class DataExplorationAgent(OpenAIAgent):
                 error_msg = "❌ No tables found in the data registry."
                 logging.error(error_msg)
                 st.append_status(f"failed: no tables in registry", 1.0)
-                worker.write_data(error_msg, output="TEXT")
-                worker.write_eos(output="TEXT")
+                worker.write_data(error_msg)
+                worker.write_eos()
                 return None
 
             # Use LLM to identify relevant tables from user query
@@ -196,7 +196,7 @@ class DataExplorationAgent(OpenAIAgent):
                 "select_scope_prompt", SELECT_SCOPE_PROMPT
             )
             scopes = "\n".join(["/".join(scope) for scope in all_scopes])
-            logging.info(f"\n\n===scopes:\n\n {scopes}\n\n")
+            logging.info(f"\n\n==={len(all_scopes)} scopes:\n\n {scopes}\n\n")
 
             selected_scopes_json = None
             for attempt in range(3):
@@ -240,8 +240,8 @@ class DataExplorationAgent(OpenAIAgent):
                 error_msg = f"❌ Could not identify a relevant table for the query: '{task_input}'\n\nPlease try rephrasing your request or specify a table name from the available tables."
                 logging.error(error_msg)
                 st.append_status("failed: no matching table", 1.0)
-                worker.write_data(error_msg, output="TEXT")
-                worker.write_eos(output="TEXT")
+                worker.write_data(error_msg)
+                worker.write_eos()
                 return None
             logging.info(f"\n\n===selected:\n\n {selected_scopes_json}\n\n")
 
@@ -260,8 +260,8 @@ class DataExplorationAgent(OpenAIAgent):
                 error_msg = f"❌ Invalid table selection - {scope}"
                 logging.error(error_msg)
                 st.append_status(f"failed: incomplete table info", 1.0)
-                worker.write_data(error_msg, output="TEXT")
-                worker.write_eos(output="TEXT")
+                worker.write_data(error_msg)
+                worker.write_eos()
                 return None
 
             summary.append(
@@ -342,8 +342,8 @@ class DataExplorationAgent(OpenAIAgent):
                 error_msg = f"❌ Failed to classify columns for table [{source}/{database}/{collection}/{entity}] after 3 attempts."
                 logging.error(error_msg)
                 st.append_status("failed: column classification error", 1.0)
-                worker.write_data(error_msg, output="TEXT")
-                worker.write_eos(output="TEXT")
+                worker.write_data(error_msg)
+                worker.write_eos()
                 return None
             logging.info(f"\n\n===cols_types:\n\n {col_profile_types_json}\n\n")
 
@@ -412,10 +412,10 @@ class DataExplorationAgent(OpenAIAgent):
             worker.write_control(
                 ControlCode.CREATE_FORM,
                 build_markdown_form(response),
-                output="TEXT",
             )
             st.append_status("done", 1.0)
-            worker.write_eos(output="TEXT")
+            worker.write_data("Report generated.")
+            worker.write_eos()
         elif message.isBOS():
             # init stream to empty array
             if worker:

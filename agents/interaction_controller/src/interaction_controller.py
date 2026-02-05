@@ -261,7 +261,7 @@ class InteractionControllerAgent(OpenAIAgent):
                     "input_template": plan_prompt
                 }
                 worker.write_data(f"Generating Plan...", output="TEXT")
-                worker.write_eos(output="TEXT")
+                # worker.write_eos(output="TEXT")
                 llm_plan = self.execute_api_call(user_request, properties=properties, additional_data={})
 
                 # summarize instructions for easier visualization
@@ -295,7 +295,7 @@ class InteractionControllerAgent(OpenAIAgent):
                 # execute plan
                 self.plan_executor(worker)
         elif input == "REACT":
-            if worker:
+            if message.isEOS() and worker:
                 # iterate through linear plan step by step
                 i = worker.get_session_data("ITERATOR")
                 worker.set_session_data("ITERATOR", i+1) 

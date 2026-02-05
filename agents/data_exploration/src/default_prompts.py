@@ -54,7 +54,7 @@ Data Improvement: e.g., handle missing values, fix inconsistency, remove duplica
 Data Analysis: e.g., explore correlations, segmentation, predictive modeling, trend analysis
 Visualization: charts or plots that could help better understand key patterns
 
-Use tables where helpful for clarity, and keep the summary concise and readable for a chat format.
+Use tables where helpful for clarity, and keep the summary concise and short for a chat format.
 Do not include any conversational filler, questions, or calls to action.
 IMPORTANT: Never use inline JSON objects like {"attr": <val>} directly in paragraphs or table cells. If you need to reference objects, wrap them in backticks like `{"attr": <val>}` or describe them in plain text instead.
 
