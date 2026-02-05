@@ -244,7 +244,8 @@ class InteractionControllerAgent(OpenAIAgent):
                     user_request = data
 
                 # sync registry before planning
-                self.registry.sync_source_database_collection(source="postgres_workspace", database="workspace", collection="public")
+                # self.registry.sync_source_database_collection(source="postgres_workspace", database="workspace", collection="public")
+                self.registry.sync_source_database_collection(source="postgres_example", database="postgres", collection="public")
                 logging.info("Synchronized source, database, and collection with Data Registry")
 
                 # search registry based on user request
@@ -301,7 +302,8 @@ class InteractionControllerAgent(OpenAIAgent):
                 worker.set_session_data("ITERATOR", i+1) 
 
                 #sync registry
-                self.registry.sync_source_database_collection(source="postgres_workspace", database="workspace", collection="public")
+                # self.registry.sync_source_database_collection(source="postgres_workspace", database="workspace", collection="public")
+                self.registry.sync_source_database_collection(source="postgres_example", database="postgres", collection="public")
                 logging.info("Synchronized source, database, and collection with Data Registry")
                 
                 #continue plan execution
