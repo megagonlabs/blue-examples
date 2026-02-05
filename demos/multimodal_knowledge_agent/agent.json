@@ -646,14 +646,43 @@
                     "created_by": null,
                     "properties": {
                         "display_name": "DEFAULT",
-                        "listens": {
-                            "includes": [
-                                "USER"
-                            ]
-                        }
+                        "listens": {}
                     },
                     "icon": null,
                     "contents": {}
+                }
+            },
+            "agent": {
+                "RECIPE_VISUALIZER___INTERACTIVE": {
+                    "name": "RECIPE_VISUALIZER___INTERACTIVE",
+                    "type": "agent",
+                    "scope": "/agent/RECIPE_VISUALIZER",
+                    "description": "Extends Recipe Visualizer agent for interactive use, by listening to the USER agent directly.",
+                    "created_by": null,
+                    "properties": {
+                        "display_name": "Interactive Recipe Visualizer"
+                    },
+                    "icon": null,
+                    "contents": {
+                        "input": {
+                            "DEFAULT": {
+                                "name": "DEFAULT",
+                                "type": "input",
+                                "scope": "/agent/RECIPE_VISUALIZER/agent/RECIPE_VISUALIZER___INTERACTIVE",
+                                "description": "",
+                                "created_by": null,
+                                "properties": {
+                                    "listens": {
+                                        "includes": [
+                                            "USER"
+                                        ]
+                                    }
+                                },
+                                "icon": null,
+                                "contents": {}
+                            }
+                        }
+                    }
                 }
             }
         }

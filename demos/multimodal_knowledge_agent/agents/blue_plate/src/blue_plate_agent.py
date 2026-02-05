@@ -82,7 +82,7 @@ class BluePlateAgent(OpenAIAgent):
 
         agentic_plan.define_input(label="RECIPE_DATA", value=recipe_data)
         agentic_plan.define_input(label="PRESENTER_TRIGGER", value="Presenter Trigger")
-        agentic_plan.define_agent(name="PRESENTER___CustomizedPresenter", label="presenter_form_agent", properties={"inputs": DISABLED_INPUTS_OVERRIDE})
+        agentic_plan.define_agent(name="PRESENTER___BLUE_PLATE", label="presenter_form_agent", properties={"inputs": DISABLED_INPUTS_OVERRIDE})
         agentic_plan.define_agent(name="RECIPE_QUERY_EXECUTOR", label="query_executor", properties={"inputs": DISABLED_INPUTS_OVERRIDE})
 
         agentic_plan.connect_input_to_agent(from_input="PRESENTER_TRIGGER", to_agent="presenter_form_agent", to_agent_input="DEFAULT")

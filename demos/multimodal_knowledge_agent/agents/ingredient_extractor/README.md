@@ -4,8 +4,9 @@
 
 ## Ingredient Extractor Agent in Action
 
-<!-- TODO: Add demo GIF showing image upload and ingredient extraction -->
-*Demo placeholder: Upload image → Agent analyzes → Returns ingredient list*
+The following animation displays the user uploading an image of a refrigerator interior, the agent processing the image, and the resulting list of extracted ingredients being returned in the UI.
+
+![Ingredient Extractor Demo](./assets/ingredient_extractor_usage.gif)
 
 ---
 
