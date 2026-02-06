@@ -330,8 +330,8 @@ class RecipeQueryExecutorAgent(QueryExecutorAgent):
             message = "No results returned from query."
         else:
             message = f"Number of results: {len(output['result'])}"
+
         # Logging
-        logging.info()
         for key, val in output.items():
             logging.info(f"\nOutput [{key}]: {textwrap.shorten(str(val), width=200)}")
         return {
