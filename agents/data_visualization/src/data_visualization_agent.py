@@ -160,7 +160,7 @@ class DataVisualizationAgent(OpenAIAgent):
         execute_sql_query_tool = Tool(
             name="execute_sql_query",
             function=self._execute_sql,
-            description="Execute sql query on selected table",
+            description="Execute sql query on selected table. Note: semantic type may differ from SQL type (e.g., numeric data stored as varchar) - cast as needed for aggregate functions.",
         )
         self.local_tools["execute_sql_query"] = execute_sql_query_tool
 
@@ -227,7 +227,8 @@ class DataVisualizationAgent(OpenAIAgent):
         query = f"""\
 SELECT
     (SELECT COUNT(*) FROM {collection}.{entity}) AS total_rows,
-    ARRAY_AGG(column_name ORDER BY ordinal_position) AS columns
+    ARRAY_AGG(column_name ORDER BY ordinal_position) AS columns,
+    ARRAY_AGG(data_type ORDER BY ordinal_position) AS column_types
 FROM information_schema.columns
 WHERE table_name = '{entity}'
 AND table_schema = '{collection}';
@@ -243,6 +244,9 @@ AND table_schema = '{collection}';
         col_names: list[str],
     ) -> list:
         """Retrieve 5 sample rows with selected columns from table"""
+        # Handle case where col_names might be passed as a comma-separated string
+        if isinstance(col_names, str):
+            col_names = [c.strip() for c in col_names.split(",") if c.strip()]
         query = f"SELECT {', '.join(col_names)} FROM {collection}.{entity} LIMIT 5"
         return self._execute_sql(query, source, database, collection)
 

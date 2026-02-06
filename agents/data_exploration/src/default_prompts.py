@@ -45,6 +45,7 @@ Notable overall data quality issues (e.g., many missing values, duplicates)
 2. Column-Wise Info:
 For each column: type, missing values, unique values, basic statistics
 Highlight anomalies or potential issues per column
+Flag type mismatches where semantic type differs from SQL type (e.g., numeric data stored as varchar)
 
 3. Insights:
 Patterns, trends, correlations, or surprising observations in the data
