@@ -91,6 +91,9 @@ def count_charts(vegalite_specs):
     return 1
 
 
+
+
+
 ############################
 ### Agent.DataVisualizationAgent
 #
@@ -159,8 +162,8 @@ class DataVisualizationAgent(OpenAIAgent):
 
         execute_sql_query_tool = Tool(
             name="execute_sql_query",
-            function=self._execute_sql,
-            description="Execute sql query on selected table. Note: semantic type may differ from SQL type (e.g., numeric data stored as varchar) - cast as needed for aggregate functions.",
+            function=self._execute_sql_with_validation,
+            description="Execute sql query on selected table. IMPORTANT: Numeric data is often stored as varchar/text. ALWAYS use explicit casts for aggregate functions like SUM, AVG, MIN, MAX. Example: AVG(column_name::numeric) or SUM(CAST(column_name AS numeric)). Without casting, you will get 'function does not exist' errors.",
         )
         self.local_tools["execute_sql_query"] = execute_sql_query_tool
 
@@ -179,7 +182,112 @@ class DataVisualizationAgent(OpenAIAgent):
         self.local_tools["validate_vegalite_spec"] = validate_vegalite_spec_tool
 
     ####### helper functions
+    def _validate_sql_query(self, query: str, source: str, database: str, collection: str) -> dict:
+        """
+        Validate SQL query for undefined tables, columns, and unsafe numeric casts.
+        Returns dict with validation result and actionable error message.
+        """
+        import re
+        
+        cache_key = f"{source}:{database}:{collection}"
+        unsafe_numeric_cols = getattr(self, '_unsafe_numeric_cache', {}).get(cache_key, [])
+        
+        # Get available tables
+        available_tables = []
+        try:
+            entities = self.registry.get_source_database_collection_entities(source, database, collection)
+            available_tables = [f"{collection}.{e['name']}" for e in entities]
+        except Exception:
+            pass
+        
+        # Check for unsafe numeric casts
+        for col in unsafe_numeric_cols:
+            pattern1 = rf'{re.escape(col)}\s*::\s*numeric'
+            pattern2 = rf'CAST\s*\(\s*{re.escape(col)}\s+AS\s+numeric\s*\)'
+            
+            if re.search(pattern1, query, re.IGNORECASE) or re.search(pattern2, query, re.IGNORECASE):
+                return {
+                    "valid": False,
+                    "error": f"Column '{col}' contains mixed data (numbers and non-numeric values). Choose one approach: (1) Filter non-numeric values with WHERE {col} ~ '^-?[0-9]+(\\.[0-9]+)?$', (2) Use CASE to convert to NULL, or (3) Group non-numeric values separately. Do not directly cast without handling mixed data."
+                }
+        
+        # Check for undefined tables
+        from_pattern = r'FROM\s+([a-zA-Z_][a-zA-Z0-9_]*\.[a-zA-Z_][a-zA-Z0-9_]*)'
+        join_pattern = r'JOIN\s+([a-zA-Z_][a-zA-Z0-9_]*\.[a-zA-Z_][a-zA-Z0-9_]*)'
+        from_matches = re.findall(from_pattern, query, re.IGNORECASE)
+        join_matches = re.findall(join_pattern, query, re.IGNORECASE)
+        tables_in_query = set(from_matches + join_matches)
+        
+        for table_ref in tables_in_query:
+            if table_ref not in available_tables:
+                return {
+                    "valid": False,
+                    "error": f"Table '{table_ref}' does not exist. Available tables: {', '.join(available_tables)}. Use the list_database_tables tool to see all available tables."
+                }
+        
+        # Get available columns for tables referenced in query
+        available_columns = {}
+        if not hasattr(self, '_column_cache'):
+            self._column_cache = {}
+        
+        for table_ref in tables_in_query:
+            column_cache_key = f"{source}:{database}:{table_ref}"
+            if column_cache_key in self._column_cache:
+                available_columns[table_ref] = self._column_cache[column_cache_key]
+            else:
+                try:
+                    entity_name = table_ref.split('.')[-1]
+                    table_info = self._get_table_info(source, database, collection, entity_name)
+                    if table_info and 'table_info' in table_info and table_info['table_info']:
+                        columns = table_info['table_info'][0].get('columns', [])
+                        available_columns[table_ref] = columns
+                        self._column_cache[column_cache_key] = columns
+                except Exception:
+                    pass
+        
+        # Check for undefined columns
+        qualified_col_pattern = r'\b([a-zA-Z_][a-zA-Z0-9_]*)\.([a-zA-Z_][a-zA-Z0-9_]*)\b'
+        qualified_matches = re.findall(qualified_col_pattern, query, re.IGNORECASE)
+        
+        for table_or_alias, col_name in qualified_matches:
+            # Skip SQL keywords and functions
+            sql_keywords = {'COUNT', 'SUM', 'AVG', 'MIN', 'MAX', 'ARRAY_AGG', 'information_schema'}
+            if table_or_alias.upper() in sql_keywords or col_name.upper() in sql_keywords:
+                continue
+            
+            found = False
+            matching_table = None
+            
+            for table_ref in available_columns.keys():
+                table_name = table_ref.split('.')[-1]
+                if table_or_alias.lower() == table_name.lower() or table_or_alias.lower() == table_ref.lower():
+                    if col_name in available_columns[table_ref]:
+                        found = True
+                        break
+                    else:
+                        matching_table = table_ref
+            
+            if matching_table and not found:
+                available_cols = available_columns[matching_table]
+                return {
+                    "valid": False,
+                    "error": f"Column '{col_name}' does not exist in table '{matching_table}'. Available columns: {', '.join(available_cols)}. Use get_table_info tool to verify column names."
+                }
+        
+        return {"valid": True, "error": None}
+    
     def _execute_sql(self, query, source, database, collection):
+        """Execute SQL query directly without validation (for internal use)."""
+        results = self.registry.execute_query(query, source, database, collection)
+        return results
+
+    def _execute_sql_with_validation(self, query, source, database, collection):
+        """Execute SQL query with validation (for user-facing Tool)."""
+        # Validate query - check for unsafe casts, undefined tables, and undefined columns
+        validation = self._validate_sql_query(query, source, database, collection)
+        if not validation["valid"]:
+            return f"SQL ERROR: {validation['error']}"
+        
         results = self.registry.execute_query(query, source, database, collection)
         return results
 
@@ -222,8 +330,9 @@ class DataVisualizationAgent(OpenAIAgent):
 
     def _get_table_info(
         self, source: str, database: str, collection: str, entity: str
-    ) -> list:
-        """Retrieve column names and metadata for a given table"""
+    ) -> dict:
+        """Retrieve column names and metadata for a given table, including detection of numeric data stored as varchar"""
+        # Get basic column info
         query = f"""\
 SELECT
     (SELECT COUNT(*) FROM {collection}.{entity}) AS total_rows,
@@ -233,7 +342,54 @@ FROM information_schema.columns
 WHERE table_name = '{entity}'
 AND table_schema = '{collection}';
 """
-        return self._execute_sql(query, source, database, collection)
+        basic_info = self._execute_sql(query, source, database, collection)
+        
+        varchar_numeric_cols = []
+        unsafe_numeric_cols = []
+        
+        if basic_info and len(basic_info) > 0:
+            row = basic_info[0]
+            logging.info(f'___info____{basic_info}')
+            columns = row.get('columns', [])
+            column_types = row.get('column_types', [])
+            
+            for col_name, col_type in zip(columns, column_types):
+                if col_type in ('character varying', 'varchar', 'text'):
+                    # Check entire column for mixed data - if ANY non-numeric value exists, mark as unsafe
+                    check_query = f"""\
+SELECT 
+    COUNT(*) FILTER (WHERE {col_name} ~ '^-?[0-9]+(\\.[0-9]+)?$') AS numeric_count,
+    COUNT(*) FILTER (WHERE {col_name} IS NOT NULL AND {col_name} !~ '^-?[0-9]+(\\.[0-9]+)?$') AS non_numeric_count,
+    COUNT(*) AS total_count
+FROM {collection}.{entity};
+"""
+                    try:
+                        result = self._execute_sql(check_query, source, database, collection)
+                        if result and len(result) > 0:
+                            numeric_count = result[0].get('numeric_count', 0)
+                            non_numeric_count = result[0].get('non_numeric_count', 0)
+                            total_count = result[0].get('total_count', 0)
+                            
+                            if non_numeric_count == 0 and numeric_count > 0:
+                                # Pure numeric column - safe to cast
+                                varchar_numeric_cols.append(col_name)
+                            elif non_numeric_count > 0:
+                                # Mixed data: contains non-numeric values - unsafe to cast
+                                unsafe_numeric_cols.append(col_name)
+                    except Exception:
+                        pass
+        
+        if not hasattr(self, '_unsafe_numeric_cache'):
+            self._unsafe_numeric_cache = {}
+        cache_key = f"{source}:{database}:{collection}"
+        self._unsafe_numeric_cache[cache_key] = unsafe_numeric_cols
+        
+        return {
+            "table_info": basic_info,
+            "varchar_columns_with_numeric_data": varchar_numeric_cols,
+            "varchar_columns_with_mixed_data": unsafe_numeric_cols,
+            "note": "Safe to cast: 'varchar_columns_with_numeric_data' (use ::numeric). UNSAFE to cast: 'varchar_columns_with_mixed_data' contain non-numeric values like 'not_available'."
+        }
 
     def _peek_table_data(
         self,
@@ -421,13 +577,34 @@ AND table_schema = '{collection}';
                         try:
                             if function_name in self.local_tools:
                                 arguments = json.loads(arguments_str)
-                                tool_result = self.local_tools[function_name].function(
-                                    **arguments
-                                )
+                                
+                                # Filter arguments to only include valid parameters
+                                # This prevents TypeError when LLM provides extra arguments
+                                tool = self.local_tools[function_name]
+                                valid_params = tool.get_parameters()
+                                if valid_params:
+                                    filtered_args = {
+                                        k: v for k, v in arguments.items() 
+                                        if k in valid_params
+                                    }
+                                    # Log if we're filtering out arguments
+                                    if len(filtered_args) != len(arguments):
+                                        removed = set(arguments.keys()) - set(filtered_args.keys())
+                                        logging.warning(
+                                            f"Filtered out invalid arguments for {function_name}: {removed}"
+                                        )
+                                    arguments = filtered_args
+                                
+                                tool_result = tool.function(**arguments)
                             else:
                                 tool_result = f"Error: Tool {function_name} not found."
                         except Exception as e:
-                            tool_result = f"Error executing tool {function_name}: {e}"
+                            error_str = str(e)
+                            # Check for PostgreSQL type casting errors in aggregate functions
+                            if "does not exist" in error_str and ("AVG" in error_str or "SUM" in error_str or "MIN" in error_str or "MAX" in error_str):
+                                tool_result = f"ERROR: Aggregate function failed. This usually means you're applying an aggregate function to a text/varchar column. You MUST cast numeric text columns to numeric type. Example: AVG(column_name::numeric) or SUM(CAST(column_name AS numeric)). Original error: {e}"
+                            else:
+                                tool_result = f"Error executing tool {function_name}: {e}"
 
                         messages.append(
                             {

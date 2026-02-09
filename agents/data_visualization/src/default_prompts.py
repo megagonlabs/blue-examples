@@ -13,6 +13,7 @@ WORKFLOW (follow these steps in order):
 
 RULES:
 - For SQL queries: NEVER fetch all columns. Only fetch columns necessary for the visualization. Use aggregations to summarize data.
+- IMPORTANT: Numeric data is often stored as varchar/text. ALWAYS cast to numeric when using aggregate functions like SUM, AVG, MIN, MAX. Example: AVG(column_name::numeric) or CAST(column_name AS numeric).
 - LIMIT data fetched: Either use aggregations (COUNT, SUM, AVG, GROUP BY) for summaries, or LIMIT to 30 rows max for raw data. Never fetch entire tables.
 - Choose appropriate marks, encodings, and transformations. Include a title and axis titles.
 - If data cannot be fetched, return {}.
