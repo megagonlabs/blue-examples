@@ -243,18 +243,8 @@ class InteractionControllerAgent(OpenAIAgent):
                 else:
                     user_request = data
 
-                # sync registry before planning
-                # self.registry.sync_source_database_collection(source="postgres_workspace", database="workspace", collection="public")
-                self.registry.sync_source_database_collection(source="postgres_example", database="postgres", collection="public")
-                logging.info("Synchronized source, database, and collection with Data Registry")
-
-                # search registry based on user request
-                data_registry = self.registry_search(user_request)
-                logging.info(f"Data Registry after search: {data_registry}")
-
                 # generate plan based on user request and registry
-                plan_prompt = f"Data Registry:\n{data_registry}"
-                plan_prompt = plan_prompt + self.properties.get("plan_prompt", "")
+                plan_prompt = self.properties.get("plan_prompt", "")
                 properties = {
                     "task_description": self.properties.get("task_description", None),
                     "demonstrations": self.properties.get("demonstrations", []),
@@ -301,11 +291,6 @@ class InteractionControllerAgent(OpenAIAgent):
                 i = worker.get_session_data("ITERATOR")
                 worker.set_session_data("ITERATOR", i+1) 
 
-                #sync registry
-                # self.registry.sync_source_database_collection(source="postgres_workspace", database="workspace", collection="public")
-                self.registry.sync_source_database_collection(source="postgres_example", database="postgres", collection="public")
-                logging.info("Synchronized source, database, and collection with Data Registry")
-                
                 #continue plan execution
                 self.plan_executor(worker)
         elif input == "FROM_VIS": # TO BE DEPRECATED
