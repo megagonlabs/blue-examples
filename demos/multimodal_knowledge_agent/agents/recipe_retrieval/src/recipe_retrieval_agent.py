@@ -224,7 +224,7 @@ class RecipeRetrievalAgent(OpenAIAgent):
             recipe = {}
 
             # Extract recipe_id (try common field names)
-            recipe["recipe_id"] = item.get("recipe_id") or item.get("id") or item.get("_id") or "unknown"
+            recipe["recipe_id"] = item.get("recipe_id") or item.get("id") or item.get("_id") or None
 
             # Extract dish_name (try common field names)
             recipe["dish_name"] = (

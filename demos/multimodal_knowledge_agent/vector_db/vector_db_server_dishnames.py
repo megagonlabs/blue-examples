@@ -25,7 +25,7 @@ def load_recipe_data_path():
     """Load recipe_data_path from agent.json."""
     script_dir = Path(__file__).parent
     agent_json_path = script_dir.parent / "agents" / "blue_plate" / "agent.json"
-    
+
     if agent_json_path.exists():
         try:
             with open(agent_json_path, "r") as f:
@@ -47,7 +47,7 @@ def load_recipe_data_path():
 EMBEDDING_MODEL = "text-embedding-3-small"
 
 # ChromaDB persistence directory
-CHROMA_PERSIST_DIR = Path(__file__).parent / "chroma_db"
+CHROMA_PERSIST_DIR = Path(__file__).parent / "vector_db"
 COLLECTION_NAME = "recipes"
 
 # Auto-index settings
@@ -145,7 +145,7 @@ def json_to_string(obj: Dict[str, Any]) -> str:
         else:
             value_str = str(value)
         parts.append(f"{key}: {value_str}")
-    
+
     return " | ".join(parts)
 
 
@@ -171,7 +171,7 @@ def get_indexed_sources() -> List[str]:
     coll = get_or_create_collection()
     if coll.count() == 0:
         return []
-    
+
     all_data = coll.get(include=["metadatas"])
     sources = set()
     for metadata in all_data["metadatas"]:
@@ -235,18 +235,18 @@ def add_documents_from_jsonl(
     Skips if the source file is already indexed.
     Returns number of documents added.
     Uses streaming to avoid memory issues with large files.
-    
+
     :param file_path: Path to the JSONL file
     :param max_rows: Randomly sample this many rows (None for all rows)
     :param sample_pct: Randomly sample this percentage of rows (None for all rows)
     :param random_seed: Seed for reproducible sampling (optional)
     """
     coll = get_or_create_collection()
-    
+
     path = Path(file_path)
     if not path.exists():
         raise FileNotFoundError(f"File not found: {file_path}")
-    
+
     # Decide sampling plan up front (this may read the file once to count rows)
     sample_indices, sample_size = _plan_sampling(path, max_rows, sample_pct, random_seed)
 
@@ -256,27 +256,27 @@ def add_documents_from_jsonl(
         source_name = f"{path.stem}_pct{pct_label}{path.suffix}"
     elif max_rows is not None and sample_size is not None:
         source_name = f"{path.stem}_sample{sample_size}{path.suffix}"
-    
+
     # Check if already indexed
     if is_source_indexed(source_name):
         print(f"Source '{source_name}' is already indexed. Skipping.")
         return 0
-    
+
     # Get current max index in collection for global indexing
     current_count = coll.count()
-    
+
     # Process in batches to avoid memory and API limits
     # Use module-level BATCH_SIZE for consistency
     total_added = 0
     skipped = 0
-    
+
     batch_docs = []
     batch_texts = []
     batch_ids = []
     batch_metadatas = []
-    
+
     print(f"Loading and indexing documents from '{source_name}' (batch size: {BATCH_SIZE})...", flush=True)
-    
+
     with open(path, "r", encoding="utf-8") as f:
         for local_idx, line in enumerate(f):
             if sample_indices is not None and local_idx not in sample_indices:
@@ -285,13 +285,13 @@ def add_documents_from_jsonl(
             line = line.strip()
             if not line:
                 continue
-            
+
             doc = json.loads(line)
             # Use dish name; fallback to recipe_id; skip if missing/empty
             raw_name = doc.get('name')
             raw_recipe_id = doc.get('recipe_id')
             name_val = raw_name if isinstance(raw_name, str) else None
-            rid_val = raw_recipe_id if isinstance(raw_recipe_id, str) else None
+            rid_val = raw_recipe_id if isinstance(raw_recipe_id, int) else None
             info_for_embedding = (name_val or rid_val or "").strip()
             if not info_for_embedding or info_for_embedding == None:
                 skipped += 1
@@ -300,7 +300,7 @@ def add_documents_from_jsonl(
 
             doc_id = str(uuid.uuid4())
             global_index = current_count + local_idx
-            
+
             batch_docs.append(doc)
             batch_texts.append(info_for_embedding)
             batch_ids.append(doc_id)
@@ -310,15 +310,15 @@ def add_documents_from_jsonl(
                 "local_index": local_idx,
                 "source": source_name,
             })
-            
+
             # Process batch when full
             if len(batch_docs) >= BATCH_SIZE:
                 batch_num = (total_added // BATCH_SIZE) + 1
                 print(f"  Processing batch {batch_num} (rows {total_added + 1}-{total_added + len(batch_docs)})...", flush=True)
-                
+
                 # Create embeddings for this batch
                 batch_embeddings = embed_texts(batch_texts)
-                
+
                 # Add to ChromaDB
                 coll.add(
                     ids=batch_ids,
@@ -326,15 +326,15 @@ def add_documents_from_jsonl(
                     documents=batch_texts,
                     metadatas=batch_metadatas,
                 )
-                
+
                 total_added += len(batch_docs)
-                
+
                 # Clear batch
                 batch_docs = []
                 batch_texts = []
                 batch_ids = []
                 batch_metadatas = []
-    
+
     # Process remaining documents
     if batch_docs:
         batch_num = (total_added // BATCH_SIZE) + 1
@@ -347,7 +347,7 @@ def add_documents_from_jsonl(
             metadatas=batch_metadatas,
         )
         total_added += len(batch_docs)
-    
+
     print(f"Added {total_added} documents from '{source_name}' successfully! Skipped {skipped} documents.")
     print(f"Total documents in collection: {coll.count()}")
     return total_added
@@ -363,7 +363,7 @@ def load_and_index_jsonl(
     """
     Load a JSONL file and create embeddings for each row.
     If embeddings already exist in ChromaDB, skip indexing unless force_reindex is True.
-    
+
     :param file_path: Path to the JSONL file
     :param force_reindex: If True, clear existing collection and reindex
     :param max_rows: Randomly sample this many rows (None for all rows)
@@ -372,14 +372,14 @@ def load_and_index_jsonl(
     """
     global collection
     coll = get_or_create_collection()
-    
+
     # Clear existing data if re-indexing
     if force_reindex and coll.count() > 0:
         print("Clearing existing collection for re-indexing...")
         chroma_client.delete_collection(name=COLLECTION_NAME)
         collection = None  # Reset global reference
         coll = get_or_create_collection()
-    
+
     return add_documents_from_jsonl(
         file_path,
         max_rows=max_rows,
@@ -393,7 +393,7 @@ async def startup_event():
     """Load existing embeddings on startup or auto-index from recipe_data directory."""
     # Initialize collection
     coll = get_or_create_collection()
-    
+
     if coll.count() > 0:
         print(f"Loaded existing collection with {coll.count()} documents from {CHROMA_PERSIST_DIR}")
         print(f"Indexed sources: {get_indexed_sources()}")
@@ -491,22 +491,22 @@ async def query_documents(request: QueryRequest):
     Optionally filter by source file using the 'source' parameter.
     """
     coll = get_or_create_collection()
-    
+
     if coll.count() == 0:
         raise HTTPException(status_code=400, detail="No documents indexed. Please index documents first.")
-    
+
     # Embed the query
     query_embedding = embed_texts([request.query])[0]
-    
+
     # Build where clause for source filtering
     where_clause = None
     if request.source:
         where_clause = {"source": request.source}
-    
+
     # Limit results to prevent memory issues
     # Don't fetch more than QUERY_BATCH_SIZE at once
     max_results = min(request.top_k, QUERY_BATCH_SIZE, coll.count())
-    
+
     # Query ChromaDB - exclude documents to save memory
     results = coll.query(
         query_embeddings=[query_embedding],
@@ -514,7 +514,7 @@ async def query_documents(request: QueryRequest):
         where=where_clause,
         include=["metadatas", "distances"]  # Removed "documents" to save memory
     )
-    
+
     # Parse results
     query_results = []
     if results["metadatas"] and results["metadatas"][0]:
@@ -523,7 +523,7 @@ async def query_documents(request: QueryRequest):
             # Convert distance to similarity score: similarity = 1 - distance
             distance = results["distances"][0][i] if results["distances"] else 0
             similarity_score = 1 - distance
-            
+
             original_doc = json.loads(metadata["original_doc"])
             query_results.append(QueryResult(
                 index=metadata["index"],
@@ -531,7 +531,7 @@ async def query_documents(request: QueryRequest):
                 document=original_doc,
                 source=metadata.get("source", "unknown"),
             ))
-    
+
     return QueryResponse(
         query=request.query,
         results=query_results,
@@ -542,15 +542,15 @@ async def query_documents(request: QueryRequest):
 async def list_documents(source: Optional[str] = None):
     """List all indexed documents with their indices. Optionally filter by source."""
     coll = get_or_create_collection()
-    
+
     if coll.count() == 0:
         return {"message": "No documents indexed", "documents": [], "sources": []}
-    
+
     # Build where clause for source filtering
     where_clause = None
     if source:
         where_clause = {"source": source}
-    
+
     # Get documents from collection (limited to prevent memory issues)
     # Fetch in smaller batches if collection is large
     total_count = coll.count()
@@ -559,20 +559,20 @@ async def list_documents(source: Optional[str] = None):
         all_data = coll.get(include=["metadatas"], limit=QUERY_BATCH_SIZE)
     else:
         all_data = coll.get(include=["metadatas"], where=where_clause)
-    
+
     documents_list = []
     for metadata in all_data["metadatas"]:
         original_doc = json.loads(metadata["original_doc"])
         documents_list.append({
             "index": metadata["index"],
             "name": original_doc.get("name", "N/A"),
-            "recipe_id": original_doc.get("recipe_id", "N/A"),
+            "recipe_id": original_doc.get("recipe_id", -1),
             "source": metadata.get("source", "unknown"),
         })
-    
+
     # Sort by index
     documents_list.sort(key=lambda x: x["index"])
-    
+
     return {
         "num_documents": len(documents_list),
         "total_documents": coll.count(),
@@ -586,7 +586,7 @@ async def list_sources():
     """List all indexed source files."""
     coll = get_or_create_collection()
     sources = get_indexed_sources()
-    
+
     return {
         "num_sources": len(sources),
         "total_documents": coll.count(),
@@ -599,13 +599,13 @@ async def clear_collection():
     """Clear all documents from the collection."""
     global collection
     coll = get_or_create_collection()
-    
+
     if coll.count() == 0:
         return {"message": "Collection is already empty"}
-    
+
     chroma_client.delete_collection(name=COLLECTION_NAME)
     collection = None
-    
+
     return {"message": "Collection cleared successfully"}
 
 
