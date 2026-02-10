@@ -829,7 +829,10 @@ class ReactiveBluePlateAgent(OpenAIAgent):
                     if not isinstance(result, dict):
                         continue
                     for recipe in result.get("recipes", []):
-                        r_id = str(recipe.get("recipe_id", ""))
+                        r_id = recipe.get("recipe_id")
+                        if not isinstance(r_id, int):
+                            logging.warning(f"Invalid recipe_id format: {r_id} in recipe {recipe}")
+                            continue
                         recipe_id_to_full_recipe[r_id] = recipe
 
             logging.info(
@@ -841,8 +844,11 @@ class ReactiveBluePlateAgent(OpenAIAgent):
                 logging.info(f"ACT: Invalid recipe data format for ref {recipe_ref}: {recipe_data}")
                 recipe_data["result"] = []
             for r in recipe_data["result"]:
-                r_id = f"REC-{r['recipe_id']:03d}"
-                logging.info(r_id)
+                r_id = r["recipe_id"]
+                if not isinstance(r_id, int):
+                    logging.warning(f"Invalid recipe_id format: {r_id} in recipe {r}")
+                    continue
+
                 if r_id in recipe_id_to_full_recipe:
                     recipe = recipe_id_to_full_recipe[r_id]
                     recipe["instructions"] = r["instructions"]

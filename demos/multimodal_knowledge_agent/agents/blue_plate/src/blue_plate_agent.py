@@ -291,18 +291,16 @@ class BluePlateAgent(OpenAIAgent):
                 for result in self.candidate_recipes.get('results', []):
                     for recipe in result.get('recipes', []):
                         if 'recipe_id' in recipe:
-                            try:
-                                # Converts IDs to new format only if they were already ints
-                                recipe['recipe_id'] = f"REC-{int(recipe['recipe_id']):03d}"
-                            except:
-                                pass
+                            if not isinstance(recipe['recipe_id'], int):
+                                logging.error(f"recipe['recipe_id'] is not int: {recipe['recipe_id']}")
+                            return f"Invalid recipe_id format: expected int, got {type(recipe['recipe_id'])}"
 
                 logging.info(f"Candidate recipe list: {self.candidate_recipes}")
 
                 self.recipe_id_to_recipe = {}
                 for result in self.candidate_recipes['results']:
                     for recipe in result['recipes']:
-                        self.recipe_id_to_recipe[str(recipe['recipe_id'])] = recipe
+                        self.recipe_id_to_recipe[recipe['recipe_id']] = recipe
                 logging.info(f"ID to recipe: {self.recipe_id_to_recipe}")
 
                 self.execute_presenter_plan(self.candidate_recipes, worker)
@@ -323,7 +321,11 @@ class BluePlateAgent(OpenAIAgent):
 
                 chosen_recipes = []
                 for r in query_results['result']:
-                    r_id = f"REC-{int(r['recipe_id']):03d}"
+                    r_id: int = r['recipe_id']
+                    if not isinstance(r_id, int):
+                        logging.error(f"recipe_id is not int: {r}")
+                        return f"Invalid recipe_id format in result: expected int, got {type(r_id)}"
+
                     if r_id in self.recipe_id_to_recipe:
                         recipe = self.recipe_id_to_recipe[r_id]
                         recipe['instructions'] = r['instructions']
