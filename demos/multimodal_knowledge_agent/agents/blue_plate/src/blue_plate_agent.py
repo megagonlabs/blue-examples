@@ -293,7 +293,7 @@ class BluePlateAgent(OpenAIAgent):
                         if 'recipe_id' in recipe:
                             if not isinstance(recipe['recipe_id'], int):
                                 logging.error(f"recipe['recipe_id'] is not int: {recipe['recipe_id']}")
-                            return f"Invalid recipe_id format: expected int, got {type(recipe['recipe_id'])}"
+                                return f"Invalid recipe_id format: expected int, got {type(recipe['recipe_id'])}"
 
                 logging.info(f"Candidate recipe list: {self.candidate_recipes}")
 
