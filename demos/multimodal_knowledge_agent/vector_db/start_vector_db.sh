@@ -5,14 +5,31 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$SCRIPT_DIR" || exit 1
 
-echo "Starting vector database server (vector_db_server_dishnames.py)..."
+# Default data source
+DATA_SOURCE="example_data"
+
+# Parse arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --data) DATA_SOURCE="$2"; shift ;;
+        *) echo "Unknown parameter: $1. Usage: ./start_vector_db.sh [--data example_data|recipe_data]"; exit 1 ;;
+    esac
+    shift
+done
+
+# Normalize 'review_data' to 'recipe_data' if user uses that valid term from instructions
+if [[ "$DATA_SOURCE" == "review_data" ]]; then
+    DATA_SOURCE="recipe_data"
+fi
+
+echo "Starting vector database server (vector_db_server_dishnames.py) using data: $DATA_SOURCE..."
 
 # Stop any existing server
 pkill -f "vector_db_server_dishnames.py" || true
 
 # Start the server in background
 # Use --project to specify the project root for uv
-nohup uv run --project "$PROJECT_ROOT" python vector_db_server_dishnames.py > server.log 2>&1 &
+nohup uv run --project "$PROJECT_ROOT" python vector_db_server_dishnames.py --data-source "$DATA_SOURCE" > server.log 2>&1 &
 
 # Get the PID
 SERVER_PID=$!

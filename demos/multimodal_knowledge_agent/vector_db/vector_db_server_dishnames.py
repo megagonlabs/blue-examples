@@ -5,6 +5,7 @@ Embeddings are persisted to disk and loaded on subsequent runs.
 Supports multiple data sources (JSONL files).
 """
 
+import argparse
 import json
 import math
 import os
@@ -21,37 +22,39 @@ from openai import OpenAI
 # Initialize OpenAI client
 client = OpenAI()
 
-def load_recipe_data_path():
-    """Load recipe_data_path from agent.json."""
+def load_recipe_data_path(data_source: str = "example_data"):
+    """Load recipe_data_path based on data_source argument."""
     script_dir = Path(__file__).parent
-    agent_json_path = script_dir.parent / "agents" / "blue_plate" / "agent.json"
 
-    if agent_json_path.exists():
-        try:
-            with open(agent_json_path, "r") as f:
-                config = json.load(f)
-                recipe_path = config.get("recipe_data_path", "./recipe_data")
-                # Convert relative path to absolute
-                if not os.path.isabs(recipe_path):
-                    recipe_path = script_dir / recipe_path
-                else:
-                    recipe_path = Path(recipe_path)
-                return recipe_path.resolve()
-        except Exception as e:
-            print(f"Warning: Failed to load agent.json: {e}")
-            return script_dir / "recipe_data"
-    else:
-        return script_dir / "recipe_data"
+    print(f"Data source configured as: {data_source}")
+
+    if data_source == "recipe_data":
+        recipe_data = script_dir / "recipe_data"
+        if recipe_data.exists():
+            return recipe_data
+        else:
+            raise FileNotFoundError(f"Requested data source 'recipe_data' directory not found: {recipe_data}")
+
+    if data_source == "example_data":
+        example_data = script_dir / "example_data"
+        if example_data.exists() and any(example_data.glob("*.jsonl")):
+            return example_data
+        else:
+            raise FileNotFoundError(f"Requested data source 'example_data' directory not found or empty: {example_data}")
+
+    raise FileNotFoundError("No data directory found (tried 'example_data' and 'recipe_data')")
 
 # Embedding model
 EMBEDDING_MODEL = "text-embedding-3-small"
 
-# ChromaDB persistence directory
-CHROMA_PERSIST_DIR = Path(__file__).parent / "vector_db"
+# Global state
 COLLECTION_NAME = "recipes"
+CHROMA_PERSIST_DIR: Optional[Path] = None
+chroma_client: Optional[chromadb.PersistentClient] = None
+collection: Optional[chromadb.Collection] = None
 
-# Auto-index settings
-AUTO_INDEX_JSONL_DIR = load_recipe_data_path()
+# Auto-index settings - will be initialized in startup_event or main
+AUTO_INDEX_JSONL_DIR: Optional[Path] = None
 AUTO_INDEX_MAX_ROWS = None  # Set to None to index all rows
 AUTO_INDEX_SAMPLE_PCT = 10  # Set to None to index 100% (no sampling)
 
@@ -62,13 +65,27 @@ QUERY_BATCH_SIZE = 100  # Limit results fetched in a single query
 # FastAPI app
 app = FastAPI(title="Vector Database API", version="1.0.0")
 
-# Initialize ChromaDB client with persistence and memory settings
-chroma_client = chromadb.PersistentClient(
-    path=str(CHROMA_PERSIST_DIR)
-)
+def setup_chroma_client(data_source_name: str):
+    """Initialize ChromaDB client with a specific persistence directory."""
+    global chroma_client, CHROMA_PERSIST_DIR
 
-# Global collection reference
-collection: Optional[chromadb.Collection] = None
+    # Create a sub-directory based on the data source name
+    base_dir = Path(__file__).parent / "chroma_db"
+    CHROMA_PERSIST_DIR = base_dir / data_source_name
+
+    print(f"Initializing ChromaDB in {CHROMA_PERSIST_DIR}")
+    chroma_client = chromadb.PersistentClient(
+        path=str(CHROMA_PERSIST_DIR)
+    )
+
+def get_chroma_client():
+    """Get or initialize the ChromaDB client."""
+    global chroma_client
+    if chroma_client is None:
+        # Fallback for when running without explicit args (e.g. tests or direct uvicorn)
+        setup_chroma_client("example_data")
+    return chroma_client
+
 
 
 class QueryRequest(BaseModel):
@@ -152,8 +169,12 @@ def json_to_string(obj: Dict[str, Any]) -> str:
 def get_or_create_collection() -> chromadb.Collection:
     """Get existing collection or create a new one."""
     global collection
+
+    # Ensure client is initialized
+    client_instance = get_chroma_client()
+
     if collection is None:
-        collection = chroma_client.get_or_create_collection(
+        collection = client_instance.get_or_create_collection(
             name=COLLECTION_NAME,
             metadata={"hnsw:space": "cosine"}  # Use cosine similarity
         )
@@ -372,11 +393,12 @@ def load_and_index_jsonl(
     """
     global collection
     coll = get_or_create_collection()
+    client_instance = get_chroma_client()
 
     # Clear existing data if re-indexing
     if force_reindex and coll.count() > 0:
         print("Clearing existing collection for re-indexing...")
-        chroma_client.delete_collection(name=COLLECTION_NAME)
+        client_instance.delete_collection(name=COLLECTION_NAME)
         collection = None  # Reset global reference
         coll = get_or_create_collection()
 
@@ -390,16 +412,32 @@ def load_and_index_jsonl(
 
 @app.on_event("startup")
 async def startup_event():
-    """Load existing embeddings on startup or auto-index from recipe_data directory."""
+    """Load existing embeddings on startup or auto-index from data directory."""
+    global AUTO_INDEX_JSONL_DIR
+
+    # Ensure ChromaDB is initialized (handles fallback if not set in main)
+    # This might happen if running via 'uvicorn vector_db_server_dishnames:app'
+    get_chroma_client()
+
+    # Initialize directory if not set (fallback)
+    if AUTO_INDEX_JSONL_DIR is None:
+        try:
+            AUTO_INDEX_JSONL_DIR = load_recipe_data_path("example_data")
+        except FileNotFoundError:
+            print("Warning: Default 'example_data' not found on startup.")
+            # If default fails, we might still proceed if just serving existing DB
+
     # Initialize collection
     coll = get_or_create_collection()
 
     if coll.count() > 0:
-        print(f"Loaded existing collection with {coll.count()} documents from {CHROMA_PERSIST_DIR}")
+        # Use str(CHROMA_PERSIST_DIR) if available, otherwise it was default
+        persist_dir = CHROMA_PERSIST_DIR if CHROMA_PERSIST_DIR else "default"
+        print(f"Loaded existing collection with {coll.count()} documents from {persist_dir}")
         print(f"Indexed sources: {get_indexed_sources()}")
     else:
-        # Auto-load from recipe_data directory (loaded from agent.json)
-        if AUTO_INDEX_JSONL_DIR.exists():
+        # Auto-load from data directory
+        if AUTO_INDEX_JSONL_DIR and AUTO_INDEX_JSONL_DIR.exists():
             print(
                 f"Auto-indexing JSONL files from {AUTO_INDEX_JSONL_DIR} "
                 f"(max_rows={AUTO_INDEX_MAX_ROWS}, sample_pct={AUTO_INDEX_SAMPLE_PCT})..."
@@ -414,7 +452,7 @@ async def startup_event():
                 except Exception as e:
                     print(f"Error indexing {jsonl_file}: {e}")
         else:
-            print(f"Recipe data directory not found: {AUTO_INDEX_JSONL_DIR}")
+            print(f"No auto-indexing directory found: {AUTO_INDEX_JSONL_DIR}")
             print("No existing collection found. Use POST /index to add documents.")
 
 
@@ -611,4 +649,27 @@ async def clear_collection():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+    parser = argparse.ArgumentParser(description="Vector Database Server")
+    parser.add_argument("--data-source", type=str, default="example_data",
+                        help="Data source to index on startup ('example_data' or 'recipe_data')")
+    parser.add_argument("--host", type=str, default="0.0.0.0", help="Host to bind to")
+    parser.add_argument("--port", type=int, default=8000, help="Port to bind to")
+
+    # Use parse_known_args to avoid conflicts with uvicorn if run via CLI
+    args, unknown = parser.parse_known_args()
+
+    # Initialize Chroma directory based on data source
+    setup_chroma_client(args.data_source)
+
+    # Set the global data directory
+    try:
+        AUTO_INDEX_JSONL_DIR = load_recipe_data_path(args.data_source)
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+        # We don't exit here because we might just want to start the server
+        # and use the (potentially empty) persistence directory.
+        # But if the user asked for specific data and it's missing, maybe we should warn more loudly.
+        AUTO_INDEX_JSONL_DIR = None
+
+    uvicorn.run(app, host=args.host, port=args.port)

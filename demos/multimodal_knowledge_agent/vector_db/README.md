@@ -1,12 +1,13 @@
 # Vector Database Server
 
-A vector search server using ChromaDB. It indexes documents from JSONL files and performs cosine similarity search using OpenAI Embeddings.
+A vector search server using ChromaDB that indexes documents from JSONL files and performs cosine similarity search using OpenAI Embeddings.
 
 ## Features
 
 - Persistent vector storage with **ChromaDB**
 - Uses **OpenAI Embeddings** (`text-embedding-3-small`)
 - Automatic indexing from multiple JSONL files
+- Source-specific persistence directories (separate databases for different data sources)
 - Filtering by source file
 - Embeddings are automatically saved and reused on subsequent runs
 
@@ -14,8 +15,12 @@ A vector search server using ChromaDB. It indexes documents from JSONL files and
 
 ### Install Required Packages
 
+The easiest way to set up the environment is using [`uv`](https://docs.astral.sh/uv/). Navigate to the parent `multimodal_knowledge_agent/` directory and install dependencies:
+
 ```bash
-cd /home/seiji/blue-plate
+# From the multimodal_knowledge_agent directory (one level up from vector_db)
+cd ../
+# uv init . (if you haven't already initialized uv in this directory)
 uv add chromadb fastapi uvicorn openai requests
 ```
 
@@ -29,17 +34,20 @@ export OPENAI_API_KEY="your-api-key-here"
 
 ## Data Preparation
 
-Place JSONL files in the `example_data/` directory. They will be automatically indexed when the server starts.
+We provide example data in `example_data/` for testing. For larger-scale testing, you can download recipe data from Kaggle (see [`../data_prep/README.md`](../data_prep/README.md) for download instructions) and place the JSONL file (`recipes_with_reviews.jsonl`) in `recipe_data/`.
 
-```
-retrieval_agent/
-├── example_data/        # Toy data directory 
+```plain
+vector_db/
+├── example_data/                    # Example data (included)
 │   ├── example_asian_recipes.jsonl
 │   └── example_other_recipes.jsonl
-├── recipe_data/         # Data directory
-│   └── (additional JSONL files...)
-├── vector_db_server_dishnames.py
-└── chroma_db/  (auto-generated)
+├── recipe_data/                     # Full dataset (user downloads)
+│   └── recipes_with_reviews.jsonl   (place downloaded data here)
+├── vector_db_server_dishnames.py   # Server script
+├── start_vector_db.sh               # Startup script
+└── chroma_db/                       (auto-generated, data-source specific)
+    ├── example_data/                # ChromaDB for example_data
+    └── recipe_data/                 # ChromaDB for recipe_data
 ```
 
 Each JSONL file should contain one JSON object per line.
@@ -48,16 +56,24 @@ Each JSONL file should contain one JSON object per line.
 
 ### Using the Startup Script (Recommended)
 
-The easiest way to start the server is using the provided script:
+To start the server with automatic indexing and logging, use the provided startup script:
 
 ```bash
-cd vector_db
 ./start_vector_db.sh
 ```
 
-This script:
+By default, it loads data from `example_data/` and stores embeddings in `chroma_db/example_data/`. To use the larger `recipe_data/` dataset instead, use the `--data` flag:
+
+```bash
+./start_vector_db.sh --data recipe_data
+```
+
+This will load data from `recipe_data/` and store embeddings in `chroma_db/recipe_data/`, keeping the two datasets completely separate.
+
+**What the script does:**
+
 - Stops any existing server instance
-- Starts the server in the background
+- Starts the server in the background with the specified data source
 - Logs output to `server.log`
 - Verifies the server started successfully
 
@@ -65,10 +81,16 @@ This script:
 
 ### Manual Start
 
-Direct command:
+Start the server directly with Python (uses `example_data` by default):
+
 ```bash
-cd vector_db
 uv run python vector_db_server_dishnames.py
+```
+
+To specify a different data source:
+
+```bash
+uv run python vector_db_server_dishnames.py --data-source recipe_data
 ```
 
 The server will start at `http://localhost:8000`.
@@ -76,7 +98,6 @@ The server will start at `http://localhost:8000`.
 ### Run in Background (Manual)
 
 ```bash
-cd vector_db
 nohup uv run python vector_db_server_dishnames.py > server.log 2>&1 &
 ```
 
