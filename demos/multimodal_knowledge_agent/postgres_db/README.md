@@ -10,7 +10,7 @@ docker run -d --name workspace \
   -e POSTGRES_PASSWORD=blueplate \
   -e POSTGRES_DB=recipes \
   -p 5449:5432 \
-  -v "$(pwd)/asian_recipes_sample_dump.sql:/docker-entrypoint-initdb.d/init.sql:ro" \
+  -v "$(pwd)/example_data/asian_recipes_sample_dump.sql:/docker-entrypoint-initdb.d/init.sql:ro" \
   postgres
 ```
 Note that you can switch to non asian recipes by changing the dump reference to other_recipes_sample_dump.sql.
