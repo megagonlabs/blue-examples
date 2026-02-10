@@ -55,8 +55,9 @@ python data_prep/data_prep_recipes.py \
 
 ## Instructions to create Postgres DB
 
+**Run all commands from the repository root** (where this project's root is located).
 
-1. Create a database (adjust user if needed):
+### 1. Create a database (adjust user and file path if needed)
 
 ```bash
 createdb -U postgres recipes
@@ -64,34 +65,55 @@ createdb -U postgres recipes
 psql -U postgres -c "CREATE DATABASE recipes;"
 ```
 
-2. Apply the DDL to create tables:
+### 2. Apply the DDL to create tables
 
 ```bash
 psql -U postgres -d recipes -f ../data/recipes/processed/tables/ddl.txt
 ```
 
-3. Import CSV files: 
+### 3. Import CSV files
 
-You can now import CSV tables generated under `../data/recipes/processed/tables/` 
+The CSV tables are located in `../data/recipes/processed/tables/`.
 
-Example: 
+Import all tables in the correct order (parent tables first, then join/child tables):
+
 ```bash
-psql -U postgres -d recipes -c "COPY public.recipes FROM '../data/recipes/processed/tables/recipes.csv' WITH CSV HEADER"
+# Parent tables first
+psql -U postgres -d recipes -c "\\copy public.recipes FROM '../data/recipes/processed/tables/recipes.csv' WITH CSV HEADER"
+psql -U postgres -d recipes -c "\\copy public.ingredients FROM '../data/recipes/processed/tables/ingredients.csv' WITH CSV HEADER"
+psql -U postgres -d recipes -c "\\copy public.nutrition FROM '../data/recipes/processed/tables/nutrition.csv' WITH CSV HEADER"
+psql -U postgres -d recipes -c "\\copy public.tags FROM '../data/recipes/processed/tables/tags.csv' WITH CSV HEADER"
+
+
+# Join tables last (they reference parent tables via foreign keys)
+psql -U postgres -d recipes -c "\\copy public.recipe_ingredients FROM '../data/recipes/processed/tables/recipe_ingredients.csv' WITH CSV HEADER"
+psql -U postgres -d recipes -c "\\copy public.recipe_tags FROM '../data/recipes/processed/tables/recipe_tags.csv' WITH CSV HEADER"
 ```
 
-Notes and tips:
-- Ensure the target tables exist (create them via the DDL) and column ordering in the CSV matches the table schema. 
+**Notes and tips:**
+- Ensure the target tables exist (created via the DDL) before importing CSVs.
+- If you get "missing data for column X" errors, check if:
+  - The CSV file has that column (check headers)
+  - The column has data in all rows (some columns like `description` may be empty/nullable in the source data)
+  - The column order matches between CSV and table schema
+- Import parent tables before join/child tables to avoid foreign key constraint errors.
 
-4. Create a database dump: 
+### 4. Create a database dump
 
-After you have imported the csv files and imported the data, you can create a database dump: 
+After importing CSVs and verifying the data, create a backup dump:
 
 ```bash
 pg_dump -U postgres -d recipes -F p -f recipes_db_dump.sql
+
 # restore with:
 psql -U postgres -d recipes -f recipes_db_dump.sql
 ```
 
-5. Follow the instructions at postgres_db/README.md on how to link to the data registry.
+Or use custom format (more flexible for restore):
+
+
+### 5. Link to data registry
+
+Follow the instructions at [postgres_db/README.md](../postgres_db/README.md) on how to link to the data registry.
 
 

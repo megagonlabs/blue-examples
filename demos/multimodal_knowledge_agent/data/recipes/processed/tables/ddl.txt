@@ -1,12 +1,12 @@
 CREATE TABLE ingredients (
     ingredient_id INT PRIMARY KEY,
-    ingredient_name VARCHAR(255) NOT NULL
+    ingredient_name VARCHAR(255)
 );
 
 
 CREATE TABLE recipes (
     recipe_id INT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(255),
     description TEXT,
     cook_time_min INT,
     ingredient_count INT,
@@ -37,7 +37,7 @@ CREATE TABLE nutrition (
 
 CREATE TABLE tags (
     tag_id INT PRIMARY KEY,
-    tag_name VARCHAR(255) NOT NULL
+    tag_name VARCHAR(255)
 );
 
 CREATE TABLE recipe_tags (
