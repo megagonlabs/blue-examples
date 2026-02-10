@@ -40,49 +40,7 @@ This demo uses the `postgres_example` dataset which is shipped with Blue. To ena
 
 You can explore the database schema by clicking on `postgres` → `public` to verify the data is loaded correctly.
 
-#### postgres_workspace
-
-This demo also uses the `postgres_workspace` dataset which contains prebuilt data for the data explorer and visualization.
-
-1. From this directory, run:
-
-```bash
-docker run -d --name postgres_workspace \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=postgres \
-  -e POSTGRES_DB=workspace \
-  -p 5449:5432 \
-  -v "$(pwd)/postgres_workspace.sql:/docker-entrypoint-initdb.d/init.sql:ro" \
-  postgres
-```
-
-This mounts the SQL dump into `/docker-entrypoint-initdb.d/`, which PostgreSQL automatically executes on first startup.
-
-2. Verify the data is loaded correctly:
-
-```bash
-docker exec -it postgres_workspace psql -U postgres -d workspace -c "\dt"
-```
-
-3. Create a Data Registry Entry
-
-To register this database in the Blue platform data registry, use:
-
-```json
-{
-    "connection": {
-        "host": "10.0.175.210",  // Replace with your actual host IP
-        "port": 5449,
-        "protocol": "postgres",
-        "user": "postgres",
-        "password": "postgres"
-    },
-    "metadata": {}
-}
-```
-4. Select **Actions** → **Synchronize**
-
-### 3. Build and Deploy the Five Agents
+### 2. Build and Deploy the Five Agents
 
 Build and register each agent (refer to individual agent READMEs for details):
 
@@ -115,7 +73,7 @@ cd blue/agents/task_coordinator
 blue registry agent update agent.json
 ```
 
-### 4. Deploy Agents
+### 3. Deploy Agents
 
 In the Blue UI (`http://localhost:3000`):
 
