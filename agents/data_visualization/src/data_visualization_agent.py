@@ -110,7 +110,6 @@ class DataVisualizationAgent(OpenAIAgent):
         if "name" not in kwargs:
             kwargs["name"] = "DATA_VISUALIZATION_AGENT"
         super().__init__(**kwargs)
-        self.vis_spec = {}
 
     def _initialize_properties(self):
         super()._initialize_properties()
@@ -163,7 +162,7 @@ class DataVisualizationAgent(OpenAIAgent):
         execute_sql_query_tool = Tool(
             name="execute_sql_query",
             function=self._execute_sql_with_validation,
-            description="Execute sql query on selected table. IMPORTANT: Numeric data is often stored as varchar/text. ALWAYS use explicit casts for aggregate functions like SUM, AVG, MIN, MAX. Example: AVG(column_name::numeric) or SUM(CAST(column_name AS numeric)). Without casting, you will get 'function does not exist' errors.",
+            description="Execute sql query on selected table. CRITICAL: Check column types from get_table_info BEFORE writing queries. For numeric columns (integer, bigint, numeric, double precision): use directly in aggregates, NO casting or regex needed. For varchar/text columns with numeric data: (1) Filter in WHERE with regex (e.g., WHERE col ~ '^-?[0-9]+(\\.[0-9]+)?$'), (2) Cast in SELECT (e.g., AVG(col::numeric)). NEVER use CASE WHEN or regex inside aggregates. NEVER use regex operators on non-varchar columns.",
         )
         self.local_tools["execute_sql_query"] = execute_sql_query_tool
 
@@ -189,6 +188,18 @@ class DataVisualizationAgent(OpenAIAgent):
         """
         import re
         
+        # Check for CASE WHEN inside aggregate functions - this is almost always wrong
+        case_in_agg_pattern = r'(AVG|SUM|MIN|MAX)\s*\(\s*CASE\s+WHEN'
+        if re.search(case_in_agg_pattern, query, re.IGNORECASE):
+            return {
+                "valid": False,
+                "error": (
+                    "CASE WHEN statement found inside aggregate function (AVG/SUM/MIN/MAX). "
+                    "This causes type errors. Instead: (1) Filter rows in WHERE clause using regex, "
+                    "(2) Then cast in SELECT. Example: WHERE salary ~ '^[0-9]+' ... SELECT AVG(salary::numeric)"
+                ),
+            }
+        
         cache_key = f"{source}:{database}:{collection}"
         unsafe_numeric_cols = getattr(self, '_unsafe_numeric_cache', {}).get(cache_key, [])
         
@@ -200,7 +211,7 @@ class DataVisualizationAgent(OpenAIAgent):
         except Exception:
             pass
         
-        # Check for unsafe numeric casts
+        # Check for unsafe numeric casts (mixed-data varchar columns must be filtered)
         for col in unsafe_numeric_cols:
             pattern1 = rf'{re.escape(col)}\s*::\s*numeric'
             pattern2 = rf'CAST\s*\(\s*{re.escape(col)}\s+AS\s+numeric\s*\)'
@@ -208,7 +219,14 @@ class DataVisualizationAgent(OpenAIAgent):
             if re.search(pattern1, query, re.IGNORECASE) or re.search(pattern2, query, re.IGNORECASE):
                 return {
                     "valid": False,
-                    "error": f"Column '{col}' contains mixed data (numbers and non-numeric values). Choose one approach: (1) Filter non-numeric values with WHERE {col} ~ '^-?[0-9]+(\\.[0-9]+)?$', (2) Use CASE to convert to NULL, or (3) Group non-numeric values separately. Do not directly cast without handling mixed data."
+                    "error": (
+                        f"Column '{col}' contains mixed data (numbers and non-numeric values). "
+                        "Do not cast directly. Use one of these approaches: "
+                        f"(1) Filter to numeric-only first, e.g., WHERE {col} ~ '^[0-9]+(\\.[0-9]+)?$' "
+                        "then cast in SELECT/aggregates; "
+                        "(2) Use CASE to convert non-numeric values to NULL; or "
+                        "(3) Group non-numeric values separately."
+                    ),
                 }
         
         # Check for undefined tables
@@ -222,28 +240,52 @@ class DataVisualizationAgent(OpenAIAgent):
             if table_ref not in available_tables:
                 return {
                     "valid": False,
-                    "error": f"Table '{table_ref}' does not exist. Available tables: {', '.join(available_tables)}. Use the list_database_tables tool to see all available tables."
+                    "error": (
+                        f"Table '{table_ref}' does not exist in the selected source/database/collection: "
+                        f"{source}/{database}/{collection}. Available tables: {', '.join(available_tables)}. "
+                        "Use the list_database_tables tool to see all available tables."
+                    )
                 }
         
-        # Get available columns for tables referenced in query
+        # Get available columns and types for tables referenced in query
+        # Cache full table_info to avoid redundant DB calls
+        if not hasattr(self, '_table_info_cache'):
+            self._table_info_cache = {}
+        
         available_columns = {}
-        if not hasattr(self, '_column_cache'):
-            self._column_cache = {}
+        col_type_map = {}  # Maps column names to their types
+        varchar_cols_by_table = {}
         
         for table_ref in tables_in_query:
-            column_cache_key = f"{source}:{database}:{table_ref}"
-            if column_cache_key in self._column_cache:
-                available_columns[table_ref] = self._column_cache[column_cache_key]
+            cache_key = f"{source}:{database}:{table_ref}"
+            
+            # Use cached table_info if available
+            if cache_key in self._table_info_cache:
+                table_info = self._table_info_cache[cache_key]
             else:
                 try:
                     entity_name = table_ref.split('.')[-1]
                     table_info = self._get_table_info(source, database, collection, entity_name)
-                    if table_info and 'table_info' in table_info and table_info['table_info']:
-                        columns = table_info['table_info'][0].get('columns', [])
-                        available_columns[table_ref] = columns
-                        self._column_cache[column_cache_key] = columns
+                    self._table_info_cache[cache_key] = table_info
                 except Exception:
-                    pass
+                    continue
+            
+            # Extract columns and types from cached/fetched table_info
+            if table_info and 'table_info' in table_info and table_info['table_info']:
+                col_names = table_info['table_info'][0].get('columns', [])
+                col_types = table_info['table_info'][0].get('column_types', [])
+                
+                available_columns[table_ref] = col_names
+                
+                # Build type map and varchar list in one pass
+                varchar_cols = []
+                for i, col in enumerate(col_names):
+                    if i < len(col_types):
+                        col_type_map[col] = col_types[i]
+                        if col_types[i] in ('character varying', 'varchar', 'text'):
+                            varchar_cols.append(col)
+                
+                varchar_cols_by_table[table_ref] = varchar_cols
         
         # Check for undefined columns
         qualified_col_pattern = r'\b([a-zA-Z_][a-zA-Z0-9_]*)\.([a-zA-Z_][a-zA-Z0-9_]*)\b'
@@ -274,6 +316,40 @@ class DataVisualizationAgent(OpenAIAgent):
                     "error": f"Column '{col_name}' does not exist in table '{matching_table}'. Available columns: {', '.join(available_cols)}. Use get_table_info tool to verify column names."
                 }
         
+        # Check for regex operators on non-varchar columns (col_type_map already built above)
+        regex_pattern = r'(\b\w+)\s*~\s*[\'"]'
+        regex_matches = re.findall(regex_pattern, query, re.IGNORECASE)
+        for col_name in regex_matches:
+            if col_name in col_type_map:
+                col_type = col_type_map[col_name]
+                if col_type not in ('character varying', 'varchar', 'text', 'unknown'):
+                    return {
+                        "valid": False,
+                        "error": (
+                            f"Column '{col_name}' has type '{col_type}' (not varchar/text) but you're using regex operator '~' on it. "
+                            f"Regex operators only work on text types. Since this column is already numeric, you don't need regex filtering. "
+                            f"Just use the column directly in your query and aggregates."
+                        ),
+                    }
+        
+        # Check for AVG/SUM/MIN/MAX on varchar columns without ::numeric cast
+        for table_ref, varchar_cols in varchar_cols_by_table.items():
+            for col in varchar_cols:
+                # Pattern: AVG(column_name) without ::numeric or CAST
+                agg_pattern = rf'(AVG|SUM|MIN|MAX)\s*\(\s*{re.escape(col)}\s*\)'
+                if re.search(agg_pattern, query, re.IGNORECASE):
+                    # Make sure it's not followed by ::numeric
+                    cast_pattern = rf'(AVG|SUM|MIN|MAX)\s*\(\s*{re.escape(col)}\s*::\s*numeric\s*\)'
+                    if not re.search(cast_pattern, query, re.IGNORECASE):
+                        return {
+                            "valid": False,
+                            "error": (
+                                f"Column '{col}' is varchar/text type but used in aggregate function without casting. "
+                                f"You MUST: (1) Filter to numeric rows in WHERE: WHERE {col} ~ '^-?[0-9]+(\\.[0-9]+)?$' "
+                                f"(2) Then cast in aggregate: AVG({col}::numeric)"
+                            ),
+                        }
+        
         return {"valid": True, "error": None}
     
     def _execute_sql(self, query, source, database, collection):
@@ -289,6 +365,9 @@ class DataVisualizationAgent(OpenAIAgent):
             return f"SQL ERROR: {validation['error']}"
         
         results = self.registry.execute_query(query, source, database, collection)
+        logging.info(f"SQL query results--------------------\n{query}--------------------\n{results}")
+        if not results:
+            return "SQL RESULT: empty result set. Try another SQL query."
         return results
 
     def _list_all_sources(self):
@@ -388,7 +467,7 @@ FROM {collection}.{entity};
             "table_info": basic_info,
             "varchar_columns_with_numeric_data": varchar_numeric_cols,
             "varchar_columns_with_mixed_data": unsafe_numeric_cols,
-            "note": "Safe to cast: 'varchar_columns_with_numeric_data' (use ::numeric). UNSAFE to cast: 'varchar_columns_with_mixed_data' contain non-numeric values like 'not_available'."
+            "note": "IMPORTANT: Check 'column_types' to determine handling. Columns already stored as numeric types (integer, bigint, numeric, double precision) can be used directly in aggregates - NO regex filtering or casting needed. For varchar/text columns: 'varchar_columns_with_numeric_data' are safe to cast after filtering (WHERE col ~ '^[0-9]+', then col::numeric). 'varchar_columns_with_mixed_data' contain non-numeric values - filter in WHERE with regex, then cast in SELECT. NEVER use regex operators on non-varchar columns."
         }
 
     def _peek_table_data(
@@ -533,7 +612,7 @@ FROM {collection}.{entity};
                 st.append_status(f"iteration {iteration}")
 
                 # If we've done several iterations without producing a spec, prompt explicitly
-                if iteration > 10 and not vis_json:
+                if iteration > max_iter-5 and not vis_json:
                     messages.append(
                         {
                             "role": "user",
@@ -602,7 +681,7 @@ FROM {collection}.{entity};
                             error_str = str(e)
                             # Check for PostgreSQL type casting errors in aggregate functions
                             if "does not exist" in error_str and ("AVG" in error_str or "SUM" in error_str or "MIN" in error_str or "MAX" in error_str):
-                                tool_result = f"ERROR: Aggregate function failed. This usually means you're applying an aggregate function to a text/varchar column. You MUST cast numeric text columns to numeric type. Example: AVG(column_name::numeric) or SUM(CAST(column_name AS numeric)). Original error: {e}"
+                                tool_result = f"ERROR: Aggregate function failed. Common causes: (1) Using CASE WHEN or regex inside aggregates - DON'T. (2) Using regex ~ on non-varchar columns. (3) Aggregating varchar without casting. SOLUTION: Check column types with get_table_info first. For numeric columns: use directly. For varchar: filter in WHERE (e.g., WHERE col ~ '^[0-9]+'), then cast in SELECT (AVG(col::numeric)). Original error: {e}"
                             else:
                                 tool_result = f"Error executing tool {function_name}: {e}"
 
