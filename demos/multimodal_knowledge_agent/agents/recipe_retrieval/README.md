@@ -4,8 +4,7 @@
 
 ## Recipe Retrieval Agent in Action
 
-<!-- TODO: Add demo GIF showing dish idea input and recipe retrieval with missing ingredients -->
-*Demo placeholder: Dish ideas input → ChromaDB query → Recipes with missing ingredients detection*
+![Recipe Retrieval Agent Demo](assets/recipe_retrieval_agent_interaction.gif)
 
 ---
 
