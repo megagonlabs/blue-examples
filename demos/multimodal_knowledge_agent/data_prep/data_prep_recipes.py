@@ -14,17 +14,53 @@ import json
 from pathlib import Path
 import numpy as np
 import pandas as pd
+import re
+
+
+def normalize_text(s: str) -> str:
+    if s is None or (isinstance(s, float) and np.isnan(s)):
+        return ''
+    if not isinstance(s, str):
+        s = str(s)
+    # Replace common line separators with space
+    s = s.replace('\r', ' ').replace('\n', ' ').replace('\t', ' ')
+    # Collapse multiple punctuation-only delimiters like || or ;; into a single pipe
+    s = re.sub(r'(\|\|)+', ' | ', s)
+    s = re.sub(r'(;;)+', ';', s)
+    # Collapse whitespace
+    s = re.sub(r'\s+', ' ', s)
+    return s.strip()
+
+
+def normalize_list_column(col_val):
+    if col_val is None:
+        return []
+    if isinstance(col_val, (list, tuple)):
+        out = []
+        for item in col_val:
+            if isinstance(item, str):
+                out.append(normalize_text(item))
+            else:
+                out.append(item)
+        return out
+    return col_val
 
 
 def read_recipes_csv(recipe_csv: Path, interaction_csv: Path) -> pd.DataFrame:
     recipes = pd.read_csv(recipe_csv)
-    # Parse columns saved as strings
+    # Text normalization helpers are at module-level to reuse across functions
+    # Parse columns saved as strings and normalize text inside list-like columns
     for col in ('nutrition', 'steps', 'ingredients', 'tags'):
         if col in recipes.columns:
             recipes[col] = recipes[col].apply(lambda x: ast.literal_eval(x) if pd.notna(x) else [])
+            if col in ('steps', 'ingredients', 'tags'):
+                recipes[col] = recipes[col].apply(normalize_list_column)
 
     # Read interactions and group by recipe_id into JSON list per recipe
     reviews = pd.read_csv(interaction_csv)
+    # Normalize text in object columns of interactions to avoid embedded newlines
+    for c in reviews.select_dtypes(include=['object']).columns:
+        reviews[c] = reviews[c].apply(lambda x: normalize_text(x) if pd.notna(x) else x)
     if 'recipe_id' not in reviews.columns:
         raise RuntimeError('INTERACTION CSV missing recipe_id column')
     # Convert grouped reviews to dict of lists
@@ -49,7 +85,7 @@ def write_jsonl(recipes: pd.DataFrame, out_path: Path):
             recipe = {}
             recipe['recipe_id'] = str(row['id'])
             recipe['name'] = row.get('name')
-            recipe['description'] = str(row.get('description') or '').strip().replace('\n', ' ')
+            recipe['description'] = row.get('description')
             recipe['cook_time_min'] = row.get('minutes')
             recipe['ingredients'] = row.get('ingredients')
             recipe['ingredient_count'] = row.get('n_ingredients') if 'n_ingredients' in row else (len(row.get('ingredients') or []))
@@ -84,8 +120,20 @@ def build_tables(jsonl_records, tables_out_dir: Path):
     tables_out_dir.mkdir(parents=True, exist_ok=True)
     formatted_recipes = pd.DataFrame(jsonl_records)
 
+    # Normalize & serialize text fields for safe CSV output
+    formatted_recipes['name'] = formatted_recipes['name'].apply(lambda x: normalize_text(x) if pd.notna(x) else '')
+    formatted_recipes['description'] = formatted_recipes['description'].apply(lambda x: normalize_text(x) if pd.notna(x) else '')
+
+    def instructions_to_text(x):
+        if isinstance(x, (list, tuple)):
+            return ' || '.join([normalize_text(s) for s in x if s is not None])
+        return normalize_text(x or '')
+
+    formatted_recipes['instructions_text'] = formatted_recipes['instructions'].apply(instructions_to_text)
+
     # Recipes table
-    recipes_df = formatted_recipes[['recipe_id', 'name', 'description', 'cook_time_min', 'ingredient_count', 'n_steps', 'review_count', 'average_rating', 'instructions']].copy()
+    recipes_df = formatted_recipes[['recipe_id', 'name', 'description', 'cook_time_min', 'ingredient_count', 'n_steps', 'review_count', 'average_rating', 'instructions_text']].copy()
+    recipes_df = recipes_df.rename(columns={'instructions_text': 'instructions'})
     recipes_df.to_csv(tables_out_dir / 'recipes.csv', index=False)
 
     # Ingredients

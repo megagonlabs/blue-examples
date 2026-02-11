@@ -77,7 +77,7 @@ psql -c "CREATE DATABASE recipes;"
 ### 2. Apply the DDL to create tables
 
 ```bash
-psql --d recipes -f ../data/recipes/processed/tables/ddl.txt
+psql -d recipes -f ../data/recipes/processed/tables/ddl.txt
 ```
 
 ### 3. Import CSV files
