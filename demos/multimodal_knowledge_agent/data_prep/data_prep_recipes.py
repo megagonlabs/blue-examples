@@ -66,12 +66,14 @@ def read_recipes_csv(recipe_csv: Path, interaction_csv: Path) -> pd.DataFrame:
     # Convert grouped reviews to dict of lists
     review_map = {}
     for rid, group in reviews.groupby('recipe_id'):
-        review_map[str(rid)] = group.to_dict(orient='records')
+        #review_map[str(rid)] = group.to_dict(orient='records')
+        review_map[int(rid)] = group.to_dict(orient='records')
 
     # Attach reviews to recipes
     reviews_col = []
     for _, row in recipes.iterrows():
-        rid = str(row['id']) if 'id' in row else None
+        #rid = str(row['id']) if 'id' in row else None
+        rid = int(row['id']) if 'id' in row else None        
         reviews_col.append(review_map.get(rid, []))
     recipes['reviews'] = reviews_col
     return recipes
@@ -83,7 +85,8 @@ def write_jsonl(recipes: pd.DataFrame, out_path: Path):
     with out_path.open('w', encoding='utf-8') as f:
         for _, row in recipes.iterrows():
             recipe = {}
-            recipe['recipe_id'] = str(row['id'])
+            #recipe['recipe_id'] = str(row['id'])
+            recipe['recipe_id'] = int(row['id'])            
             recipe['name'] = row.get('name')
             recipe['description'] = row.get('description')
             recipe['cook_time_min'] = row.get('minutes')
