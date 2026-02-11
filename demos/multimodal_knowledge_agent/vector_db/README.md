@@ -34,7 +34,7 @@ export OPENAI_API_KEY="your-api-key-here"
 
 ## Data Preparation
 
-We provide example data in `example_data/` for testing. For larger-scale testing, you can download recipe data from Kaggle (see [`../data_prep/README.md`](../data_prep/README.md) for download instructions) and place the JSONL file (`recipes_with_reviews.jsonl`) in `recipe_data/`.
+We provide example data in `example_data/` for testing. For larger-scale testing, you can use the data generated from the [data preparation script](../data_prep/README.md#2-run-the-script) by running the following command  `cp ../data/recipes/processed/recipes_with_reviews.jsonl ./recipe_data/`.
 
 ```plain
 vector_db/
