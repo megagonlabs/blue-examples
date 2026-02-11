@@ -20,7 +20,7 @@ The script produces the following artifacts:
 
 ### JSONL (for vector databases)
 - `recipes_with_reviews.jsonl`  at default path `../data/recipes/processed/recipes_with_reviews.jsonl`
-
+dp
 ### CSV Tables (for relational databases)
 Generated under:  
 `../data/recipes/processed/tables/`
@@ -46,29 +46,38 @@ Download the dataset from Kaggle and place the files in `../data/recipes/raw_dat
 From the repository root, run:
 
 ```bash
-python data_prep/data_prep_recipes.py \
-  --raw-dir data/recipes/raw_data \
-  --out-dir data/recipes/processed
+python data_prep_recipes.py \
+  --raw-dir ../data/recipes/raw_data \
+  --out-dir ../data/recipes/processed
 ```
 
 ---
 
 ## Instructions to create Postgres DB
 
-**Run all commands from the repository root** (where this project's root is located).
-
 ### 1. Create a database (adjust user and file path if needed)
 
+**Notes and tips:**
+- createdb defaults to local socket connection
+- Explicitly add host flag (e.g. -h 10.0.189.83) to tell it where to connect if not using default. Alternatively, set environment variables once so all Postgres CLI tools know where the server is. This is true for all the follow up instructions. 
+
 ```bash
-createdb -U postgres recipes
-# or using psql
-psql -U postgres -c "CREATE DATABASE recipes;"
+export PGHOST=10.0.189.93
+export PGUSER=postgres
 ```
+
+
+```bash
+createdb recipes
+# or using psql
+psql -c "CREATE DATABASE recipes;"
+```
+
 
 ### 2. Apply the DDL to create tables
 
 ```bash
-psql -U postgres -d recipes -f ../data/recipes/processed/tables/ddl.txt
+psql --d recipes -f ../data/recipes/processed/tables/ddl.txt
 ```
 
 ### 3. Import CSV files
@@ -79,16 +88,16 @@ Import all tables in the correct order (parent tables first, then join/child tab
 
 ```bash
 # Parent tables first
-psql -U postgres -d recipes -c "\\copy public.recipes FROM '../data/recipes/processed/tables/recipes.csv' WITH CSV HEADER"
-psql -U postgres -d recipes -c "\\copy public.ingredients FROM '../data/recipes/processed/tables/ingredients.csv' WITH CSV HEADER"
-psql -U postgres -d recipes -c "\\copy public.nutrition FROM '../data/recipes/processed/tables/nutrition.csv' WITH CSV HEADER"
-psql -U postgres -d recipes -c "\\copy public.tags FROM '../data/recipes/processed/tables/tags.csv' WITH CSV HEADER"
+psql -d recipes -c "\\copy public.recipes FROM '../data/recipes/processed/tables/recipes.csv' WITH CSV HEADER"
+psql -d recipes -c "\\copy public.ingredients FROM '../data/recipes/processed/tables/ingredients.csv' WITH CSV HEADER"
+psql -d recipes -c "\\copy public.nutrition FROM '../data/recipes/processed/tables/nutrition.csv' WITH CSV HEADER"
+psql -d recipes -c "\\copy public.tags FROM '../data/recipes/processed/tables/tags.csv' WITH CSV HEADER"
 
 
 # Join tables last (they reference parent tables via foreign keys)
-psql -U postgres -d recipes -c "\\copy public.recipe_ingredients FROM '../data/recipes/processed/tables/recipe_ingredients.csv' WITH CSV HEADER"
-psql -U postgres -d recipes -c "\\copy public.recipe_tags FROM '../data/recipes/processed/tables/recipe_tags.csv' WITH CSV HEADER"
-```
+psql -d recipes -c "\\copy public.recipe_ingredients FROM '../data/recipes/processed/tables/recipe_ingredients.csv' WITH CSV HEADER"
+psql -d recipes -c "\\copy public.recipe_tags FROM '../data/recipes/processed/tables/recipe_tags.csv' WITH CSV HEADER"
+```c
 
 **Notes and tips:**
 - Ensure the target tables exist (created via the DDL) before importing CSVs.
