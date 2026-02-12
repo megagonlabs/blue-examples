@@ -1,0 +1,55 @@
+[{
+        "name": "data_explorer_visualization_demo",
+        "type": "agent_group",
+        "scope": "/",
+        "description": "Try out the Data Explorer & Visualization demo",
+        "created_by": null,
+        "properties": {},
+        "icon": null
+},
+{
+        "name": "INTERACTION_CONTROLLER",
+        "type": "agent",
+        "scope": "/agent_group/data_explorer_visualization_demo",
+        "description": "",
+        "created_by": null,
+        "properties": {},
+        "icon": null
+    },
+    {
+        "name": "DATA_EXPLORATION_AGENT",
+        "type": "agent",
+        "scope": "/agent_group/data_explorer_visualization_demo",
+        "description": "",
+        "created_by": null,
+        "properties": {},
+        "icon": null
+    },
+    {
+        "name": "COORDINATOR",
+        "type": "agent",
+        "scope": "/agent_group/data_explorer_visualization_demo",
+        "description": "",
+        "created_by": null,
+        "properties": {},
+        "icon": null
+    },
+    {
+        "name": "DATA_VISUALIZATION_AGENT",
+        "type": "agent",
+        "scope": "/agent_group/data_explorer_visualization_demo",
+        "description": "",
+        "created_by": null,
+        "properties": {},
+        "icon": null
+    },
+    {
+        "name": "NL2SQL",
+        "type": "agent",
+        "scope": "/agent_group/data_explorer_visualization_demo",
+        "description": "",
+        "created_by": null,
+        "properties": {},
+        "icon": null
+    }
+]
