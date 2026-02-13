@@ -7,6 +7,7 @@ An autonomous agentic system that can explore datasets, generate visualizations,
 - **Natural Language to SQL:** Convert questions into executable queries
 - **Data-Aware Planning:** Intelligent orchestration based on data registry metadata
 
+
 ## Installation
 
 To install please follow the [installation instructions](installation.md)
@@ -14,47 +15,6 @@ To install please follow the [installation instructions](installation.md)
 ## Try it out
 
 Please follow the [demo example](demo_example.md) to try it out.
-
-TODO: add gifs here
-
-## Core Problem
-
-Working with data often involves:
-- **Time-consuming manual EDA:** Understanding new datasets requires repetitive profiling work
-- **Disconnected workflows:** Separate tools for querying, analysis, and visualization
-- **Context switching:** Users must translate between natural language intent and technical queries
-
-## Solution
-
-### Automated Data Exploration and Visualization
-Enables users to understand their data using automated column classification, statistical profiling, and insight generation, and to represent insights clearly through automatically generated visualizations.
-
-### Unified Natural Language Interface
-Allows users to express exploration and visualization needs in plain language, with the system automatically routing requests to appropriate agents
- 
-
-## Architecture
-
-This demo orchestrates five agents working together:
-
-| Agent | Description |
-|-------|-------------|
-| **Interaction Controller** | Routes user requests, manages conversation memory, and generates execution plans |
-| **Data Exploration Agent** | Performs automated EDA: column classification, statistics, and insights |
-| **Data Visualization Agent** | Generates interactive Vega-Lite v5 visualizations using a ReAct approach |
-| **NL2SQL Agent** | Converts natural language questions to SQL queries (shipped with Blue) |
-| **Task Coordinator Agent** | Coordinates task execution across agents (shipped with Blue) |
-
-### Workflow
-
-```mermaid
-graph TD
-    A[User Input] --> B[Interaction Controller]
-    B --> C[Coordinator]
-    C --> D[NL2SQL]
-    C --> E[Data Exploration]
-    C --> F[Data Visualization]
-```
 
 
 # Disclosures:

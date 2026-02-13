@@ -1,6 +1,13 @@
 # Multimodal Knowledge Agent - WIP
 
-A multimodal, agentic system capable of open-ended question-and-answer functionality. It uses a knowledge base to support ambiguous or exploratory tasks, accepting both multimodal input and generating multimodal output.
+Traditional recipe apps can be rigid, *often requiring specific ingredients you don't have.* The **Multimodal Knowledge Agent** solves this by acting as an intelligent kitchen assistant that **helps you cook with what's already in your fridge!** It combines visual perception with a verified recipe database to provide reliable, personalized suggestions.
+
+The workflow is simple and intuitive:
+
+1.  **Visual Ingredient Extraction**: Upload a photo of your open fridge, and the agent automatically identifies available ingredients.
+2.  **Recipe Search**: Instead of guessing, it retrieves matching recipes from a verified database based on your ingredients.
+3.  **Smart Filtering**: You can refine the results with natural language preferences like "healthy breakfast" or "savory dinner."
+4.  **Interactive Cooking**: Once you pick a dish, the agent guides you with step-by-step instructions, answers your questions, and generates helper images to make cooking easy.
 
 ## Installation
 
@@ -9,29 +16,6 @@ To install please follow the [installation instructions](installation.md)
 ## Try it out
 
 Please follow the [demo example](demo_example.md) to try it out.  
-
-## Core problem
-
-Agentic systems currently face significant limitations, including frequent inaccuracies (hallucinations), a lack of robust multimodal interaction support, and difficulty handling complex, open-ended tasks and questions. Our core focus is addressing these challenges. A practical example demonstrating this is an agentic AI system that generates creative cooking ideas based on a user's available ingredients.
-
-## Solution
-
-### Reducing Hallucinations
-Achieving this by grounding the system in a vector database.
-
-### Multimodal Capabilities 
-Implementing comprehensive support for multimodal input and output.
-- multimodal input
-- multimodal output
-
-### Improving Retrieval
-Enabling filtered retrieval based on user-defined preferences and constraints.
-- Vector databse retrieval
-
-### Addressing Complexity
-Utilizing a sophisticated approach (React) to handle ambiguous, exploratory tasks, and open-ended Q&A.
-- React Agent
-- Ideation
  
 # Disclosures:
 
