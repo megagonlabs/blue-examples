@@ -1,4 +1,4 @@
-# Data Explorer and Visualization
+# Autonomous Data Exploration & Visualization
 
 An autonomous agentic system that can explore datasets, generate visualizations, and handle open-ended queries.
 
