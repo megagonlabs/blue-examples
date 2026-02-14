@@ -8,20 +8,32 @@ This demo showcases a scenario that enables users to automatically explore, visu
 - **Interaction Controller:** Supports multi-turn user interactions, using conversational context to resolve ambiguity and better infer user intent.
 - **NL2SQL:** Allows users to ask questions in natural language, which are automatically translated into SQL queries.
 
-You can test the demo using your own data or the provided postgres_example dataset, which contains sample job postings data.
+You can test the demo using your own data or the provided `postgres_example` dataset, which contains sample job postings data.
 
 ## Demo Instructions
 
-1. Create a new session in the Blue web application
-2. Add the following agents to the session:
-   - `INTERACTION_CONTROLLER`
-   - `DATA_EXPLORATION_AGENT`
-   - `DATA_VISUALIZATION_AGENT`
-   - `NL2SQL`
-   - `COORDINATOR`
+There are two ways to set up this demo:
 
-3. Example Queries:
+### Option 1: Use the Pre-configured Application
+1. Click the Blue icon
+2. Select **Application**
+3. Double-click **data_explorer_visualization_demo**
 
+This will automatically create a session with all the required agents.
+
+### Option 2: Manual Setup
+1. Click the Blue icon
+2. Select **New Session**
+3. Add the following agents to the session:
+   - `Task Coordinator Agent`
+   - `NL-to-SQL Agent`
+   - `Interaction Controller`
+   - `Data Exploration Agent`
+   - `Data Visualization Agent`
+
+Either option will work. Once the session is up, you can enter any natural language queries about the data. Here are some examples:
+
+### Example Queries
 
 | **User Input Pattern** | **Example Query** | **Expected Result** |
 |----------------|---------------------|---------------------|

@@ -11,10 +11,10 @@ This guide covers the additional setup needed for the Data Explorer and Visualiz
 ## What This Demo Adds
 
 This demo requires five agents working together:
-1. **Interaction Controller Agent** - Orchestrates the workflow - [README](../../agents/interaction_controller/README.md)
+1. **Interaction Controller** - Orchestrates the workflow - [README](../../agents/interaction_controller/README.md)
 2. **Data Exploration Agent** - Performs automated EDA - [README](../../agents/data_exploration/README.md)
 3. **Data Visualization Agent** - Creates Vega-Lite visualizations - [README](../../agents/data_visualization/README.md)
-4. **NL2SQL Agent** (shipped with Blue) - Converts natural language questions to SQL
+4. **NL-to-SQL Agent** (shipped with Blue) - Converts natural language questions to SQL
 5. **Task Coordinator Agent** (shipped with Blue) - Coordinates task execution across agents (required for Interaction Controller)
 
 ## Installation Steps
@@ -40,50 +40,52 @@ This demo uses the `postgres_example` dataset which is shipped with Blue. To ena
 
 You can explore the database schema by clicking on `postgres` → `public` to verify the data is loaded correctly.
 
-### 2. Build and Deploy the Five Agents
+### 3. Build and Register the Required Agents
 
-Build and register each agent (refer to individual agent READMEs for details):
+Build each agent:
 
 ```bash
 # 1. Interaction Controller Agent
 cd blue-examples/agents/interaction_controller
 ./docker_build_agent.sh
-blue registry agent update agent.json
 
 # 2. Data Exploration Agent
 cd blue-examples/agents/data_exploration
 ./docker_build_agent.sh
-blue registry agent update agent.json
 
 # 3. Data Visualization Agent
 cd blue-examples/agents/data_visualization
 ./docker_build_agent.sh
-blue registry agent update agent.json
 
 # 4. NL2SQL Agent (shipped with Blue)
 # Check if already built during Blue default agent building before running
 cd blue/agents/nl2sql
 ./docker_build_agent.sh
-blue registry agent update agent.json
 
 # 5. Task Coordinator Agent (shipped with Blue)
 # Check if already built during Blue default agent building before running
 cd blue/agents/task_coordinator
 ./docker_build_agent.sh
-blue registry agent update agent.json
 ```
 
-### 3. Deploy Agents
+Register all agents using the provided configuration:
+
+```bash
+cd blue-examples/demos/data_explorer_visualization
+blue registry agent update agents.json
+```
+
+### 4. Deploy Agents
 
 In the Blue UI (`http://localhost:3000`):
 
 1. Navigate to **Agents**
 2. Deploy each of the five agents:
-   - `INTERACTION_CONTROLLER`
-   - `DATA_EXPLORATION_AGENT`
-   - `DATA_VISUALIZATION_AGENT`
-   - `NL2SQL`
-   - `TASK_COORDINATOR`
+   - `Task Coordinator Agent`
+   - `NL-to-SQL Agent`
+   - `Interaction Controller`
+   - `Data Exploration Agent`
+   - `Data Visualization Agent`
 3. Verify all agents show as "Running"
 
 **Note**: Each agent's README contains detailed configuration options and properties.

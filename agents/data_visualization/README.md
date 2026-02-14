@@ -12,7 +12,7 @@ cd agents/data_visualization
 ./docker_build_agent.sh
 ```
 
-2. Set agent properties
+2. Register `DATA_VISUALIZATION_AGENT` agent with properties
 
 **Option A: Automatic (via CLI)**
 ```bash
@@ -21,10 +21,13 @@ blue registry agent update agent.json
 ```
 
 **Option B: Manual (via UI)**
-- Create a `DATA_VISUALIZATION_AGENT` agent with the following properties:
+- Create a `DATA_VISUALIZATION_AGENT` agent with the following:
+  - Name: `DATA_VISUALIZATION_AGENT`
+  - Display name: `Data Visualization Agent`
+  - Docker image: `megagonlabs/blue-agent-data_visualization-private`
+  - Properties:
 ```json
 {
-  "image": "megagonlabs/blue-agent-data_visualization-private",
   "service_url": "ws://blue_service_openai:8001",
   "input_json": null,
   "input_template": null,

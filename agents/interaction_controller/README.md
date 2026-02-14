@@ -9,27 +9,34 @@ Interaction Controller supports
 
 ## Usage 
 
-1. You may utilize an automatic way to update the agent registry as below, or follow steps to [manually](#add-agent-manually-in-ui) add agent in UI.
-```bash
-cd agents/interaction_controller
-blue registry agent update agent.json
-```
-
-2. Build `INTERACTION_CONTROLLER` agent
+1. Build `INTERACTION_CONTROLLER` agent
 
 ```bash
 cd agents/interaction_controller
 ./docker_build_agent.sh
 ```
 
+2. Register `INTERACTION_CONTROLLER` agent with properties
+
+You may utilize an automatic way to update the agent registry as below (option 1), or follow steps to [manually](#add-agent-manually-in-ui) add agent in UI (option 2).
+```bash
+# (Option 1)
+cd agents/interaction_controller
+blue registry agent update agent.json
+```
+
+
 3. Deploy `INTERACTION_CONTROLLER` agent on UI.
 
 
-Alternatively, you may define the agent manually in the UI
  
-### Add Agent manually in UI
+### Register Agent Manually in UI (Option 2 of Step 2)
 You may also add the agent manually in the UI
-1. Create a `INTERACTION_CONTROLLER` agent with the following properties
+1. Create a `INTERACTION_CONTROLLER` agent with the following:
+   - Name: `INTERACTION_CONTROLLER`
+   - Display name: `Interaction Controller`
+   - Docker image: `megagonlabs/blue-agent-interaction_controller-private`
+   - Properties:
  ```json
  {
     "plan_prompt": "You will be provided a USER utterance.\nBased on the USER utterance, create a detailed multi-step plan utilizing the following agents as needed:\n\n1. NL2SQL: The NL to SQL agent takes an instruction and optionally database or table information, converts the instruction into SQL queries, identifies relevant data sources if missing, executes the queries, and returns the results.\n2. DATA_EXPLORATION_AGENT: The Data Exploration agent is used to profile data and takes an instruction along with the database name and table name. It performs exploratory data analysis by generating statistical summaries such as distributions, missing values, and correlations, and highlights trends, anomalies, and key metrics.\n3. DATA_VISUALIZATION_AGENT: The Data Visualization agent takes an instruction along with tabular or summary data and generates Vega-Lite visualizations based on the input data.\n\nYour plan should also be based on the data registry provided above.\n\nNotes:\nThe NL2SQL agent should be used to query the database tables created or modified by the previous agents for the particular information requested by the user.\nThe instruction to NL2SQL should also be high level, no need to mention anything about tables or schema.\nThe instruction to the DATA_EXPLORATION_AGENT agent should include the name of the database as mentioned in the original user request. However, the instruction to DATA_EXPLORATION_AGENT should also be high level, no need to mention any specific instructions on what to do -- just the data is enough.\n\nYour plan should be in linear format, and use each agent only once at most.\nThe instructions to each agent should be related to the user query.\n\nResponse in a JSON format as follows:\n{\n \"plan\": [\n {\n \"agent\": \"AGENT_NAME\",\n \"instruction\": <valid input instruction to agent>\n },\n {\n ...\n },\n ...\n ]\n}\n${input}",
@@ -61,14 +68,7 @@ You may also add the agent manually in the UI
 
 2. Add input `DEFAULT`, which **listens** to `USER`
 
-3. Build `INTERACTION_CONTROLLER` agent
-
-```bash
-cd agents/interaction_controller
-./docker_build_agent.sh
-```
-
-4. Deploy `INTERACTION_CONTROLLER` agent on UI.
+3. Go back to Step 3 above.
 
 
 

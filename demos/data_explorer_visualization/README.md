@@ -5,7 +5,7 @@ An autonomous agentic system that can explore datasets, generate visualizations,
 - **Automated Data Profiling:** Column classification, statistics, and insight generation
 - **Dynamic Visualization:** Interactive Vega-Lite charts and dashboards
 - **Natural Language to SQL:** Convert questions into executable queries
-- **Data-Aware Planning:** Intelligent orchestration based on data registry metadata
+- **Multi-Agent Planning:** Context-aware orchestration with conversational memory
 
 
 ## Installation

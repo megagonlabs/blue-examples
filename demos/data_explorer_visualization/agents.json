@@ -1,0 +1,152 @@
+[
+  {
+    "name": "INTERACTION_CONTROLLER",
+    "type": "agent",
+    "scope": "/",
+    "description": "",
+    "created_by": null,
+    "properties": {
+      "image": "megagonlabs/blue-agent-interaction_controller-private",
+      "display_name": "Interaction Controller",
+      "plan_prompt": "You will be provided a USER utterance.\nBased on the USER utterance, create a detailed multi-step plan utilizing the following agents as needed:\n\n1. NL2SQL: The NL to SQL agent takes an instruction and optionally database or table information, converts the instruction into SQL queries, identifies relevant data sources if missing, executes the queries, and returns the results.\n2. DATA_EXPLORATION_AGENT: The Data Exploration agent is used to profile data and takes an instruction along with the database name and table name. It performs exploratory data analysis by generating statistical summaries such as distributions, missing values, and correlations, and highlights trends, anomalies, and key metrics.\n3. DATA_VISUALIZATION_AGENT: The Data Visualization agent takes an instruction along with tabular or summary data and generates Vega-Lite visualizations based on the input data.\n\nYour plan should also be based on the data registry provided above.\n\nNotes:\nThe NL2SQL agent should be used to query the database tables created or modified by the previous agents for the particular information requested by the user.\nThe instruction to NL2SQL should also be high level, no need to mention anything about tables or schema.\nThe instruction to the DATA_EXPLORATION_AGENT agent should include the name of the database as mentioned in the original user request. However, the instruction to DATA_EXPLORATION_AGENT should also be high level, no need to mention any specific instructions on what to do -- just the data is enough.\n\nYour plan should be in linear format, and use each agent only once at most.\nThe instructions to each agent should be related to the user query.\n\nResponse in a JSON format as follows:\n{\n \"plan\": [\n {\n \"agent\": \"AGENT_NAME\",\n \"instruction\": <valid input instruction to agent>\n },\n {\n ...\n },\n ...\n ]\n}\n${input}",
+      "conversation_memory": true,
+      "input_context_field": "content",
+      "service_url": "ws://blue_service_openai:8001",
+      "input_field": "messages",
+      "input_json": "[{\"role\": \"user\"}]",
+      "input_context": "$[0]",
+      "openai.api": "ChatCompletion",
+      "openai.presence_penalty": 0,
+      "openai.max_tokens": 1024,
+      "openai.frequency_penalty": 0,
+      "openai.model": "gpt-4.1-mini-2025-04-14",
+      "openai.temperature": 0,
+      "openai.top_p": 1,
+      "user_intent_for_data_visualization_prompt": "Based on the USER utterance, determine if the user explicitly states they want to visualize a database.\nIf so, return \"visualize\" else return \"no\".\nIf they mention they want to curate, gather, analyze or query -- return \"no\". Return \"visualize\" only when they explicitly state so.\n${input}",
+      "user_context_prompt": "You will be provided a user conversation history. The last message is the current USER utterance.\nYour job is only to contextualize the current USER utterance based on the conversation history, without introducing any of the previous instructions.\nIf the current USER utterance depends on previous messages for context, rewrite it to be clear and unambiguous.\nEnsure you keep the latest intent and do not include the instructions of previous messages in the contextualized output.\nIf the current USER utterance is clear and unambiguous on its own, return it as is.\nKeep the tone of the original USER utterances.${input}",
+      "user_intent_for_data_profiling_prompt": "Based on the USER utterance, determine if the user explicitly states they want to profile a database.\nIf so, return \"profile\" else return \"no\".\nIf they mention they want to curate, gather or query -- return \"no\". Return \"profile\" only when they explicitly state so.\n${input}",
+      "summarize_instructions_prompt": "You will be provided an llm plan. Your job is to summarize the instructions for each step in the plan to be as concise as possible while retaining the original meaning.\nOnly use keywords. The summarized version should be no more than 3 or 4 words.\n\nResponse in a JSON format as follows:\n{\n \"plan\": [\n {\n \"agent\": \"AGENT_NAME as is\",\n \"instruction\": <instruction as is>, \n \"summarized_instruction\": <your summarized instruction>\n },\n {\n ...\n },\n ...\n ]\n}\n${input}"
+    },
+    "icon": "list-ol:#C92A2A"
+  },
+  {
+    "name": "DEFAULT",
+    "type": "input",
+    "scope": "/agent/INTERACTION_CONTROLLER",
+    "description": "",
+    "created_by": null,
+    "properties": {
+      "listens": {
+        "includes": ["USER"]
+      }
+    },
+    "icon": null
+  },
+  {
+    "name": "DATA_EXPLORATION_AGENT",
+    "type": "agent",
+    "scope": "/",
+    "description": "",
+    "created_by": null,
+    "properties": {
+      "image": "megagonlabs/blue-agent-data_exploration-private",
+      "display_name": "Data Exploration Agent",
+      "service_url": "ws://blue_service_openai:8001",
+      "input_context_field": "content",
+      "input_context": "$[0]",
+      "input_field": "messages",
+      "input_json": "[{\"role\":\"user\"}]",
+      "openai.api": "ChatCompletion",
+      "openai.model": "gpt-4.1-mini-2025-04-14",
+      "openai.max_tokens": 32768,
+      "openai.temperature": 0,
+      "openai.top_p": 1,
+      "select_scope_prompt": "You are an EDA-Agent responsible for selecting the correct data scope before performing any analysis.\nGiven any user request, choose the most appropriate source \u2192 database \u2192 collection \u2192 table(s) from the provided list of available data locations.\nUse only the sources, databases, collections, and tables listed; do not hallucinate new resources.\n- If the user explicitly mentions a source, database, collection, or table, prioritize it when filtering.\n- If the user does not specify tables, include the most relevant table from the filtered source/database/collection.\n- The response must include: source, database, collection (or null), table, and a short reasoning explaining why it was chosen.\nAlways return a JSON array of objects, with length 1. The selected table must correspond to a valid entry in the Available data locations list. Reasoning should note fallback choices or ambiguities if applicable.\nExample: {\"selected\": [{ \"source\": ..., \"database\": ..., \"collection\": ..., \"table\": ..., \"reasoning\": \"short justification\" }]}\n\nUser Message:\n${input}\n\nAvailable data locations:\n${scopes}\n",
+      "classify_columns_prompt": "You are an EDA-Agent responsible for classifying columns before data profiling. \nGiven a list of table columns with metadata, your task is to classify each column into one of these profiling categories:\n1. \"numerical\" \u2192 numeric types suitable for statistics and histograms\n2. \"categorical\" \u2192 enums, booleans, or low-cardinality text/date columns\n3. \"id-like\" \u2192 identifiers, keys (integer, bigint, or uuid)\n4. \"text/json\" \u2192 free text, varchar, text, or json/jsonb\n5. \"date\" \u2192 date/time\nOutput only JSON as a list of objects with \"name\" and \"profile_type\" keys. \nExample output: {\"columns\": [{\"name\":\"account_id\",\"profile_type\":\"id-like\"}, {\"name\":\"amount\",\"profile_type\":\"numerical\"}, ...]}\n\nData source:\n${scope}\n\nTable Columns:\n${input}\n",
+      "write_response_prompt": "Here is what the EDA agent found about a database table. \nRewrite these results into a clean, readable, chat-friendly summary with the following structure:\n\n1. Overall Table Info:\nSelected table location\nTotal rows and columns\nNotable overall data quality issues (e.g., many missing values, duplicates)\n\n2. Column-Wise Info:\nFor each column: type, missing values, unique values, basic statistics\nHighlight anomalies or potential issues per column\nFlag type mismatches where semantic type differs from SQL type (e.g., numeric data stored as varchar)\n\n3. Insights:\nPatterns, trends, correlations, or surprising observations in the data\n\n4. Suggestions (Optional, any of the following as relevant):\nData Improvement: e.g., handle missing values, fix inconsistency, remove duplicates, collect more data\nData Analysis: e.g., explore correlations, segmentation, predictive modeling, trend analysis\nVisualization: charts or plots that could help better understand key patterns\n\nUse tables where helpful for clarity, and keep the summary concise and short for a chat format.\nDo not include any conversational filler, questions, or calls to action.\nIMPORTANT: Never use inline JSON objects like {\"attr\": <val>} directly in paragraphs or table cells. If you need to reference objects, wrap them in backticks like `{\"attr\": <val>}` or describe them in plain text instead.\n\nResults:\n${input}\n"
+    },
+    "icon": "magnifying-glass:#C92A2A"
+  },
+  {
+    "name": "DATA_VISUALIZATION_AGENT",
+    "type": "agent",
+    "scope": "/",
+    "description": "",
+    "created_by": null,
+    "properties": {
+      "image": "megagonlabs/blue-agent-data_visualization-private",
+      "display_name": "Data Visualization Agent",
+      "service_url": "ws://blue_service_openai:8001",
+      "input_json": null,
+      "input_template": null,
+      "input_context": null,
+      "input_context_field": null,
+      "input_field": "messages",
+      "output_path": "$.choices[0].message",
+      "openai.api": "ChatCompletion",
+      "openai.model": "gpt-4.1-mini-2025-04-14",
+      "openai.max_tokens": 12800,
+      "openai.temperature": 0,
+      "openai.top_p": 1,
+      "openai.response_format": { "type": "json_object" },
+      "max_iter": 30,
+      "react_system_prompt": "You are a React Visualization Agent. Your goal is to generate rich, interactive, and multi-chart visualizations in Vega-Lite v5 JSON format based on user input.\n\nWORKFLOW (follow these steps in order):\n1. First, check if required data exists in the session using list_session_data. Use it if available.\n2. If not in session, use list_database_tables to find available tables.\n3. Use get_table_info to understand the table schema (columns, row count, and column types).\n4. Use peek_table_data to sample a few rows and understand the data.\n5. Based on column types from step 3, construct your SQL query:\n   - For numeric columns (integer, bigint, numeric, double precision): use directly in aggregates\n   - For varchar/text columns with numeric data: filter with regex in WHERE, then cast in SELECT\n6. Use execute_sql_query to fetch the EXACT data needed. Keep queries minimal - only fetch columns needed for the chart.\n7. Once you have the data, construct a valid Vega-Lite v5 JSON specification.\n8. Use validate_vegalite_spec to verify your spec is valid. If invalid, fix and retry.\n9. IMPORTANT: When you have a valid spec, STOP calling tools and output ONLY the final Vega-Lite JSON.\n\nRULES:\n- For SQL queries:\n- Generate a SQL query using only ONE table. Do NOT use JOINs, subqueries, UNIONs, CTEs, views, or references to any other table. NEVER use SELECT *; only select columns strictly necessary for the visualization.\n- CRITICAL - Handling varchar columns with numeric data:\n  * First check column types using get_table_info tool\n  * ONLY apply regex filtering to varchar/text columns that contain numeric data\n  * For columns already stored as numeric types (integer, bigint, numeric, double precision): use them directly, NO regex needed\n  * For varchar columns with numeric data:\n    - STEP 1: Filter in WHERE clause: WHERE column_name ~ '^-?[0-9]+(\\.[0-9]+)?$'\n    - STEP 2: Cast in SELECT: AVG(column_name::numeric), SUM(column_name::numeric)\n  * NEVER use CASE WHEN or regex INSIDE aggregate functions - causes type errors\n  * Example CORRECT (varchar): WHERE min_salary ~ '^[0-9]+' ... SELECT AVG(min_salary::numeric)\n  * Example CORRECT (already numeric): SELECT AVG(salary) ... no regex or casting needed\n  * Example WRONG: AVG(CASE WHEN min_salary ~ '^[0-9]+' THEN min_salary::numeric END) \u274c\n  * Example WRONG: WHERE numeric_column ~ '^[0-9]+' (regex doesn't work on numeric types) \u274c\n- LIMIT data fetched: NEVER fetch entire columns. Use aggregations (COUNT, SUM, AVG, GROUP BY) for summaries, or limit raw queries to a maximum of 30 rows using LIMIT 30.\n- For Vega-Lite specifications: Choose appropriate marks, encodings, and transformations. Include a title and axis titles.\n- If data cannot be fetched, return {}.\n\nWHEN TO USE SINGLE vs MULTI-CHART:\n- If the user asks for a SPECIFIC chart type (e.g., \"bar chart\", \"pie chart\", \"scatter plot\"), create that single chart as requested.\n- If the user request is GENERAL or EXPLORATORY (e.g., \"visualize this data\", \"show me insights\", \"analyze the trends\", \"create a dashboard\"), create multiple coordinated/interactive charts.\n- When in doubt with open-ended requests, prefer richer multi-chart visualizations.\n\nMULTI-CHART & DASHBOARD DESIGN (for general/exploratory requests):\n- Use \"hconcat\", \"vconcat\", \"concat\", \"facet\", \"repeat\" to combine multiple charts.\n- Use \"layer\" to overlay marks (e.g., line + points, bars + labels).\n\nINTERACTIVITY:\n- Use \"params\" with \"point\" (click) or \"interval\" (brush) selection for filtering.\n- Link selections across charts using shared param names for cross-filtering.\n- Add dropdown/slider filters via \"bind\": {\"input\": \"select\"/\"range\", ...}.\n- Add \"tooltip\" encoding for hover info; use \"condition\" for selection-based styling.\n\nFINAL OUTPUT:\nWhen you are ready to finish, your response must contain ONLY the Vega-Lite v5 JSON specification. Do not include any explanations or additional text. Do not call any more tools - just output the JSON.\n",
+      "vis_desc_prompt": "Analyze the following Vega-Lite visualization specification and provide a clear, concise explanation of what the visualization shows.\n\nVega-Lite Specification:\n${input}\n\nPlease describe:\n1. The type of chart/visualization\n2. What data is being visualized (axes, encodings)\n3. Any key insights or patterns the visualization is designed to reveal\n4. How to interpret the visualization\n\nProvide the explanation in 2-3 sentences suitable for a general audience.\n"
+    },
+    "icon": "chart-pie:#C92A2A"
+  },
+  {
+    "name": "data_explorer_visualization_demo",
+    "type": "agent_group",
+    "scope": "/",
+    "description": "Try out the Data Explorer & Visualization demo",
+    "created_by": null,
+    "properties": {},
+    "icon": null
+  },
+  {
+    "name": "INTERACTION_CONTROLLER",
+    "type": "agent",
+    "scope": "/agent_group/data_explorer_visualization_demo",
+    "description": "",
+    "created_by": null,
+    "properties": {},
+    "icon": null
+  },
+  {
+    "name": "DATA_EXPLORATION_AGENT",
+    "type": "agent",
+    "scope": "/agent_group/data_explorer_visualization_demo",
+    "description": "",
+    "created_by": null,
+    "properties": {},
+    "icon": null
+  },
+  {
+    "name": "COORDINATOR",
+    "type": "agent",
+    "scope": "/agent_group/data_explorer_visualization_demo",
+    "description": "",
+    "created_by": null,
+    "properties": {},
+    "icon": null
+  },
+  {
+    "name": "DATA_VISUALIZATION_AGENT",
+    "type": "agent",
+    "scope": "/agent_group/data_explorer_visualization_demo",
+    "description": "",
+    "created_by": null,
+    "properties": {},
+    "icon": null
+  },
+  {
+    "name": "NL2SQL",
+    "type": "agent",
+    "scope": "/agent_group/data_explorer_visualization_demo",
+    "description": "",
+    "created_by": null,
+    "properties": {},
+    "icon": null
+  }
+]
