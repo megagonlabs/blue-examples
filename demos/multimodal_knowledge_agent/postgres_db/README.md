@@ -1,7 +1,5 @@
 ### Set Up Postgres DB with Example Data
 
-This demo also uses the `recipes` dataset which contains prebuilt data for the data explorer and visualization.
-
 1. From this directory, run:
 
 ```bash
