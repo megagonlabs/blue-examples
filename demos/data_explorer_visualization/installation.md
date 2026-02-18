@@ -64,7 +64,7 @@ cd blue/agents/nl2sql
 
 # 5. Task Coordinator Agent (shipped with Blue)
 # Check if already built during Blue default agent building before running
-cd blue/agents/task_coordinator
+cd blue/agents/coordinator
 ./docker_build_agent.sh
 ```
 
