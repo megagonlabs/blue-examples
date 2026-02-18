@@ -1,115 +1,41 @@
 # Vector Database Server
 
-A vector search server using ChromaDB that indexes documents from JSONL files and performs cosine similarity search using OpenAI Embeddings.
+A vector search server using ChromaDB. It indexes documents from JSONL files and performs cosine similarity search using OpenAI Embeddings.
 
-## Features
+## Quick Tour
 
-- Persistent vector storage with **ChromaDB**
-- Uses **OpenAI Embeddings** (`text-embedding-3-small`)
-- Automatic indexing from multiple JSONL files
-- Source-specific persistence directories (separate databases for different data sources)
-- Filtering by source file
-- Embeddings are automatically saved and reused on subsequent runs
+Get the vector database server up and running in 3 steps:
 
-## Setup
-
-### Install Required Packages
-
-The easiest way to set up the environment is using [`uv`](https://docs.astral.sh/uv/). Navigate to the parent `multimodal_knowledge_agent/` directory and install dependencies:
+### 1. Install Dependencies
 
 ```bash
-# From the multimodal_knowledge_agent directory (one level up from vector_db)
-cd ../
-# uv init . (if you haven't already initialized uv in this directory)
-uv add chromadb fastapi uvicorn openai requests
+pip install chromadb fastapi uvicorn openai requests
 ```
 
-### Environment Variables
-
 Set your OpenAI API key:
-
 ```bash
 export OPENAI_API_KEY="your-api-key-here"
 ```
 
-## Data Preparation
-
-We provide example data in `example_data/` for testing. For larger-scale testing, you can use the data generated from the [data preparation script](../data_prep/README.md#2-run-the-script) by running the following command  `cp ../data/recipes/processed/recipes_with_reviews.jsonl ./recipe_data/`.
-
-```plain
-vector_db/
-├── example_data/                    # Example data (included)
-│   ├── example_asian_recipes.jsonl
-│   └── example_other_recipes.jsonl
-├── recipe_data/                     # Full dataset (user downloads)
-│   └── recipes_with_reviews.jsonl   (place downloaded data here)
-├── vector_db_server_dishnames.py   # Server script
-├── start_vector_db.sh               # Startup script
-└── chroma_db/                       (auto-generated, data-source specific)
-    ├── example_data/                # ChromaDB for example_data
-    └── recipe_data/                 # ChromaDB for recipe_data
-```
-
-Each JSONL file should contain one JSON object per line.
-
-## Starting the Server
-
-### Using the Startup Script (Recommended)
-
-To start the server with automatic indexing and logging, use the provided startup script:
+### 2. Start the Server
 
 ```bash
+cd db
 ./start_vector_db.sh
 ```
 
-By default, it loads data from `example_data/` and stores embeddings in `chroma_db/example_data/`. To use the larger `recipe_data/` dataset instead, use the `--data` flag:
+The server will start at `http://localhost:8000` and automatically index the example data.
 
-```bash
-./start_vector_db.sh --data recipe_data
-```
+**Note:** This script is automatically executed when running `./docker_build_all_agents.sh` from the [agents/](../agents/) directory.
 
-This will load data from `recipe_data/` and store embeddings in `chroma_db/recipe_data/`, keeping the two datasets completely separate.
+### 3. Verify It's Working
 
-**What the script does:**
-
-- Stops any existing server instance
-- Starts the server in the background with the specified data source
-- Logs output to `server.log`
-- Verifies the server started successfully
-
-**Note:** This script is automatically executed when running `./docker_build_all_agents.sh` from the `agents/` directory.
-
-### Manual Start
-
-Start the server directly with Python (uses `example_data` by default):
-
-```bash
-uv run python vector_db_server_dishnames.py
-```
-
-To specify a different data source:
-
-```bash
-uv run python vector_db_server_dishnames.py --data-source recipe_data
-```
-
-The server will start at `http://localhost:8000`.
-
-### Run in Background (Manual)
-
-```bash
-nohup uv run python vector_db_server_dishnames.py > server.log 2>&1 &
-```
-
-## API Endpoints
-
-### Health Check
-
+Check server health:
 ```bash
 curl http://localhost:8000/
 ```
 
-Example response:
+Expected response:
 ```json
 {
     "status": "ok",
@@ -119,99 +45,62 @@ Example response:
 }
 ```
 
-### Similarity Search
-
+Try a simple search:
 ```bash
 curl -X POST http://localhost:8000/query \
   -H "Content-Type: application/json" \
-  -d '{"query": "spicy Asian noodles", "top_k": 5}'
+  -d '{"query": "spicy Asian noodles", "top_k": 3}'
 ```
 
-Search only within a specific source:
-```bash
-curl -X POST http://localhost:8000/query \
-  -H "Content-Type: application/json" \
-  -d '{"query": "Italian pasta", "top_k": 3, "source": "example_other_recipes.jsonl"}'
-```
+✅ **Server is ready!** Return to the [main README](../README.md) for next steps.
 
-### List Documents
+---
 
-All documents:
-```bash
-curl http://localhost:8000/documents
-```
+## Detailed Documentation
 
-Filter by source:
-```bash
-curl "http://localhost:8000/documents?source=example_asian_recipes.jsonl"
-```
+### Features
 
-### List Sources
+- Persistent vector storage with **ChromaDB**
+- Uses **OpenAI Embeddings** (`text-embedding-3-small`)
+- Automatic indexing from multiple JSONL files
+- Filtering by source file
+- Embeddings are automatically saved and reused on subsequent runs
 
-```bash
-curl http://localhost:8000/sources
-```
+### Data Preparation
 
-### Index New File
+The server automatically indexes JSONL files from `example_data/` and `recipe_data/` directories on startup. Each JSONL file should contain one JSON object per line.
 
-```bash
-curl -X POST http://localhost:8000/index \
-  -H "Content-Type: application/json" \
-  -d '{"file_path": "/path/to/new_data.jsonl"}'
-```
+- **`example_data/`**: Toy sample data (already included, no setup needed)
+- **`recipe_data/`**: Your real data (requires preprocessing from [data_prep/README.md](../data_prep/README.md))
 
-### Reindex (Clears All Data First)
+**To use real external data:**
+1. Follow preprocessing steps in [data_prep/README.md](../data_prep/README.md)
+2. Copy the resulting JSONL to `recipe_data/`:
+   ```bash
+   cp data/recipes/processed/recipes_with_reviews.jsonl vector_db/recipe_data/
+   ```
+3. Restart the server (files will be indexed automatically)
 
-```bash
-curl -X POST http://localhost:8000/reindex \
-  -H "Content-Type: application/json" \
-  -d '{"file_path": "/path/to/data.jsonl"}'
-```
+#### Data Sampling Configuration
 
-### Clear Collection
+**By default, the server indexes only 10% of the data** to reduce compute costs and resource usage during development and testing.
 
-```bash
-curl -X DELETE http://localhost:8000/clear
-```
-
-## Usage from Jupyter Notebook
-
-You can use `retrieval_test.ipynb` for testing.
+To change this behavior, edit `vector_db_server_dishnames.py`:
 
 ```python
-import requests
-
-BASE_URL = "http://localhost:8000"
-
-# Execute a query
-response = requests.post(
-    f"{BASE_URL}/query",
-    json={"query": "healthy breakfast", "top_k": 5}
-)
-results = response.json()
-
-for r in results['results']:
-    print(f"[{r['index']}] {r['document']['name']} (Score: {r['score']:.4f})")
+# Line ~54: Adjust sampling percentage based on your budget and compute resources
+AUTO_INDEX_SAMPLE_PCT = 10  # Set to None to index 100% (no sampling)
 ```
 
-## File Structure
+**Configuration options:**
+- `AUTO_INDEX_SAMPLE_PCT = 10` → Index 10% of data (default, recommended for testing)
+- `AUTO_INDEX_SAMPLE_PCT = 50` → Index 50% of data
+- `AUTO_INDEX_SAMPLE_PCT = None` → Index 100% of data (full indexing)
 
-```
-retrieval_agent/
-├── vector_db_server_dishnames.py   # Main server
-├── retrieval_test.ipynb  # Test notebook
-├── README.md             # This file
-├── example_data/         # Toy data directory
-│   ├── example_asian_recipes.jsonl
-│   └── example_other_recipes.jsonl
-├── recipe_data/          # Data directory
-│   └── *.jsonl           # Data you want use
-└── chroma_db/            # ChromaDB persistence directory (auto-generated)
-```
+**Consider adjusting this value based on:**
+- **Budget**: OpenAI embedding API costs scale with data volume
+- **Compute resources**: More data requires more memory and processing time
+- **Use case**: Testing vs. production deployment
 
-## Notes
+After changing the setting, restart the server for changes to take effect.
 
-- On first startup, embeddings are created and saved to `chroma_db/`
-- On subsequent startups, saved embeddings are loaded (no API calls needed)
-- To recreate embeddings, delete `chroma_db/` and restart the server, or use the `/reindex` endpoint
-- The same file will not be indexed twice
