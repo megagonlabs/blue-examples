@@ -75,6 +75,10 @@ cd blue-examples/demos/data_explorer_visualization
 blue registry agent update agents.json
 ```
 
+Note: that during the agent registration process:
+1. You will need to login via the browser
+2. You will need to then return to the CLI to confirm the agent registry changes
+
 ### 4. Deploy Agents
 
 In the Blue UI (`http://localhost:3000`):

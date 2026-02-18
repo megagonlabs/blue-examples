@@ -45,6 +45,10 @@ This creates registry entries from `agent.json`:
 
 ![agent registry](assets/mm_knowledge_agent_registry.png)
 
+Note: that during the agent registration process:
+1. You will need to login via the browser
+2. You will need to then return to the CLI to confirm the agent registry changes
+
 ### 4. Deploy Agents
 
 To deploy an agent:
