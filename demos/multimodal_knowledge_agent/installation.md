@@ -18,10 +18,7 @@ For Blue package installation, see the official docs:
 
 ### 1. Database Setup
 
-This project uses two databases:
-- **Relational database** (PostgreSQL) for recipe data. See [`postgres_db/README.md`](postgres_db/README.md) for setup instructions for example data. If using raw, full dataset, follow instructions at  [`data_prep/README.md`](data_prep/README.md) 
-
-- **Vector database** (ChromaDB) for recipe embeddings. See [`vector_db/README.md`](vector_db/README.md) for setup.
+Follow the instructions at  [`db/README.md`]
 
 ### 2. Build Agents
 

@@ -48,7 +48,7 @@ Start with the fixed workflow example:
 > [!NOTE]
 > **Why "Dish Ideation" before "Recipe Retrieval"?** This step avoids trivial matches (e.g., "milk") and broadens the variety of suggested dishes.
 
-5. **Filter by Preference**: Enter your preferences (e.g., "Main Dish") in the UI form to filter the recipe results. The [RecipeQueryExecutor](agents/recipe_query_executor/) agent will query the database and return recipes that match the specified preference criteria.
+5. **Filter by Preference**: Enter your preferences (e.g., "Main Dish") in the UI form to filter the recipe results. The [RecipeQueryExecutor](agents/recipe_query_executor/) agent will query the database and return recipes that match the specified preference criteria. Apply recipe filters minimally to avoid failures due to no matches found.
 
     ![input preferences](assets/demo/03_filtering.gif)
 
