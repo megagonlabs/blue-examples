@@ -5,74 +5,13 @@ This demo uses two databases:
 
 You can either:
 
-- Use the small example dataset (~1k recipes)
+- Use the small example dataset (~1k recipes) → Follow the instruction in [`../installation.md`](../installation.md)
 OR
-- Process the full raw dataset (>230k recipes) and import into Postgres
+- Process the full raw dataset (>230k recipes) and import into Postgres → Follow the instruction below
 
 ----
 
-## Option 1 — Quick Start (Example Dataset)
-
-Preprocessed example files are already included under: `../data/recipes/processed`
-
-### 1. Postgres set up (via Blue UI)
-
-We will use the `recipes_example` dataset shipped with Blue. We will enable agents to discover this data by:
-
-1. Log in to the Blue web app
-2. Go to `Data` under `Registries`
-3. Open `recipes_example`
-4. Select Actions → Duplicate. Set `source` name to `Recipes`. Click `Create`
-5. Select Actions → Synchronize
-6. Refresh and confirm `recipes` appears under Databases
-7. Note that the agents rely on a data source named `Recipes` in the data registry.
-
-### 2. ChromaDB set up
-
-#### 1. Install dependencies 
-
-```bash
-pip install chromadb fastapi uvicorn openai requests
-export OPENAI_API_KEY="your-api-key-here"
-```
-
-#### 2. Start the server
-
-```bash
-cd db
-./start_vector_db.sh
-```
-
-The server will start at `http://localhost:8000` and automatically index the example data.
-
-#### 3. Verify ChromaDB is working
-
-Check server health:
-```bash
-curl http://localhost:8000/
-```
-
-Expected response:
-```json
-{
-    "status": "ok",
-    "message": "Vector Database API is running",
-    "indexed_documents": 50,
-    "indexed_sources": ["example_asian_recipes.jsonl", "example_other_recipes.jsonl"]
-}
-```
-
-Try a simple search:
-```bash
-curl -X POST http://localhost:8000/query \
-  -H "Content-Type: application/json" \
-  -d '{"query": "spicy Asian noodles", "top_k": 3}'
-```
-
-
----
-
-## Option 2 — Full Dataset
+## Full Dataset
 
 #### 1. Download the dataset from Kaggle and place the files in `../data/recipes/raw_data`
 
