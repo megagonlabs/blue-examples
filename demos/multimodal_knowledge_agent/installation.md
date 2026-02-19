@@ -18,7 +18,7 @@ For Blue package installation, see the official docs:
 
 ### 1. Database Setup
 
-Follow the instructions at  [db/README.md]
+Follow the instructions at [`db/README.md`](db/README.md)
 
 ### 2. Build Agents
 
