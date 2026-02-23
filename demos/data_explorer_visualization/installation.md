@@ -11,9 +11,9 @@ This guide covers the additional setup needed for the Data Explorer and Visualiz
 ## What This Demo Adds
 
 This demo requires five agents working together:
-1. **Interaction Controller** - Orchestrates the workflow - [README](interaction_controller/README.md)
-2. **Data Exploration Agent** - Performs automated EDA - [README](data_exploration/README.md)
-3. **Data Visualization Agent** - Creates Vega-Lite visualizations - [README](data_visualization/README.md)
+1. **Interaction Controller** - Orchestrates the workflow - [README](agents/interaction_controller/README.md)
+2. **Data Exploration Agent** - Performs automated EDA - [README](agents/data_exploration/README.md)
+3. **Data Visualization Agent** - Creates Vega-Lite visualizations - [README](agents/data_visualization/README.md)
 4. **NL-to-SQL Agent** (shipped with Blue) - Converts natural language questions to SQL
 5. **Task Coordinator Agent** (shipped with Blue) - Coordinates task execution across agents (required for Interaction Controller)
 
@@ -45,24 +45,16 @@ You can explore the database schema by clicking on `postgres` → `public` to ve
 Build each agent:
 
 ```bash
-# 1. Interaction Controller Agent
-cd blue-examples/demos/data_explorer_visualization/interaction_controller
-./docker_build_agent.sh
+# 1. Interaction Controller Agent & Data Exploration Agent & Data Visualization Agent
+cd blue-examples/demos/data_explorer_visualization/
+./docker_build_all_agents.sh
 
-# 2. Data Exploration Agent
-cd blue-examples/demos/data_explorer_visualization/data_exploration
-./docker_build_agent.sh
-
-# 3. Data Visualization Agent
-cd blue-examples/demos/data_explorer_visualization/data_visualization
-./docker_build_agent.sh
-
-# 4. NL2SQL Agent (shipped with Blue)
+# 2. NL2SQL Agent (shipped with Blue)
 # Check if already built during Blue default agent building before running
 cd blue/agents/nl2sql
 ./docker_build_agent.sh
 
-# 5. Task Coordinator Agent (shipped with Blue)
+# 3. Task Coordinator Agent (shipped with Blue)
 # Check if already built during Blue default agent building before running
 cd blue/agents/coordinator
 ./docker_build_agent.sh
