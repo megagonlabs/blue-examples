@@ -1,4 +1,4 @@
-# Multimodal Knowledge Agent - WIP
+# Multimodal Knowledge Agent
 
 Traditional recipe apps can be rigid, *often requiring specific ingredients you don't have.* The **Multimodal Knowledge Agent** solves this by acting as an intelligent kitchen assistant that **helps you cook with what's already in your fridge!** It combines visual perception with a verified recipe database to provide reliable, personalized suggestions.
 
