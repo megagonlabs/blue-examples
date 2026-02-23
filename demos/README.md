@@ -1,5 +1,9 @@
 # Blue Example Demos
 
+Use Case Examples:
+* [Data Explorer & Visualization Agent](data_explorer_visualization/README.md): An autonomous agent that can explore datasets, generate visualizations, and handle open-ended queries.
+* [Multimodal Knowledge Agent](multimodal_knowledge_agent/README.md): An agent that combines visual perception with a database to provide reliable, personalized suggestions.
+
 Basics:
 * [counter](counter): Build a simple agent that counts words 
 * [basic_planner](basic_planner): Build a simple agent that executes a plan instructing other agents

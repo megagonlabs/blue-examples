@@ -3,7 +3,7 @@
 In this repo you can find many example demonstrations of blue agents and template agent code.
 
 To try demos:
-* Go to [demos](demos) page and explore base and experimental agents
+* Go to [demos](demos) page and explore use case examples, base and experimental agents
 
 Or you can check out:
 * [template](agents/template): a template starter agent
@@ -65,6 +65,12 @@ terms or the lack of any warranty herein.
 While Megagon makes commercially reasonable efforts to ensure that citations in this
 document are complete and accurate, errors may occur. If you see any error or omission, please
 help us improve this document by sending information to contact_oss@megagon.ai.
+
+
+## Datasets
+| ID  | OSS Component Name | Modified | Copyright Holder                    | Upstream Link | License  |
+|-----|----------------------------------|----------|-------------------------------------|---------------------------------------------------------------------------------------|--------------------|
+| 1 | Recipes and Interactions | Yes | Shuyang Li, Bodhisattwa Prasad Majumder | [link](https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions) |  | 
 
 ## Open Source Software (OSS) Components 
 

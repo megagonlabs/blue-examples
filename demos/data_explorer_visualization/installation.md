@@ -11,9 +11,9 @@ This guide covers the additional setup needed for the Data Explorer and Visualiz
 ## What This Demo Adds
 
 This demo requires five agents working together:
-1. **Interaction Controller** - Orchestrates the workflow - [README](../../agents/interaction_controller/README.md)
-2. **Data Exploration Agent** - Performs automated EDA - [README](../../agents/data_exploration/README.md)
-3. **Data Visualization Agent** - Creates Vega-Lite visualizations - [README](../../agents/data_visualization/README.md)
+1. **Interaction Controller** - Orchestrates the workflow - [README](interaction_controller/README.md)
+2. **Data Exploration Agent** - Performs automated EDA - [README](data_exploration/README.md)
+3. **Data Visualization Agent** - Creates Vega-Lite visualizations - [README](data_visualization/README.md)
 4. **NL-to-SQL Agent** (shipped with Blue) - Converts natural language questions to SQL
 5. **Task Coordinator Agent** (shipped with Blue) - Coordinates task execution across agents (required for Interaction Controller)
 
@@ -46,15 +46,15 @@ Build each agent:
 
 ```bash
 # 1. Interaction Controller Agent
-cd blue-examples/agents/interaction_controller
+cd blue-examples/demos/data_explorer_visualization/interaction_controller
 ./docker_build_agent.sh
 
 # 2. Data Exploration Agent
-cd blue-examples/agents/data_exploration
+cd blue-examples/demos/data_explorer_visualization/data_exploration
 ./docker_build_agent.sh
 
 # 3. Data Visualization Agent
-cd blue-examples/agents/data_visualization
+cd blue-examples/demos/data_explorer_visualization/data_visualization
 ./docker_build_agent.sh
 
 # 4. NL2SQL Agent (shipped with Blue)
