@@ -22,15 +22,28 @@ Preprocessed example files are already included under: `../data/recipes/processe
 
 #### 1.1 Postgres set up (via Blue UI)
 
-We will use the `recipes_example` dataset shipped with Blue. We will enable agents to discover this data by:
+1. Create a new database `recipes_example` on the existing postgres shipped with Blue.
 
-1. Log in to the Blue web app
-2. Go to `Data` under `Registries`
-3. Open `recipes_example`
-4. Select Actions → Duplicate. Set `source` name to `Recipes`. Click `Create`
-5. Select Actions → Synchronize
-6. Refresh and confirm `recipes` appears under Databases
-7. Note that the agents rely on a data source named `Recipes` in the data registry.
+```bash
+docker exec -it "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)" \
+psql -U postgres -c "CREATE DATABASE recipes_example;"
+```
+
+2. Upload the example data into the database
+
+```bash
+docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)" psql -U postgres -d recipes_example < "$HOME/blue-examples/data/recipes/asian_recipes_sample_dump.sql"
+```
+
+Next we will enable agents to discover this data:
+
+3. Log in to the Blue web app
+4. Go to `Data` under `Registries`
+5. Open `recipes_example`
+6. Select Actions → Duplicate. Set `source` name to `Recipes`. Click `Create`
+7. Select Actions → Synchronize
+8. Refresh and confirm `recipes` appears under Databases
+9. Note that the agents rely on a data source named `Recipes` in the data registry.
 
 #### 1.2. ChromaDB set up
 
