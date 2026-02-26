@@ -7,14 +7,9 @@
 - blue_platform >= 1.1
 - OpenAI API key
 
-For Blue package installation, see the official docs:
+For Blue package installation, see the official docs: [Quickstart guide](https://blue.megagon.info/latest/quickstart.html)
 
-- [Quickstart guide](https://github.com/megagonlabs/blue/blob/v1.0/QUICK-START.md)
-- [Local installation guide](https://github.com/megagonlabs/blue/blob/v1.0/LOCAL-INSTALLATION.md)
-
-(TODO: replace them with the latest doc links)
-
-## Setup
+## Installation Steps
 
 ### 1. Database Setup
 
@@ -47,7 +42,7 @@ Next we will enable agents to discover this data:
 
 #### 1.2. ChromaDB set up
 
-##### 1. Install dependencies 
+##### 1. Install dependencies
 
 ```bash
 pip install chromadb fastapi uvicorn openai requests
@@ -110,13 +105,23 @@ Note: that during the agent registration process:
 
 ### 4. Deploy Agents
 
-To deploy an agent:
+In the Blue UI (`http://localhost:3000`):
 
-1. In the agent registry, click the agent.
-2. Click **Actions > Deploy**.
+1. Navigate to **Agents**
+2. Deploy the following agents:
+    - Blue System Agents:
+        - `Task Coordinator Agent`
+        - `Presenter Agent`
+    - Demo-specific Agents:
+        - `Blue Plate Agent`
+        - `Reactive Blue Plate Agent`
+        - `Ingredient Extractor Agent`
+        - `Recipe Retrieval Agent`
+        - `Dish Ideation Agent`
+        - `Recipe Query Executor Agent`
+        - `Recipe Visualizer Agent`
+3. Verify all agents show as "Running"
 
 ![deploy agent](assets/mm_knowledge_agent_deploy.png)
-
-Once deployed, the agent status should show "container: running".
 
 See [`demo_example.md`](demo_example.md) for usage examples.
