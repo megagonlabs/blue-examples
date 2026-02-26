@@ -8,7 +8,7 @@
         "properties": {
             "form": {},
             "schema": {},
-            "image": "megagonlabs/blue-agent-presenter-private",
+            "image": "megagonlabs/blue-agent-presenter",
             "display_name": "Presenter Agent",
             "system_agent": false,
             "categories": [
@@ -261,7 +261,7 @@
         "created_by": null,
         "properties": {
             "display_name": "Ingredient Extractor Agent",
-            "image": "megagonlabs/blue-agent-ingredient_extractor-private",
+            "image": "megagonlabs/blue-agent-ingredient_extractor",
             "openai.api": "ChatCompletion",
             "openai.model": "gpt-4.1-mini",
             "input_field": "messages",
@@ -374,7 +374,7 @@
         "description": "",
         "created_by": null,
         "properties": {
-            "image": "megagonlabs/blue-agent-dish_ideation-private",
+            "image": "megagonlabs/blue-agent-dish_ideation",
             "display_name": "Dish Ideation Agent",
             "n_candidates_per_persona": 10,
             "max_n_candidates": 16,
@@ -534,7 +534,7 @@
         "created_by": null,
         "properties": {
             "display_name": "Blue Plate Agent",
-            "image": "megagonlabs/blue-agent-blue_plate-private",
+            "image": "megagonlabs/blue-agent-blue_plate",
             "openai.api": "ChatCompletion",
             "openai.model": "gpt-4o",
             "input_json": "[{\"role\": \"user\"}]",
@@ -607,7 +607,7 @@
         "created_by": null,
         "properties": {
             "display_name": "Recipe Visualizer Agent",
-            "image": "megagonlabs/blue-agent-image-test-private",
+            "image": "megagonlabs/blue-agent-image-generation",
             "chromadb_url": "http://host.docker.internal:8000",
             "openai.api": "ChatCompletion",
             "source": null,
@@ -695,7 +695,7 @@
         "created_by": null,
         "properties": {
             "display_name": "Reactive Blue Plate Agent",
-            "image": "megagonlabs/blue-agent-reactive_blue_plate-private",
+            "image": "megagonlabs/blue-agent-reactive_blue_plate",
             "debug_mode": true,
             "categories": [
                 "EXAMPLE_BLUE_PLATE"
@@ -893,7 +893,7 @@
         "description": "Return recipe data that matches specified filtering criteria",
         "created_by": null,
         "properties": {
-            "image": "megagonlabs/blue-agent-recipe_query_executor-private",
+            "image": "megagonlabs/blue-agent-recipe_query_executor",
             "output_filters": [
                 "result"
             ],
@@ -939,7 +939,7 @@
         "description": "",
         "created_by": null,
         "properties": {
-            "image": "megagonlabs/blue-agent-recipe_retrieval-private",
+            "image": "megagonlabs/blue-agent-recipe_retrieval",
             "display_name": "Recipe Retrieval Agent",
             "chromadb_url": "http://host.docker.internal:8000",
             "top_k": 3,
