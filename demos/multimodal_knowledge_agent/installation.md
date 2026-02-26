@@ -77,17 +77,7 @@ Expected response:
 
 If you want to use the full data, follow the instructions at [`db/README.md`](db/README.md)
 
-### 2. Build Agents
-
-Build all agent Docker images:
-
-```bash
-cd agents && bash docker_build_all_agents.sh
-```
-
-Ensure Docker is installed and running.
-
-### 3. Register Agents
+### 2. Register Agents
 
 Add agents to the registry:
 
@@ -103,12 +93,12 @@ Note: that during the agent registration process:
 1. You will need to login via the browser
 2. You will need to then return to the CLI to confirm the agent registry changes
 
-### 4. Deploy Agents
+### 3. Pull and Deploy Agents
 
 In the Blue UI (`http://localhost:3000`):
 
 1. Navigate to **Agents**
-2. Deploy the following agents:
+2. Pull and deploy the following agents:
     - Blue System Agents:
         - `Task Coordinator Agent`
         - `Presenter Agent`

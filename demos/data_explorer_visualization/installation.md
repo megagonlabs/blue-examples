@@ -40,25 +40,7 @@ This demo uses the `postgres_example` dataset which is shipped with Blue. To ena
 
 You can explore the database schema by clicking on `postgres` → `public` to verify the data is loaded correctly.
 
-### 3. Build and Register the Required Agents
-
-Build each agent:
-
-```bash
-# 1. Interaction Controller Agent & Data Exploration Agent & Data Visualization Agent
-cd blue-examples/demos/data_explorer_visualization/
-./docker_build_all_agents.sh
-
-# 2. NL2SQL Agent (shipped with Blue)
-# Check if already built during Blue default agent building before running
-cd blue/agents/nl2sql
-./docker_build_agent.sh
-
-# 3. Task Coordinator Agent (shipped with Blue)
-# Check if already built during Blue default agent building before running
-cd blue/agents/coordinator
-./docker_build_agent.sh
-```
+### 3. Register the Required Agents
 
 Register all agents using the provided configuration:
 
@@ -71,12 +53,12 @@ Note: that during the agent registration process:
 1. You will need to login via the browser
 2. You will need to then return to the CLI to confirm the agent registry changes
 
-### 4. Deploy Agents
+### 4. Pull and Deploy Agents
 
 In the Blue UI (`http://localhost:3000`):
 
 1. Navigate to **Agents**
-2. Deploy each of the five agents:
+2. Pull & deploy each of the five agents:
    - `Task Coordinator Agent`
    - `NL-to-SQL Agent`
    - `Interaction Controller`
