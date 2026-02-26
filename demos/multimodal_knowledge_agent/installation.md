@@ -13,7 +13,7 @@ For Blue package installation, see the official docs: [Quickstart guide](https:/
 
 ### 1. Database Setup
 
-Preprocessed example files are already included under: `../data/recipes/processed`
+We have provided some preprocessed example synthetic data files under: `../data/recipes/processed`
 
 #### 1.1 Postgres set up (via Blue UI)
 
@@ -27,7 +27,7 @@ psql -U postgres -c "CREATE DATABASE recipes_example;"
 2. Upload the example data into the database
 
 ```bash
-docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)" psql -U postgres -d recipes_example < "$HOME/blue-examples/data/recipes/asian_recipes_sample_dump.sql"
+docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)" psql -U postgres -d recipes_example < "data/recipes/processed/asian_recipes_sample_dump.sql"
 ```
 
 Next we will enable agents to discover this data:
