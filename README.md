@@ -66,12 +66,6 @@ While Megagon makes commercially reasonable efforts to ensure that citations in 
 document are complete and accurate, errors may occur. If you see any error or omission, please
 help us improve this document by sending information to contact_oss@megagon.ai.
 
-
-## Datasets
-| ID  | OSS Component Name | Modified | Copyright Holder                    | Upstream Link | License  |
-|-----|----------------------------------|----------|-------------------------------------|---------------------------------------------------------------------------------------|--------------------|
-| 1 | Recipes and Interactions | Yes | Shuyang Li, Bodhisattwa Prasad Majumder | [link](https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions) |  | 
-
 ## Open Source Software (OSS) Components 
 
 All OSS components used within the product are listed below (including their copyright holders and the license information).
