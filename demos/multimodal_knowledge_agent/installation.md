@@ -7,7 +7,8 @@
 - blue_platform >= 1.1
 - OpenAI API key
 
-For Blue package installation, see the official docs: [Quickstart guide](https://blue.megagon.info/latest/quickstart.html)
+- **Blue package installation and running**, see the official docs: [Quickstart guide](https://blue.megagon.info/latest/quickstart.html).  The install includes Blue CLI which is required for agent registration.  
+- **OpenAI API key** - Required for LLM-powered agents
 
 ## Installation Steps
 
@@ -40,11 +41,11 @@ docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)"ps
 
 Next we will enable agents to discover this data:
 
-4. Log in to the Blue web app
-5. Go to `Data` under `Registries`
-5. Open `postgres_example`
-6. Select Actions → Synchronize
-8. Refresh and confirm `recipes_example` appears under Databases
+4. Open the Blue web application and log in
+5. Navigate to **Data** under registries
+6. Click on `postgres_example` dataset in the registry
+7. Select **Actions** → **Synchronize**
+8. Reload the page - you should now see the `recipes_example` database listed under **Databases**
 
 #### 1.2. ChromaDB set up
 
@@ -85,9 +86,10 @@ If you want to use the full data, follow the instructions at [`db/README.md`](db
 
 ### 2. Register Agents
 
-Add agents to the registry:
+Register all agents using the provided configuration:
 
 ```bash
+cd blue-examples/demos/multimodal_knowledge_agent
 blue registry agent update agent.json
 ```
 
@@ -116,8 +118,14 @@ In the Blue UI (`http://localhost:3000`):
         - `Dish Ideation Agent`
         - `Recipe Query Executor Agent`
         - `Recipe Visualizer Agent`
-3. Verify all agents show as "Running"
 
 ![deploy agent](assets/mm_knowledge_agent_deploy.png)
+
+3. Verify all agents showing as "Running"
+
+    - Navigate to **Agents** under platform
+    - Verify all agents are showing as "Running"
+
+![verify agents](assets/verify_agents.png)
 
 See [`demo_example.md`](demo_example.md) for usage examples.

@@ -4,8 +4,7 @@ This guide covers the additional setup needed for the Data Explorer and Visualiz
 
 ## Prerequisites
 
-- **Blue platform installed and running** - Follow Blue QUICK-START.md or LOCAL-INSTALLATION.md
-- **Blue CLI installed and configured** - Required for agent registration
+- **Blue package installation and running**, see the official docs: [Quickstart guide](https://blue.megagon.info/latest/quickstart.html).  The install includes Blue CLI which is required for agent registration.  
 - **OpenAI API key** - Required for LLM-powered agents
 
 ## What This Demo Adds
@@ -49,6 +48,8 @@ cd blue-examples/demos/data_explorer_visualization
 blue registry agent update agent.json
 ```
 
+This creates registry entries from `agent.json`:
+
 Note: that during the agent registration process:
 1. You will need to login via the browser
 2. You will need to then return to the CLI to confirm the agent registry changes
@@ -64,19 +65,17 @@ In the Blue UI (`http://localhost:3000`):
    - `Interaction Controller`
    - `Data Exploration Agent`
    - `Data Visualization Agent`
-3. Verify all agents show as "Running"
+
+![deploy agent](assets/data_employers_visualization_deploy.png)
+
+3. Verify all agents showing as "Running"
+
+    - Navigate to **Agents** under platform
+    - Verify all agents are showing as "Running"
+    
+![verify agents](assets/verify_agents.png)
 
 **Note**: Each agent's README contains detailed configuration options and properties.
-
-## Verification
-
-Verify all five agents are running:
-```bash
-docker ps | grep blue-agent
-```
-
-You should see containers for all five agents.
-
 
 ## Troubleshooting
 
@@ -85,6 +84,3 @@ You should see containers for all five agents.
   - Check blue platform logs: `docker logs <platform-api-container-name> `
   - Check agent logs: `docker logs <agent-container-name>`
 - Check that data registry has synced database schemas
-
-
-
