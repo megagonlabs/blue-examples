@@ -28,24 +28,30 @@ psql -U postgres -c "CREATE DATABASE recipes_example;"
 
 ```bash
 docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)" psql -U postgres -d recipes_example < "data/recipes/processed/asian_recipes_sample_dump.sql"
+docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)" psql -U postgres -d recipes_example < "data/recipes/processed/other_recipes_sample_dump.sql"
+```
+
+3. List databases to validate that the new database `recipes_example` has been created 
+
+```bash
+docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)"psql -U postgres -c "\l"
+
 ```
 
 Next we will enable agents to discover this data:
 
-3. Log in to the Blue web app
-4. Go to `Data` under `Registries`
-5. Open `recipes_example`
-6. Select Actions → Duplicate. Set `source` name to `Recipes`. Click `Create`
-7. Select Actions → Synchronize
-8. Refresh and confirm `recipes` appears under Databases
-9. Note that the agents rely on a data source named `Recipes` in the data registry.
+4. Log in to the Blue web app
+5. Go to `Data` under `Registries`
+5. Open `postgres_example`
+6. Select Actions → Synchronize
+8. Refresh and confirm `recipes_example` appears under Databases
 
 #### 1.2. ChromaDB set up
 
 ##### 1. Install dependencies
 
 ```bash
-pip install chromadb fastapi uvicorn openai requests
+pip install chromadb fastapi uvicorn openai requests uv
 export OPENAI_API_KEY="your-api-key-here"
 ```
 
@@ -70,8 +76,8 @@ Expected response:
 {
     "status": "ok",
     "message": "Vector Database API is running",
-    "indexed_documents": 50,
-    "indexed_sources": ["example_asian_recipes.jsonl", "example_other_recipes.jsonl"]
+    "indexed_documents":6,
+    "indexed_sources":["example_asian_recipes_pct10.jsonl","example_other_recipes_pct10.jsonl"]
 }
 ```
 

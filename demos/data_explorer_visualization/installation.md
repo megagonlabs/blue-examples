@@ -46,7 +46,7 @@ Register all agents using the provided configuration:
 
 ```bash
 cd blue-examples/demos/data_explorer_visualization
-blue registry agent update agents.json
+blue registry agent update agent.json
 ```
 
 Note: that during the agent registration process:

@@ -630,7 +630,7 @@
             "parse_recipe.prompt_template": "Convert the following recipe text into a JSON object with this exact structure:\n\n{\n\"dishName\": \"name of the dish\",\n\"description\": \"brief description\",\n\"ingredients\": [\"ingredient1\", \"ingredient2\", ...],\n\"instructions\": [\"step1\", \"step2\", ...]\n}\n\nRecipe text:\n```\n{recipe_input}\n```\n\nReturn ONLY the parsed recipe text, no explanation or markdown code blocks.",
             "image.prompt_template": "Recipe: {dish_name}. Full cooking process: {all_steps_str}. GENERATE IMAGE FOR STEP {step_num}: {current_instruction}. Show ONLY these ingredients that have been used so far: {ingredients_in_image}. Do NOT show ingredients not yet used. Do NOT include any items, utensils, tools, or elements that are not explicitly mentioned in the current step instruction. Focus ONLY on what is directly described in step {step_num}. Exclude unnecessary background items, kitchen tools, or decorative elements unless specifically required by the instruction. Style: {style_description}. No text, no watermarks. The image must be anime art style.",
             "extract_ingredients.prompt_template": "You are analyzing a cooking instruction to determine which ingredients are being used.\n\nAvailable ingredients:\n{ingredients_str}\n\nInstruction step: \"{instruction}\"\n\nTask: Return ONLY a JSON array of ingredient names (exactly as listed above) that are actively being used, handled, or should be visible in this cooking step.\n\nRules:\n- Only include ingredients that are explicitly mentioned or clearly implied in this step\n- Use the exact ingredient names from the list above\n- If no ingredients from the list are used in this step, return an empty array []\n- Return ONLY the JSON array, no explanation\n\nExample output: [\"Cherry tomatoes, halved\", \"Fresh basil leaves\"]",
-            "recipe_data_path": "../vector_db/example_data",
+            "recipe_data_path": "../db/example_data",
             "categories": [
                 "EXAMPLE_BLUE_PLATE"
             ]
@@ -900,7 +900,7 @@
             "output_max_results": null,
             "tracker.output": "log.INFO",
             "tracker.autostart": false,
-            "source": "/Recipes/recipes/public",
+            "source": "/postgres_example/recipes_example/public",
             "display_name": "Recipe Query Executor Agent",
             "categories": [
                 "EXAMPLE_BLUE_PLATE"
@@ -973,7 +973,7 @@
                     "strict": true
                 }
             },
-            "recipe_data_path": "../vector_db/example_data",
+            "recipe_data_path": "../db/example_data",
             "categories": [
                 "EXAMPLE_BLUE_PLATE"
             ]
