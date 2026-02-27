@@ -16,6 +16,13 @@ python data_prep_recipes.py --raw-dir "$RAW_DIR" --out-dir "$OUT_DIR"
 
 log "Processing complete. Outputs are in: $OUT_DIR"
 
+# Move JSONL to recipe_data/
+log "Moving recipes_with_reviews.jsonl to recipe_data/"
+mkdir -p recipe_data
+mv "${OUT_DIR}/recipes_with_reviews.jsonl" recipe_data/
+log "Moved: ${OUT_DIR}/recipes_with_reviews.jsonl -> $(pwd)/recipe_data/recipes_with_reviews.jsonl"
+
+
 # Basic checks
 [[ -f "$DDL" ]] || { echo "Missing DDL: $DDL"; exit 1; }
 for f in recipes.csv ingredients.csv nutrition.csv tags.csv recipe_ingredients.csv recipe_tags.csv; do
@@ -41,3 +48,4 @@ log "Done. Tables in $DB_NAME:"
 
 # Quick verify
 psql -d "$DB_NAME" -c "\dt"
+

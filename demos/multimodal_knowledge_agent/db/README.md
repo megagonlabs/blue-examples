@@ -28,6 +28,7 @@ export PGUSER=postgres
 
 Then run the following 
 ```bash
+cd db
 ./recipes_process_and_import.sh
 ```
 
@@ -89,7 +90,37 @@ docker exec workspace psql -U postgres -d recipes -c "\dt"
 
 #### 5. Set up the chromaDB server
 
-Follow instructions from Option 1 to index the files automatically.
+##### 1. Install dependencies
+```bash
+pip install chromadb fastapi uvicorn openai requests uv
+export OPENAI_API_KEY="your-api-key-here"
+```
+
+##### 2. Start the server
+
+```bash
+./start_vector_db.sh --data recipe_data
+```
+
+The server will start at `http://localhost:8000` and automatically index the example data.
+
+##### 3. Verify ChromaDB is working
+
+Check server health:
+```bash
+curl http://localhost:8000/
+```
+
+Expected response:
+```json
+{
+    "status": "ok",
+    "message": "Vector Database API is running",
+    "indexed_documents":6,
+    "indexed_sources":["recipes_with_reviews.jsonl"]
+}
+```
+
 
 
 

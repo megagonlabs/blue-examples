@@ -17,11 +17,6 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-# Normalize 'review_data' to 'recipe_data' if user uses that valid term from instructions
-if [[ "$DATA_SOURCE" == "review_data" ]]; then
-    DATA_SOURCE="recipe_data"
-fi
-
 echo "Starting vector database server (vector_db_server_dishnames.py) using data: $DATA_SOURCE..."
 
 # Stop any existing server
