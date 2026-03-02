@@ -35,7 +35,7 @@ docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)" p
 3. List databases to validate that the new database `recipes_example` has been created 
 
 ```bash
-docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)"psql -U postgres -c "\l"
+docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)" psql -U postgres -c "\l"
 
 ```
 
