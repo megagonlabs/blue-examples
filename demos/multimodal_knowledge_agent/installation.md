@@ -36,7 +36,6 @@ docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)" p
 
 ```bash
 docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)" psql -U postgres -c "\l"
-
 ```
 
 Next we will enable agents to discover this data:
@@ -103,10 +102,22 @@ Note: that during the agent registration process:
 
 ### 3. Pull and Deploy Agents
 
+Pull the agent images:
+
+```bash
+docker pull megagonlabs/blue-agent-ingredient_extractor:v1.1 &&
+docker pull megagonlabs/blue-agent-dish_ideation:v1.1 &&
+docker pull megagonlabs/blue-agent-blue_plate:v1.1 &&
+docker pull megagonlabs/blue-agent-image-generation:v1.1 &&
+docker pull megagonlabs/blue-agent-reactive_blue_plate:v1.1 &&
+docker pull megagonlabs/blue-agent-recipe_query_executor:v1.1 &&
+docker pull megagonlabs/blue-agent-recipe_retrieval:v1.1
+```
+
 In the Blue UI (`http://localhost:3000`):
 
-1. Navigate to **Agents**
-2. Pull and deploy the following agents:
+1. Navigate to **Agents** 
+3. Deploy the following agents:
     - Blue System Agents:
         - `Task Coordinator Agent`
         - `Presenter Agent`

@@ -56,10 +56,18 @@ Note: that during the agent registration process:
 
 ### 4. Pull and Deploy Agents
 
+Pull the agent images:
+
+```bash
+docker pull megagonlabs/blue-agent-interaction_controller:v1.1 &&
+docker pull megagonlabs/blue-agent-data_exploration:v1.1 &&
+docker pull megagonlabs/blue-agent-data_visualization:v1.1
+```
+
 In the Blue UI (`http://localhost:3000`):
 
 1. Navigate to **Agents**
-2. Pull & deploy each of the five agents:
+2. Deploy each of the five agents:
    - `Task Coordinator Agent`
    - `NL-to-SQL Agent`
    - `Interaction Controller`
