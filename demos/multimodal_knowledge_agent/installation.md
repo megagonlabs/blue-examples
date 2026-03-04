@@ -29,7 +29,6 @@ psql -U postgres -c "CREATE DATABASE recipes_example;"
 
 ```bash
 docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)" psql -U postgres -d recipes_example < "data/recipes/processed/asian_recipes_sample_dump.sql"
-docker exec -i "$(docker ps -q --filter 'ancestor=postgres:16.0' | head -n 1)" psql -U postgres -d recipes_example < "data/recipes/processed/other_recipes_sample_dump.sql"
 ```
 
 3. List databases to validate that the new database `recipes_example` has been created 
