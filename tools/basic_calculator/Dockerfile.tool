@@ -7,15 +7,22 @@ ENV BLUE_DEPLOY_VERSION=${BLUE_DEPLOY_VERSION}
 # Set workdir
 WORKDIR /app
 
+# Install system dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends iputils-ping \
+    && rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip first
+RUN pip install --no-cache-dir --upgrade pip
+
+# Copy requirements first to leverage Docker layer caching
+COPY src/requirements.* /app/
+
 # Build requirements first
-ADD src/requirements.core /app/requirements.core
-RUN pip install ${BLUE_BUILD_CACHE_ARG} ${BLUE_BUILD_LIB_ARG} -r requirements.core
-
-ADD src/requirements.tool /app/requirements.tool
-RUN pip install ${BLUE_BUILD_CACHE_ARG} -r requirements.tool
-
-ADD src/requirements.basic_calculator_tool /app/requirements.basic_calculator_tool
-RUN pip install ${BLUE_BUILD_CACHE_ARG} -r requirements.basic_calculator_tool
+RUN pip install --no-cache-dir \
+        -r requirements.tool \
+        -r requirements.basic_calculator_tool \
+        ${BLUE_BUILD_CACHE_ARG} ${BLUE_BUILD_LIB_ARG} -r requirements.core
 
 # Copy service files
 ADD /src /app/
